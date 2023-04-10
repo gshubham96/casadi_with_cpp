@@ -26,7 +26,7 @@ int main(){
     // input arguements
     std::vector<casadi::SX> arg = {X, sym_p};
 
-    std::cout << "function arg : " << fname_n_in(fun_obj) << std::endl;
+    std::cout << "function arg : " << casadi::fname_n_in(fun_obj) << std::endl;
 
 
     // // Objective
