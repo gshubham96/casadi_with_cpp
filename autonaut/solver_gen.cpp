@@ -24,16 +24,19 @@ int main(){
     casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
 
     // input arguements
-    std::vector<casadi::SX> arg_1 = {X, sym_p};
+    std::vector<casadi::SX> arg = {X, sym_p};
 
-    // Objective
-    casadi::SX f = fun_obj(arg_1);
+    std::cout << "function arg : " << arg << std::endl;
 
-    // Constraints
-    casadi::SX g = fun_eql(arg_1);
 
-    std::cout << "function obj : " << f << std::endl;
-    std::cout << "function g   : " << g << std::endl;
+    // // Objective
+    // casadi::SX f = fun_obj(arg);
+
+    // // Constraints
+    // casadi::SX g = fun_eql(arg);
+
+    // std::cout << "function obj : " << f << std::endl;
+    // std::cout << "function g   : " << g << std::endl;
 
 
     // // Create an NLP solver instance
