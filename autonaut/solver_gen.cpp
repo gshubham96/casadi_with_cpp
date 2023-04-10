@@ -43,7 +43,7 @@ int main(){
     // casadi::SX x_out = x_dot(args);
 
     std::cout << "function xdot : " << x_dot << std::endl;
-    std::cout << "evaluate xdot : " << x_dot(args) << std::endl;
+    std::cout << "evaluate xdot : " << x_dot({x_in, u_in, p_in}) << std::endl;
 
 
     // // Objective
