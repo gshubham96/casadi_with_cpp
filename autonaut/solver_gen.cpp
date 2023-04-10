@@ -25,38 +25,38 @@ int main(){
     return 0;
 
     // Parameters
-    casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
+    // casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
 
-    // Objective
-    std::vector<casadi::DM> arg_1 = {X, U, sym_p};
-    casadi::MX f = fun_obj(arg_1);
+    // // Objective
+    // std::vector<casadi::DM> arg_1 = {X, U, sym_p};
+    // casadi::MX f = fun_obj(arg_1);
 
-    // Constraints
-    casadi::MX g = fun_eql(arg_1);
+    // // Constraints
+    // casadi::MX g = fun_eql(arg_1);
 
-    // Create an NLP solver instance
-    casadi::Function solver = casadi::nlpsol("solver", "ipopt", {{"x", X}, {"f", f}, {"g", g}});
+    // // Create an NLP solver instance
+    // casadi::Function solver = casadi::nlpsol("solver", "ipopt", {{"x", X}, {"f", f}, {"g", g}});
 
-    // file name
-    std::string file_name = "nlp_code";
-    // code predix
-    std::string prefix_code = fs::current_path().string() + "/";
+    // // file name
+    // std::string file_name = "nlp_code";
+    // // code predix
+    // std::string prefix_code = fs::current_path().string() + "/";
 
-    // Generate C code for the NLP functions
-    solver.generate_dependencies(file_name + ".c");
+    // // Generate C code for the NLP functions
+    // solver.generate_dependencies(file_name + ".c");
 
-    // shared library prefix
-    std::string prefix_lib = fs::current_path().string() + "/";
+    // // shared library prefix
+    // std::string prefix_lib = fs::current_path().string() + "/";
 
-    // compile c code to a shared library
-    std::string compile_command = "gcc -fPIC -shared -O3 " + 
-        prefix_code + file_name + ".c -o " +
-        prefix_lib + file_name + ".so";
+    // // compile c code to a shared library
+    // std::string compile_command = "gcc -fPIC -shared -O3 " + 
+    //     prefix_code + file_name + ".c -o " +
+    //     prefix_lib + file_name + ".so";
 
-    std::cout << compile_command << std::endl;
-    int compile_flag = std::system(compile_command.c_str());
-    casadi_assert(compile_flag==0, "Compilation failed");
-    std::cout << "Compilation successed!" << std::endl;
+    // std::cout << compile_command << std::endl;
+    // int compile_flag = std::system(compile_command.c_str());
+    // casadi_assert(compile_flag==0, "Compilation failed");
+    // std::cout << "Compilation successed!" << std::endl;
 
     return 0;
 }
