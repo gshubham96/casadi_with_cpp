@@ -17,7 +17,6 @@ int main(){
     std::string lib_full_name = prefix_lib + "lib_autonaut.so";
 
     // use this function
-    casadi::Function x_dot = casadi::external("x_dot", lib_full_name);
     casadi::Function fun_obj = casadi::external("obj_ms", lib_full_name);
     casadi::Function fun_eql = casadi::external("eql_ms", lib_full_name);
 
@@ -31,10 +30,15 @@ int main(){
     std::vector<casadi::SX> arg = {X, sym_p};
 
     //! TEST DYNAMCIS
+    casadi::Function x_dot = casadi::external("x_dot", lib_full_name);
     casadi::SX x_in = casadi::SX::sym("x", 4);
     casadi::SX u_in = casadi::SX::sym("u", 1);
     casadi::SX p_in = casadi::SX::sym("p", 11);
-    std::vector<casadi::SX> args = {x_in, u_in, p_in};
+
+    Dict args;
+    args["sym_x"] = x_in;
+    args["sym_u"] = u_in;
+    args["sym_p"] = p_in;
 
     casadi::SX x_out = x_dot(args);
 
