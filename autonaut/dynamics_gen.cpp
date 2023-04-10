@@ -47,7 +47,7 @@ int main(){
     std::cout << "p  = " << x0 << std::endl;
 
     std::vector<casadi::DM> arg_1 = {casadi::DM(x0), casadi::DM(u), casadi::DM(p)};
-    std::vector<auto> arg_2 = {sym_x, sym_u, sym_p};
+    auto arg_2 = {sym_x, sym_u, sym_p};
 
     std::cout << "x_dot 1 = " << x_dot(arg_1) << std::endl;
     std::cout << "x_dot 2 = " << x_dot(arg_2) << std::endl;
