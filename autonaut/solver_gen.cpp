@@ -34,7 +34,7 @@ int main(){
     random_device rnd_device;
     // Specify the engine and distribution.
     mt19937 mersenne_engine {rnd_device()};  // Generates random integers
-    uniform_int_distribution<int> dist {1, 52};
+    std::uniform_int_distribution<int> dist {1, 52};
     auto gen = [&dist, &mersenne_engine](){
                    return dist(mersenne_engine);
                };
