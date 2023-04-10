@@ -8,14 +8,14 @@ namespace fs = std::filesystem;
 int main(){
 
     // location for c code generated from matlab and output lib
-    std::string file_name = 'gen.c';
+    // std::string file_name = 'gen.c';
     std::string prefix_code = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/";
     std::string prefix_lib = fs::current_path().parent_path().string() + "/build/";
     std::string lib_full_name = prefix_lib + "lib_autonaut.so";
 
     // compile c code and add it to a shared library
     std::string compile_command = "gcc -fPIC -shared -O3 " + 
-        prefix_code + file_name + lib_full_name;
+        prefix_code + 'gen.c' + lib_full_name;
 
     std::cout << compile_command << std::endl;
 
