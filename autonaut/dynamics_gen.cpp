@@ -46,9 +46,11 @@ int main(){
     std::cout << "u  = " << x0 << std::endl;
     std::cout << "p  = " << x0 << std::endl;
 
-    casadi::SX sym_xn = x_dot(casadi::DMDict{{"sym_x", sym_x}, {"sym_u", sym_u}, {"sym_p", sym_p}});
-
+    std::vector<casadi::DM> arg_1 = {casadi::DM(x0), casadi::DM(u), casadi::DM(p)};
     std::cout << "x_dot 1 = " << x_dot(arg_1) << std::endl;
+
+    casadi::DMDict x_dot_out = x_dot(casadi::DMDict{{"sym_x", sym_x}, {"sym_u", sym_u}, {"sym_p", sym_p}});
+    casadi::SX sym_xn = x_dot_out.at("x_dot_out");
     std::cout << "x_dot 2 = " << sym_xn << std::endl;
 
 
