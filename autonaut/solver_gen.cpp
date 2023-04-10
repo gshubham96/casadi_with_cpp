@@ -55,6 +55,7 @@ int main(){
         std::cout << i << " ";
     }
 
+    std::vector<casadi::SX> arg_test = {xx, params};
 
     // std::cout << "function arg : " << fun_obj(arg) << std::endl;
 
