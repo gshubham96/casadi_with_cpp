@@ -46,6 +46,7 @@ int main(){
     std::cout << "u  = " << x0 << std::endl;
     std::cout << "p  = " << x0 << std::endl;
 
+    std::cout << "f_test  = " << test({x, y}) << std::endl;
     // std::cout << "x_dot  = " << x_dot({x0, u, p}) << std::endl;
 
 
