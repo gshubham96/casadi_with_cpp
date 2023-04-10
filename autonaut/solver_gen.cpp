@@ -17,6 +17,8 @@ int main(){
     casadi::Function fun_obj = casadi::external("obj_ms", lib_full_name);
     casadi::Function fun_eql = casadi::external("eql_ms", lib_full_name);
 
+    std::cout << "function obj : " << fun_obj << std::endl;
+
     // Optimization variables - contains both state and input variables -- [X00 X01 X02 X03 X10 X11 X12 X13 ... U0 U1 U2 ....]
     casadi::SX X = casadi::SX::sym("X", 454, 1);
 
