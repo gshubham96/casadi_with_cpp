@@ -46,7 +46,8 @@ int main(){
     for (auto i : xx) {
         std::cout << i << " ";
     }
-    
+    std::cout << std::endl;
+ 
     std::vector<int> params(11);
     std::generate(begin(params), end(params), gen);
 
@@ -54,10 +55,10 @@ int main(){
     for (auto i : params) {
         std::cout << i << " ";
     }
+    std::cout << std::endl;
 
     std::vector<casadi::SX> arg_test = {xx, params};
-
-    // std::cout << "function arg : " << fun_obj(arg) << std::endl;
+    std::cout << "function arg : " << fun_obj(arg_test) << std::endl;
 
 
     // // Objective
