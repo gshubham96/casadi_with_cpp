@@ -57,7 +57,7 @@ int main(){
     }
     std::cout << std::endl;
 
-    std::vector<casadi::MX> arg_test = {xx, params};
+    std::vector<casadi::DM> arg_test = {xx, params};
     std::cout << "function arg : " << fun_obj(arg_test) << std::endl;
 
 
