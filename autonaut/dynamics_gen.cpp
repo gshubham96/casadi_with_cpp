@@ -12,10 +12,6 @@ int main(){
     casadi::SX U = casadi::SX::sym("U", 1, 90);
     casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
 
-    //! functions to be generated 
-    casadi::Function f_fun_obj("fun_obj", {posi, posi_des}, {fun_obj});
-    casadi::Function f_fun_obj_grad("fun_obj_grad", {posi, posi_des}, {fun_obj_grad});
-
     // location for c code
     std::string prefix_code = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/";
 
