@@ -121,3 +121,10 @@ target_link_libraries(example_nlp_code_gen ${CASADI_LIBRARIES})
 # solve a NLP given a compiled shared library
 add_executable(example_use_nlp_external example/example_use_nlp_external.cpp)
 target_link_libraries(example_use_nlp_external ${CASADI_LIBRARIES})
+
+### CUSTOM DEFINED FOR AUTONAUT
+
+# casadi function C code auto generation
+add_executable(dynamics_gen autonaut/dynamics_gen.cpp)
+target_link_libraries(dynamics_gen ${CASADI_LIBRARIES})
+

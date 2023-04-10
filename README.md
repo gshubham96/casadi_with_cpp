@@ -29,6 +29,7 @@ $ sudo apt install coinor-libipopt-dev
 $ pip3 install casadi
 ```
 
+Install Ipopt from source from [here](https://coin-or.github.io/Ipopt/INSTALL.html) 
 
 Instructions on upgrade GCC to Version 11
 ```
@@ -45,8 +46,6 @@ $ gcc --version
 $ g++ --version
 ```
 
-
-
 Build
 =====
 
@@ -59,6 +58,7 @@ $ git clone https://github.com/casadi/casadi.git -b master casadi
 $ cd casadi
 $ mkdir build
 $ cd build
+$ cmake -DWITH_PYTHON=ON -DWITH_IPOPT=ON -DWITH_OPENMP=ON -DWITH_THREAD=ON ..
 $ cmake -DWITH_PYTHON=ON -DWITH_IPOPT=ON -DWITH_OPENMP=ON -DWITH_THREAD=ON ..
 $ make
 $ sudo make install
