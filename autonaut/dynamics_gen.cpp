@@ -7,11 +7,6 @@ namespace fs = std::filesystem;
 
 int main(){
 
-    // symbolic variables
-    casadi::SX X = casadi::SX::sym("X", 4, 91);
-    casadi::SX U = casadi::SX::sym("U", 1, 90);
-    casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
-
     // location for c code
     std::string prefix_code = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/";
 
