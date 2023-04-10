@@ -42,10 +42,8 @@ int main(){
 
     // casadi::SX x_out = x_dot(args);
 
-    auto res = x_dot({{"sym_x",x_in},{"sym_u", u_in},{"sym_p", p_in}});
-
     std::cout << "function xdot : " << x_dot << std::endl;
-    std::cout << "evaluate xdot : " << res << std::endl;
+    std::cout << "evaluate xdot : " << x_dot({x_in, u_in, p_in}) << std::endl;
 
 
     // // Objective
