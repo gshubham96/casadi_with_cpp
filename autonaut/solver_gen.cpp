@@ -36,7 +36,7 @@ int main(){
     casadi::SX p_in = casadi::SX::sym("p", 11);
     std::vector<casadi::SX> args = {x_in, u_in, p_in};
 
-    casadi::SX x_out = xdot(args);
+    casadi::SX x_out = x_dot(args);
 
     std::cout << "function xdot : " << x_dot << std::endl;
     std::cout << "evaluate xdot : " << x_dot(args) << std::endl;
