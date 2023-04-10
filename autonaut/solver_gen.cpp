@@ -26,32 +26,32 @@ int main(){
     casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
 
     // Objective
-    std::vector<casadi::SX> arg_1 = {X, sym_p};
-    casadi::SX f = fun_obj(arg_1);
+    // std::vector<casadi::SX> arg_1 = {X, sym_p};
+    // casadi::SX f = fun_obj(arg_1);
 
     // Constraints
-    casadi::SX g = fun_eql(arg_1);
+    // casadi::SX g = fun_eql(arg_1);
 
-    // Create an NLP solver instance
-    casadi::Function solver = casadi::nlpsol("solver", "ipopt", {{"x", X}, {"f", f}, {"g", g}});
+    // // Create an NLP solver instance
+    // casadi::Function solver = casadi::nlpsol("solver", "ipopt", {{"x", X}, {"f", f}, {"g", g}});
 
-    // file name
-    std::string file_name = "autonaut_nlp";
-    // code predix
-    std::string prefix_code = fs::current_path().string() + "/code_gen/";
+    // // file name
+    // std::string file_name = "autonaut_nlp";
+    // // code predix
+    // std::string prefix_code = fs::current_path().string() + "/code_gen/";
 
-    // Generate C code for the NLP functions
-    solver.generate_dependencies(file_name + ".c");
+    // // Generate C code for the NLP functions
+    // solver.generate_dependencies(file_name + ".c");
 
-    // compile c code to a shared library
-    std::string compile_command = "gcc -fPIC -shared -O3 " + 
-        prefix_code + file_name + ".c -o " +
-        prefix_lib + file_name + ".so";
+    // // compile c code to a shared library
+    // std::string compile_command = "gcc -fPIC -shared -O3 " + 
+    //     prefix_code + file_name + ".c -o " +
+    //     prefix_lib + file_name + ".so";
 
-    std::cout << compile_command << std::endl;
-    int compile_flag = std::system(compile_command.c_str());
-    casadi_assert(compile_flag==0, "Compilation failed");
-    std::cout << "Compilation successed!" << std::endl;
+    // std::cout << compile_command << std::endl;
+    // int compile_flag = std::system(compile_command.c_str());
+    // casadi_assert(compile_flag==0, "Compilation failed");
+    // std::cout << "Compilation successed!" << std::endl;
 
     return 0;
 }
