@@ -25,10 +25,10 @@ int main(){
 
     // Objective
     std::vector<casadi::DM> arg_1 = {X, sym_p};
-    casadi::MX f = fun_obj(arg_1);
+    casadi::SX f = fun_obj(arg_1);
 
     // Constraints
-    casadi::MX g = fun_eql(arg_1);
+    casadi::SX g = fun_eql(arg_1);
 
     // Create an NLP solver instance
     casadi::Function solver = casadi::nlpsol("solver", "ipopt", {{"x", X}, {"f", f}, {"g", g}});
@@ -40,9 +40,6 @@ int main(){
 
     // Generate C code for the NLP functions
     solver.generate_dependencies(file_name + ".c");
-
-    // shared library prefix
-    std::string prefix_lib = fs::current_path().string() + "/build/";
 
     // compile c code to a shared library
     std::string compile_command = "gcc -fPIC -shared -O3 " + 
