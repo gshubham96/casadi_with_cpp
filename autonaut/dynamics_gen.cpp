@@ -53,7 +53,8 @@ int main(){
     casadi::DMDict x_dot_out = x_dot(casadi::DMDict{{"i0", sym_x}, {"i1", sym_u}, {"i2", sym_p}});
 
     std::cout << "x_dot 2 = " << x_dot_out << std::endl;
-    std::cout << "x_dot debug = " << x_dot(casadi::DMDict{{"i0", sym_x}, {"i1", sym_u}, {"i2", sym_p}}) << std::endl;
+
+    std::cout << "x_dot debug = " << x_dot(casadi::Dict{{"i0", sym_x}, {"i1", sym_u}, {"i2", sym_p}}) << std::endl;
 
     casadi::SX sym_xn = x_dot_out.at("x_dot_out");
 
