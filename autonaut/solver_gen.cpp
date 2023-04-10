@@ -23,8 +23,10 @@ int main(){
     // Parameters
     casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
 
-    // Objective
+    // input arguements
     std::vector<casadi::SX> arg_1 = {X, sym_p};
+
+    // Objective
     casadi::SX f = fun_obj(arg_1);
 
     // Constraints
