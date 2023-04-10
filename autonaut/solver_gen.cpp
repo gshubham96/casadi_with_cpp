@@ -31,9 +31,14 @@ int main(){
 
     //! TEST DYNAMCIS
     casadi::Function x_dot = casadi::external("x_dot", lib_full_name);
-    casadi::SX x_in = casadi::SX::sym("x", 4);
-    casadi::SX u_in = casadi::SX::sym("u", 1);
-    casadi::SX p_in = casadi::SX::sym("p", 11);
+
+    // casadi::SX x_in = casadi::SX::sym("x", 4);
+    // casadi::SX u_in = casadi::SX::sym("u", 1);
+    // casadi::SX p_in = casadi::SX::sym("p", 11);
+
+    casadi::DM x0(4, 1); // Initial state
+    casadi::DM u(1, 1);  // Input
+    casadi::DM p(11, 1); // Parameters
 
     // casadi::Dict args;
     // args["sym_x"] = x_in;
@@ -43,7 +48,8 @@ int main(){
     // casadi::SX x_out = x_dot(args);
 
     std::cout << "function xdot : " << x_dot << std::endl;
-    std::cout << "evaluate xdot : " << x_dot({x_in, u_in, p_in}) << std::endl;
+    // std::cout << "evaluate xdot : " << x_dot({x_in, u_in, p_in}) << std::endl;
+    std::cout << "evaluate xdot : " << x_dot({x0, u, p}) << std::endl;
 
 
     // // Objective
