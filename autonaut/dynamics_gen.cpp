@@ -26,9 +26,9 @@ int main(){
     // Load Casadi-dynamics function
     casadi::Function x_dot = casadi::external("x_dot", lib_full_name);
 
-    casadi::SX sym_x = casadi::SX::sym("sym_x", 4);
-    casadi::SX sym_u = casadi::SX::sym("sym_u", 1);
-    casadi::SX sym_p = casadi::SX::sym("sym_p", 11);
+    casadi::SX sym_x = casadi::SX::sym("i0", 4);
+    casadi::SX sym_u = casadi::SX::sym("i1", 1);
+    casadi::SX sym_p = casadi::SX::sym("i11", 11);
 
     // set initial state
     std::vector<double> x0(4, 0);
@@ -54,7 +54,7 @@ int main(){
 
     std::cout << "x_dot 2 = " << x_dot_out << std::endl;
 
-    std::cout << "x_dot debug = " << x_dot(casadi::Dict{{"i0", sym_x}, {"i1", sym_u}, {"i2", sym_p}}) << std::endl;
+    std::cout << "x_dot debug = " << x_dot({sym_x, sym_u, sym_p}) << std::endl;
 
     casadi::SX sym_xn = x_dot_out.at("x_dot_out");
 
