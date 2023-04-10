@@ -26,8 +26,8 @@ int main(){
     // Load Casadi-dynamics function
     casadi::Function x_dot = casadi::external("x_dot", lib_full_name);
 
-    x = casadi::SX("x");
-    y = casadi::SX("y");
+    casadi::SX x = casadi::SX("x");
+    casadi::SX y = casadi::SX("y");
     casadi::Function test = casadi::Function("test",{x,y},{x+y});
 
     // set initial state
