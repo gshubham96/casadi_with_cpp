@@ -17,6 +17,7 @@ int main(){
     std::string lib_full_name = prefix_lib + "lib_autonaut.so";
 
     // use this function
+    casadi::Function x_dot = casadi::external("x_dot", lib_full_name);
     casadi::Function fun_obj = casadi::external("obj_ms", lib_full_name);
     casadi::Function fun_eql = casadi::external("eql_ms", lib_full_name);
 
@@ -29,36 +30,12 @@ int main(){
     // input arguements
     std::vector<casadi::SX> arg = {X, sym_p};
 
-    // input
-    // First create an instance of an engine.
-    std::random_device rnd_device;
-    // Specify the engine and distribution.
-    std::mt19937 mersenne_engine {rnd_device()};  // Generates random integers
-    std::uniform_int_distribution<int> dist {1, 52};
-    auto gen = [&dist, &mersenne_engine](){
-                   return dist(mersenne_engine);
-               };
-
-    std::vector<int> xx(14);
-    std::generate(begin(xx), end(xx), gen);
-
-    // Optional
-    for (auto i : xx) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
- 
-    std::vector<int> params(11);
-    std::generate(begin(params), end(params), gen);
-
-    // Optional
-    for (auto i : params) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-
-    std::vector<casadi::DM> arg_test = {xx, params};
-    std::cout << "function arg : " << fun_obj(arg_test) << std::endl;
+    //! TEST DYNAMCIS
+    casadi::SX x_in = casadi::SX::sym("x", 4);
+    casadi::SX u_in = casadi::SX::sym("u", 1);
+    casadi::SX p_in = casadi::SX::sym("p", 11);
+    std::vector<casadi::SX> args = {x_in, u_in, p_in};
+    std::cout << "function arg : " << x_dot(arg_test) << std::endl;
 
 
     // // Objective
