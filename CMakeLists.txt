@@ -97,34 +97,38 @@ file(GLOB HEADER_FILES_H ${CMAKE_SOURCE_DIR}/include/*.h)
 
 # add executable files for test
 
-# casadi + ipopt test
-add_executable(example_racecar example/example_racecar.cpp)
-target_link_libraries(example_racecar ${CASADI_LIBRARIES} ipopt)
+# # casadi + ipopt test
+# add_executable(example_racecar example/example_racecar.cpp)
+# target_link_libraries(example_racecar ${CASADI_LIBRARIES} ipopt)
 
-# casadi basic operations
-add_executable(example_basic_operations example/example_basic_operations.cpp)
-target_link_libraries(example_basic_operations ${CASADI_LIBRARIES})
+# # casadi basic operations
+# add_executable(example_basic_operations example/example_basic_operations.cpp)
+# target_link_libraries(example_basic_operations ${CASADI_LIBRARIES})
 
-# casadi function C code auto generation
-add_executable(example_code_gen example/example_code_gen.cpp)
-target_link_libraries(example_code_gen ${CASADI_LIBRARIES})
+# # casadi function C code auto generation
+# add_executable(example_code_gen example/example_code_gen.cpp)
+# target_link_libraries(example_code_gen ${CASADI_LIBRARIES})
 
-# a test file to use auto generated code library
-# compile the test file
-add_executable(example_use_code_gen example/example_use_code_gen.cpp)
-target_link_libraries(example_use_code_gen ${CASADI_LIBRARIES})
+# # a test file to use auto generated code library
+# # compile the test file
+# add_executable(example_use_code_gen example/example_use_code_gen.cpp)
+# target_link_libraries(example_use_code_gen ${CASADI_LIBRARIES})
 
-# compile a nonlinear programming to a shared library
-add_executable(example_nlp_code_gen example/example_nlp_code_gen.cpp)
-target_link_libraries(example_nlp_code_gen ${CASADI_LIBRARIES})
+# # compile a nonlinear programming to a shared library
+# add_executable(example_nlp_code_gen example/example_nlp_code_gen.cpp)
+# target_link_libraries(example_nlp_code_gen ${CASADI_LIBRARIES})
 
-# solve a NLP given a compiled shared library
-add_executable(example_use_nlp_external example/example_use_nlp_external.cpp)
-target_link_libraries(example_use_nlp_external ${CASADI_LIBRARIES})
+# # solve a NLP given a compiled shared library
+# add_executable(example_use_nlp_external example/example_use_nlp_external.cpp)
+# target_link_libraries(example_use_nlp_external ${CASADI_LIBRARIES})
 
 ### CUSTOM DEFINED FOR AUTONAUT
 
 # casadi function C code auto generation
 add_executable(dynamics_gen autonaut/dynamics_gen.cpp)
 target_link_libraries(dynamics_gen ${CASADI_LIBRARIES})
+
+# casadi function C code auto generation
+add_executable(solver_gen autonaut/solver_gen.cpp)
+target_link_libraries(solver_gen ${CASADI_LIBRARIES})
 
