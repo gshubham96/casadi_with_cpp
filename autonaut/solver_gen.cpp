@@ -35,7 +35,7 @@ int main(){
     casadi::SX u_in = casadi::SX::sym("u", 1);
     casadi::SX p_in = casadi::SX::sym("p", 11);
 
-    Dict args;
+    casadi::Dict args;
     args["sym_x"] = x_in;
     args["sym_u"] = u_in;
     args["sym_p"] = p_in;
