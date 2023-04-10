@@ -28,9 +28,7 @@ int main(){
 
     // set initial state
     std::vector<double> x0(4, 0);
-    x0[0] = 0.0;
     x0[1] = 0.9;
-    x0[2] = 0.0;
 
     // set input
     std::vector<double> u(1, 0);
@@ -38,8 +36,13 @@ int main(){
 
     // set params
     std::vector<double> p(11, 0);
+    p[9] = 0.9;
 
     std::cout << "x0 = " << x0 << std::endl;
+    std::cout << "u  = " << x0 << std::endl;
+    std::cout << "p  = " << x0 << std::endl;
+
+    std::cout << "x_dot  = " << x_dot({x0, u, p}) << std::endl;
 
 
     return 0;
