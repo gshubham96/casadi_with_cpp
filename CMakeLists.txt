@@ -128,7 +128,7 @@ file(GLOB HEADER_FILES_H ${CMAKE_SOURCE_DIR}/include/*.h)
 add_executable(dynamics_gen autonaut/dynamics_gen.cpp)
 target_link_libraries(dynamics_gen ${CASADI_LIBRARIES})
 
-# casadi function C code auto generation
-add_executable(solver_gen autonaut/solver_gen.cpp)
-target_link_libraries(solver_gen ${CASADI_LIBRARIES})
+# # casadi function C code auto generation
+# add_executable(solver_gen autonaut/solver_gen.cpp)
+# target_link_libraries(solver_gen ${CASADI_LIBRARIES})
 
