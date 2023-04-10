@@ -46,8 +46,10 @@ int main(){
     std::cout << "u  = " << x0 << std::endl;
     std::cout << "p  = " << x0 << std::endl;
 
-    std::cout << "f_test  = " << test({0.2, 1}) << std::endl;
-    // std::cout << "x_dot  = " << x_dot({x0, u, p}) << std::endl;
+    std::vector<casadi::DM> arg_1 = {casadi::DM(x0), casadi::DM(u), casadi::DM(p)};
+
+    // std::cout << "f_test  = " << test({0.2, 1}) << std::endl;
+    std::cout << "x_dot  = " << x_dot(arg_1) << std::endl;
 
 
     return 0;
