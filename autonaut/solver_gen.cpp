@@ -5,6 +5,9 @@
 #include <filesystem>
 #include <casadi/casadi.hpp>
 
+#include <random>
+#include <algorithm>
+
 namespace fs = std::filesystem;
 
 int main(){
@@ -26,7 +29,34 @@ int main(){
     // input arguements
     std::vector<casadi::SX> arg = {X, sym_p};
 
-    std::cout << "function arg : " << fun_obj(arg) << std::endl;
+    // input
+    // First create an instance of an engine.
+    random_device rnd_device;
+    // Specify the engine and distribution.
+    mt19937 mersenne_engine {rnd_device()};  // Generates random integers
+    uniform_int_distribution<int> dist {1, 52};
+    auto gen = [&dist, &mersenne_engine](){
+                   return dist(mersenne_engine);
+               };
+
+    std::vector<int> xx(14);
+    std::generate(begin(xx), end(xx), gen);
+
+    // Optional
+    for (auto i : xx) {
+        std::cout << i << " ";
+    }
+    
+    std::vector<int> params(11);
+    std::generate(begin(params), end(params), gen);
+
+    // Optional
+    for (auto i : params) {
+        std::cout << i << " ";
+    }
+
+
+    // std::cout << "function arg : " << fun_obj(arg) << std::endl;
 
 
     // // Objective
