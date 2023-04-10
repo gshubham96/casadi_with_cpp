@@ -31,9 +31,9 @@ int main(){
 
     // input
     // First create an instance of an engine.
-    random_device rnd_device;
+    std::random_device rnd_device;
     // Specify the engine and distribution.
-    mt19937 mersenne_engine {rnd_device()};  // Generates random integers
+    std::mt19937 mersenne_engine {rnd_device()};  // Generates random integers
     std::uniform_int_distribution<int> dist {1, 52};
     auto gen = [&dist, &mersenne_engine](){
                    return dist(mersenne_engine);
