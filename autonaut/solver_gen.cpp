@@ -40,7 +40,7 @@ int main(){
     args["sym_u"] = u_in;
     args["sym_p"] = p_in;
 
-    casadi::SX x_out = x_dot(args);
+    // casadi::SX x_out = x_dot(args);
 
     std::cout << "function xdot : " << x_dot << std::endl;
     std::cout << "evaluate xdot : " << x_dot(args) << std::endl;
