@@ -25,6 +25,7 @@ int main(){
 
     // Load Casadi-dynamics function
     casadi::Function x_dot = casadi::external("x_dot", lib_full_name);
+    casadi::Function test = Function("f",{x,y},{x+y});
 
     // set initial state
     std::vector<double> x0(4, 0);
