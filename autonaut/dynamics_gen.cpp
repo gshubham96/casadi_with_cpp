@@ -8,7 +8,7 @@ namespace fs = std::filesystem;
 int main(){
 
     // location for c code generated from matlab and output lib
-    std::string file_name = "gen.c";
+    std::string file_name = "gen.c -o ";
     std::string prefix_code = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/";
     std::string prefix_lib = fs::current_path().parent_path().string() + "/build/";
     std::string lib_full_name = prefix_lib + "lib_autonaut.so";
