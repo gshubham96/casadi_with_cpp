@@ -21,7 +21,7 @@ int main() {
   }
 
   y = f_eval["o0"];
-  std::cout << "y = " << f_func(args) << 1 << std::endl;
+  std::cout << "y = " << y << std::endl;
 
   return 0;
 }
