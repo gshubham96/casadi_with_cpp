@@ -31,16 +31,16 @@ int main(){
     casadi::SX sym_p = casadi::SX::sym("i11", 11);
 
     // std::vector<casadi::SX> args;
-    std::vector<casadi::SX> args = {sym_x, sym_u, sym_p};
-    // casadi::SXDict args;
-    // args["i0"] = sym_x;
-    // args["i1"] = sym_u;
-    // args["i2"] = sym_p;
+    // std::vector<casadi::SX> args = {sym_x, sym_u, sym_p};
+    casadi::SXDict args;
+    args["i0"] = sym_x;
+    args["i1"] = sym_u;
+    args["i2"] = sym_p;
 
     // casadi::SXDict f_eval = xdot(args);
 
     std::cout << "x_dot = " << x_dot << std::endl;
-    std::cout << "x_dot(args) = " << x_dot(args) << std::endl;
+    std::cout << "x_dot(args) = " << x_dot.call(args) << std::endl;
 
 
 
