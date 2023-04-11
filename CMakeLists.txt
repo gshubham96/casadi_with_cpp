@@ -132,3 +132,5 @@ target_link_libraries(dynamics_gen ${CASADI_LIBRARIES})
 # add_executable(solver_gen autonaut/solver_gen.cpp)
 # target_link_libraries(solver_gen ${CASADI_LIBRARIES})
 
+add_executable(test_sym autonaut/test_sym.cpp)
+target_link_libraries(test_sym ${CASADI_LIBRARIES})
