@@ -30,7 +30,7 @@ int main(){
     casadi::SX sym_u = casadi::SX::sym("i1", 1);
     casadi::SX sym_p = casadi::SX::sym("i11", 11);
 
-    std::map<std::string, MatrixType> args;
+    std::map<std::string, casadi::SX> args;
     // casadi::SXDict args;
     args["i0"] = sym_x;
     args["i1"] = sym_u;
