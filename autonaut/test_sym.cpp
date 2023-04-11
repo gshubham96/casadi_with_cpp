@@ -6,7 +6,7 @@ int main() {
   casadi::SX y = casadi::SX::sym("y", 1);
 
   // Define function f = x[0]*x[1]
-  casadi::SX f = x[0]*x[1];
+  casadi::SX f = x(0)*x(1);
   casadi::Function f_func("f", {x}, {f});
 
   // Define y = f(x)
