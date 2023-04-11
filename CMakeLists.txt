@@ -125,8 +125,8 @@ file(GLOB HEADER_FILES_H ${CMAKE_SOURCE_DIR}/include/*.h)
 ### CUSTOM DEFINED FOR AUTONAUT
 
 # casadi function C code auto generation
-# add_executable(dynamics_gen autonaut/dynamics_gen.cpp)
-# target_link_libraries(dynamics_gen ${CASADI_LIBRARIES})
+add_executable(dynamics_gen autonaut/dynamics_gen.cpp)
+target_link_libraries(dynamics_gen ${CASADI_LIBRARIES})
 
 # # casadi function C code auto generation
 # add_executable(solver_gen autonaut/solver_gen.cpp)

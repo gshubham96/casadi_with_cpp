@@ -30,33 +30,15 @@ int main(){
     casadi::SX sym_u = casadi::SX::sym("i1", 1);
     casadi::SX sym_p = casadi::SX::sym("i11", 11);
 
-    // set initial state
-    std::vector<double> x0(4, 0);
-    x0[1] = 0.9;
+    // casadi::SXDict args;
+    // args["i0"] = sym_x;
+    // args["i1"] = sym_x;
+    // args["i0"] = sym_x;
 
-    // set input
-    std::vector<double> u(1, 0);
-    u[0] = 0.0;
+    // casadi::SXDict f_eval = f_func(args);
 
-    // set params
-    std::vector<double> p(11, 0);
-    p[9] = 0.9;
+    std::cout << "x_dot = " << x_dot << std::endl;
 
-    std::cout << "x0 = " << x0 << std::endl;
-    std::cout << "u  = " << x0 << std::endl;
-    std::cout << "p  = " << x0 << std::endl;
-
-    std::vector<casadi::DM> arg_1 = {casadi::DM(x0), casadi::DM(u), casadi::DM(p)};
-    std::cout << "x_dot 1 = " << x_dot(arg_1) << std::endl;
-
-    std::cout << "x_dot  = " << x_dot << std::endl;
-    casadi::DMDict x_dot_out = x_dot(casadi::DMDict{{"i0", sym_x}, {"i1", sym_u}, {"i2", sym_p}});
-
-    std::cout << "x_dot 2 = " << x_dot_out << std::endl;
-
-    std::cout << "x_dot debug = " << x_dot({sym_x, sym_u, sym_p}) << std::endl;
-
-    casadi::SX sym_xn = x_dot_out.at("x_dot_out");
 
 
     return 0;
