@@ -20,7 +20,7 @@ int main() {
     std::cout << "Value: " << item.second << std::endl;
   }
 
-//   y = f_eval;
+  y = f_eval["o0"];
   std::cout << "y = " << f_func(args) << 1 << std::endl;
 
   return 0;
