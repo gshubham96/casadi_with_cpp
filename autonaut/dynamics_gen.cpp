@@ -30,8 +30,8 @@ int main(){
     casadi::SX sym_u = casadi::SX::sym("i1", 1);
     casadi::SX sym_p = casadi::SX::sym("i11", 11);
 
-    std::map<std::string, casadi::SX> args;
-    // casadi::SXDict args;
+    // std::map<std::string, casadi::SX> args;
+    casadi::SXDict args;
     args["i0"] = sym_x;
     args["i1"] = sym_u;
     args["i2"] = sym_p;
@@ -39,7 +39,7 @@ int main(){
     // casadi::SXDict f_eval = xdot(args);
 
     std::cout << "x_dot = " << x_dot << std::endl;
-    std::cout << "x_dot(args) = " << x_dot.map(args) << std::endl;
+    std::cout << "x_dot(args) = " << x_dot(args) << std::endl;
 
 
 
