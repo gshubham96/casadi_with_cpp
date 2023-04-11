@@ -37,8 +37,8 @@ int main(){
 
     // casadi::SXDict f_eval = xdot(args);
 
-    std::cout << "x_dot = " << xdot << std::endl;
-    std::cout << "x_dot(args) = " << xdot(args) << std::endl;
+    std::cout << "x_dot = " << x_dot << std::endl;
+    std::cout << "x_dot(args) = " << x_dot(args) << std::endl;
 
 
 
