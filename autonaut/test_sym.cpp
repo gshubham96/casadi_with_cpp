@@ -12,9 +12,9 @@ int main() {
   // Define y = f(x)
   casadi::SXDict args;
   args["i0"] = x;
-//   casadi::SX f_eval = f_func(args);
+  casadi::DMDict f_eval = f_func(args);
 //   y = f_eval;
-  std::cout << "y = " << f_func(args) << x.isType<casadi::SX>() << std::endl;
+  std::cout << "y = " << f_func(args) << 1 << std::endl;
 
   return 0;
 }
