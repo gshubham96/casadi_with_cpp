@@ -14,7 +14,7 @@ int main() {
   args["i0"] = x;
 //   casadi::SX f_eval = f_func(args);
 //   y = f_eval;
-  std::cout << "y = " << f_func(args) << std::endl;
+  std::cout << "y = " << f_func(args) << x.isType<casadi::SX>() << std::endl;
 
   return 0;
 }
