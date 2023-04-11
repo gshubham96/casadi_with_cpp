@@ -31,7 +31,7 @@ int main(){
     casadi::SX sym_p = casadi::SX::sym("i11", 11);
 
     // std::vector<casadi::SX> args;
-    std::vector<casadi::DM> args = {sym_x, sym_u, sym_p};
+    std::vector<casadi::SX> args = {sym_x, sym_u, sym_p};
     // casadi::SXDict args;
     // args["i0"] = sym_x;
     // args["i1"] = sym_u;
