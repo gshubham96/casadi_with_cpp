@@ -13,6 +13,13 @@ int main() {
   casadi::SXDict args;
   args["i0"] = x;
   casadi::SXDict f_eval = f_func(args);
+
+  // print contents of Dict
+  for (auto& item : f_eval) {
+    std::cout << "Key: " << item.first << std::endl;
+    std::cout << "Value: " << item.second << std::endl;
+  }
+
 //   y = f_eval;
   std::cout << "y = " << f_func(args) << 1 << std::endl;
 
