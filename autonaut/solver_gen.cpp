@@ -10,17 +10,17 @@
 
 namespace fs = std::filesystem;
 
-class MyCallback : public Callback {
+class MyCallback : public casadi::Callback {
  public:
    // Constructor
-   MyCallback {
+   MyCallback(void) {
         std::string file_name = "gen.c -o ";
         std::string prefix_code = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/";
         std::string prefix_lib = fs::current_path().parent_path().string() + "/build/";
         std::string lib_full_name = prefix_lib + "lib_autonaut.so";
 
         // Load Casadi-dynamics function
-        x_dot = casadi::external("x_dot", lib_full_name);
+        x_dot = casadi::external("obj_ms", lib_full_name);
    }
 
    // Destructor
