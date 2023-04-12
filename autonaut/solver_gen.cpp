@@ -54,8 +54,9 @@ int main(){
     casadi::SX sym_x = casadi::SX::sym("i0", 465);
 
     casadi::Function f = cb;
-    casadi::Function g = casadi::Function("g", {sym_x}, {f(sym_x)});
-    std::cout << g(sym_x) << std::endl;
+    std::cout << f << std::endl;
+    // casadi::Function g = casadi::Function("g", {sym_x}, {f(sym_x)});
+    // std::cout << g(sym_x) << std::endl;
 
     return 0;
 }
