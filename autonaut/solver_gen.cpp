@@ -33,7 +33,7 @@ class MyCallback : public casadi::Callback {
    }
 
    // Number of inputs and outputs
-   casadi_int get_n_in() override { return 465;}
+   casadi_int get_n_in() override { return 1;}
    casadi_int get_n_out() override { return 1;}
 
    // Evaluate numerically
