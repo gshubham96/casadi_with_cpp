@@ -10,10 +10,10 @@
 
 namespace fs = std::filesystem;
 
- class MyCallback : public Callback {
+class MyCallback : public Callback {
  public:
    // Constructor
-   MyCallback(double d) {
+   MyCallback {
         std::string file_name = "gen.c -o ";
         std::string prefix_code = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/";
         std::string prefix_lib = fs::current_path().parent_path().string() + "/build/";
