@@ -38,7 +38,8 @@ class MyCallback : public casadi::Callback {
 
    // Evaluate numerically
    std::vector<casadi::DM> eval(const std::vector<casadi::DM>& arg) const override {
-    //  casadi::DM x = arg.at(0);
+     casadi::DM x = arg.at(0);
+     std::cout << x << std::endl;
      casadi::DM f = x_dot(arg);
      return {f};
    }
@@ -55,9 +56,9 @@ int main(){
     casadi::SX sym_x = casadi::SX::sym("i0", 465);
 
     casadi::Function f = cb;
-    std::cout << f << std::endl;
+    // std::cout << f << std::endl;
     casadi::Function g = casadi::Function("g", {sym_x}, {f(sym_x)});
-    std::cout << g(sym_x) << std::endl;
+    // std::cout << g(sym_x) << std::endl;
 
     return 0;
 }
