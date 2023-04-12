@@ -21,7 +21,7 @@ class MyCallback : public casadi::Callback {
 
         // Load Casadi-dynamics function
         x_dot = casadi::external("obj_ms", lib_full_name);
-        casadi::construct("x_dot");
+        construct("x_dot");
    }
 
    // Destructor
