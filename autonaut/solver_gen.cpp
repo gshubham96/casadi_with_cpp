@@ -50,9 +50,11 @@ namespace fs = std::filesystem;
 int main(){
 
     MyCallback cb ;
+
     casadi::SX sym_x = casadi::SX::sym("i0", 465);
 
-    y = cb(sym_x);
+    g = casadi::Function("g", {sym_x}, {f(sym_x)});
+    y = g(sym_x);
 
     return 0;
 }
