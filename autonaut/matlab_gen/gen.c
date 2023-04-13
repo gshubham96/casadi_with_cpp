@@ -220,7 +220,7 @@ CASADI_SYMBOL_EXPORT int x_dot_work(casadi_int *sz_arg, casadi_int* sz_res, casa
 /* phi_x:(i0[4],i1)->(o0) */
 static int casadi_f1(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
   casadi_real a0, a1, a2, a3, a4;
-  a0=1.5000000000000000e+000;
+  a0=4.5000000000000000e+000;
   a1=arg[1]? arg[1][0] : 0;
   a2=arg[0]? arg[0][0] : 0;
   a1=(a1-a2);
@@ -321,7 +321,7 @@ CASADI_SYMBOL_EXPORT int phi_x_work(casadi_int *sz_arg, casadi_int* sz_res, casa
 /* phi_u:(i0)->(o0) */
 static int casadi_f2(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
   casadi_real a0, a1;
-  a0=10.;
+  a0=3.;
   a1=arg[0]? arg[0][0] : 0;
   a0=(a0*a1);
   a0=(a0*a1);
@@ -406,7 +406,7 @@ CASADI_SYMBOL_EXPORT int phi_u_work(casadi_int *sz_arg, casadi_int* sz_res, casa
 /* obj_ms:(i0[465])->(o0) */
 static int casadi_f3(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
   casadi_real a0, a1, a10, a11, a12, a2, a3, a4, a5, a6, a7, a8, a9;
-  a0=1.5000000000000000e+000;
+  a0=4.5000000000000000e+000;
   a1=arg[0]? arg[0][454] : 0;
   a2=arg[0]? arg[0][456] : 0;
   a3=arg[0]? arg[0][455] : 0;
@@ -479,7 +479,7 @@ static int casadi_f3(const casadi_real** arg, casadi_real** res, casadi_int* iw,
   a6=(a6-a2);
   a7=(a0*a6);
   a7=(a7*a6);
-  a6=10.;
+  a6=3.;
   a8=arg[0]? arg[0][364] : 0;
   a10=(a6*a8);
   a10=(a10*a8);

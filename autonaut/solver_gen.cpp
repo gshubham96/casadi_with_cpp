@@ -290,7 +290,7 @@ class MpcProblem {
     bool solveProblem(){
 
         // TODO 
-        std::vector<double> p0 = {0, 0.9, 0, 0};
+        std::vector<double> p0 = {0.091855, 0.9821, 0.19964, 0.031876};
 
         std::map<std::string, casadi::DM> arg, res;
         arg["lbx"] = lbx;
