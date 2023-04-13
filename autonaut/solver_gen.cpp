@@ -272,7 +272,7 @@ class MpcProblem {
         solver = nlpsol("solver", "ipopt", nlp);
         // solver.print_options();
 
-        // // define state bounds
+        // define state bounds
         for(int i = 0; i < nx*(N+1); i++){
             lbx.push_back(-casadi::inf);
             ubx.push_back(casadi::inf);
@@ -285,32 +285,32 @@ class MpcProblem {
         }
     }
 
-    // bool solveProblem(){
+    bool solveProblem(){
 
-    //     // TODO 
-    //     std::vector p0 = {0, 0.9, 0, 0};
+        // TODO 
+        std::vector p0 = {0, 0.9, 0, 0};
 
-    //     std::map<std::string, casadi::DM> arg, res;
-    //     arg["lbx"] = lbx;
-    //     arg["ubx"] = ubx;
-    //     arg["lbg"] = lbg;
-    //     arg["ubg"] = ubg;
-    //     // arg["x0"] = x0;
-    //     arg["p"] = p0;
+        std::map<std::string, casadi::DM> arg, res;
+        arg["lbx"] = lbx;
+        arg["ubx"] = ubx;
+        arg["lbg"] = lbg;
+        arg["ubg"] = ubg;
+        // arg["x0"] = x0;
+        arg["p"] = p0;
 
-    //     res = solver(arg);
-    //     std::vector<double> optimized_vars = res.at("x");
-    //     std::cout << "optimal input found that is: " << optimal_input(0) << std::endl;
+        res = solver(arg);
+        std::vector<double> optimized_vars = res.at("x");
+        std::cout << "optimal input found that is: " << optimal_input(0) << std::endl;
         
-    //     std::ofstream file;
-    //     std::string filename = "casadi_ipopt_results.m";
-    //     file.open(filename.c_str());
-    //     file << "% Results file from " __FILE__ << std::endl;
-    //     file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
-    //     file << std::endl;
-    //     file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
+        std::ofstream file;
+        std::string filename = "casadi_ipopt_results.m";
+        file.open(filename.c_str());
+        file << "% Results file from " __FILE__ << std::endl;
+        file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+        file << std::endl;
+        file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
 
-    // }
+    }
 
    // Destructor
    ~MpcProblem() { std::cout << "MyCallback is destroyed here." << std::endl; };
@@ -321,6 +321,8 @@ class MpcProblem {
 int main(){
 
     MpcProblem NMPC ;
+
+    NMPC.solveProblem()
 
     // std::cout << g(sym_x) << std::endl;
 
