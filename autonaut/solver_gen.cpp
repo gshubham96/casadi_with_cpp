@@ -202,42 +202,34 @@ class MpcProblem {
             casadi::SX cost_u = sym_du * R * sym_du;
 
             obj = obj + cost_u + cost_x;
-            std::cout << "4 check point * " << 0 << std::endl;
 
             // multiple shooting using Runge-Kutta4
-            std::cout << "4 check point * " << "0.0.1" << std::endl;
             casadi::SXDict args, f_eval;
-            std::cout << "4 check point * " << "0.0.2" << std::endl;
             // Stage 1
             args["i0"] = sym_x;
-            std::cout << "4 check point * " << "0.0.3" << std::endl;
             args["i1"] = sym_u;
-            std::cout << "4 check point * " << "0.0.4" << std::endl;
             f_eval = x_dot(args);
-            std::cout << "4 check point * " << "0.0.5" << std::endl;
             casadi::SX rk1 = f_eval["i0"];
-            std::cout << "4 check point * " << "0.0.6" << std::endl;
 
-            std::cout << "4 check point * " << 0.1 << std::endl;
             // Stage 2
             args["i0"] = sym_x + 0.5*Ts*rk1;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX rk2 = f_eval.at("i0");
+            casadi::SX rk2 = f_eval["i0"];
 
             std::cout << "4 check point * " << 0.2 << std::endl;
             // Stage 3
             args["i0"] = sym_x + 0.5*Ts*rk2;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX rk3 = f_eval.at("i0");
+            casadi::SX rk3 = f_eval["i0"];
 
             std::cout << "4 check point * " << 0.3 << std::endl;
             // Stage 4
             args["i0"] = sym_x + Ts*rk3;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX rk4 = f_eval.at("i0");
+            casadi::SX rk4 = f_eval["i0"];
 
             std::cout << "4 check point * " << 0.4 << std::endl;
 
