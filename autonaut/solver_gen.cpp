@@ -217,53 +217,40 @@ class MpcProblem {
             f_eval = x_dot(args);
             casadi::SX rk2 = f_eval["o0"];
 
-            std::cout << "4 check point * " << 0.2 << std::endl;
             // Stage 3
             args["i0"] = sym_x + 0.5*Ts*rk2;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
             casadi::SX rk3 = f_eval["o0"];
 
-            std::cout << "4 check point * " << 0.3 << std::endl;
             // Stage 4
             args["i0"] = sym_x + Ts*rk3;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
             casadi::SX rk4 = f_eval["o0"];
 
-            std::cout << "4 check point * " << 0.4 << std::endl;
-
            // next state
             casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
-
-            std::cout << "4 check point * " << 1 << std::endl;
 
             casadi::SX x_n = casadi::SX::sym("x_n", 4);
             for(int j = 0; j < nx; j++)
                 x_n(j) = X(j,i+1);
 
-            std::cout << "4 check point * " << 2 << std::endl;
-
             for(int j = 0; j < nx; j++)
                 sym_dx.push_back(X(j,i) - sym_x_rk4(j));
             sym_dx[1] = ssa(sym_dx[1]);
 
-            std::cout << "4 check point * " << 3 << std::endl;
-
             for(int j = 0; j < nx; j++)
                 g.push_back(sym_dx[j]);
-
-            std::cout << "4 check point * " << 4 << std::endl;
 
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
                 optims.push_back(X(j,i));
             optims.push_back(U(i));
-
         }
 
-        // std::cout << "4 g = " << g << std::endl;
-        // std::cout << "5 obj = " << obj << std::endl;
+        std::cout << "4 g = " << g << std::endl;
+        std::cout << "5 obj = " << obj << std::endl;
 
 
         // for(int j = 0; j < nx; j++)
