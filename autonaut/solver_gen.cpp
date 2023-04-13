@@ -7,59 +7,240 @@
 
 #include <random>
 #include <algorithm>
+#include <cmath>
+
+#define PI 3.14159
+#define EPS 1e-9
+#define DEG2RAD(angle) ((angle) * M_PI / 180.0)
 
 namespace fs = std::filesystem;
 
-class MyCallback : public casadi::Callback {
- public:
-   // Constructor
-   MyCallback(void) {
-        std::string file_name = "gen.c -o ";
-        std::string prefix_code = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/";
-        std::string prefix_lib = fs::current_path().parent_path().string() + "/build/";
-        std::string lib_full_name = prefix_lib + "lib_autonaut.so";
+// linear, 4, chi_d
+class MpcProblem {
 
-        // Load Casadi-dynamics function
-        x_dot = casadi::external("obj_ms", lib_full_name);
-        construct("x_dot");
-   }
+    private:
+        // costs
+        int nx, nu, np;
+        double Tp, Ts, N;
+        double Q, R;
+
+        // params
+        double chi_d;
+        double Vc, beta_c, Vw, beta_w, k_1, k_2;
+        // std::vector<double> x0;
+
+        // bounds
+        std::vector<double> ubx, lbx, ubu, lbu;
+
+        // state vectors 
+        casadi::SX psi, u, v, r;
+        casadi::SX delta;
+        casadi::SX sym_x, sym_u, p_x0;
+
+        casadi::SX u_e, u_c, v_c, u_r, v_r, nu_r, U_r2, beta;
+
+        // Optimization variables
+        casadi::SX X, U;
+
+        // Objective Function
+        casadi::SX obj;
+
+        // constraints (multiple-shooting)
+        casadi::SX g;
+
+        // helper vars
+        casadi::SX sym_dx, sym_du;
+
+        double ssa(double diff) {
+            while (diff < -PI) diff += 2 * PI;
+            while (diff > PI) diff -= 2 * PI;
+            return diff;
+        }
+
+        casadi::Function solver;
+
+    public:
+
+    MpcProblem(void){
+
+        // mpc params
+        Tp = 45; Ts = 0.5; N = Tp / Ts;
+
+        // named symbolica vars
+        psi = casadi::SX::sym("psi", 1);
+        u = casadi::SX::sym("u", 1);
+        v = casadi::SX::sym("v", 1);
+        r = casadi::SX::sym("r", 1);
+        delta = casadi::SX::sym("delta", 1);
+
+        // optim vars for each shooting period 
+        sym_x = casadi::vertcat(psi, u, v, r);
+        sym_u = delta;
+
+        // model dims
+        nx = 4; nu = 1; np = 11;
+
+        // constant parameters for test - Vc, beta_c, Vw, beta_w,
+        Vc = 0.35; beta_c = 1.57;
+        Vw = 5;    beta_w = 1.57;
+        k_1 = 0.1; k_2 = 0.1;
+
+        // detived states
+        u_e = u + EPS;
+        u_c = Vc * cos(beta_c - beta_c);
+        v_c = Vc * sin(beta_c - beta_c);
+        u_r = u_e - u_c;
+        v_r = v - u_c;
+        nu_r = casadi::vertcat(u_r, v_r, r);
+        U_r2 = pow(u_r, 2) + pow(v_r, 2);
+        beta = atan(v / u_e);
+
+        // dynamics of yaw
+        yaw_dot = r;
+        // dynamics of surge
+        u_dot = k_1 - 1.0 * u - 3.5e-3 * pow(delta, 2) * (53.0 * pow(u + 2.2e-16, 2) + 53.0 * pow(v, 2)) - 1.0 * k_2 * cos(psi) - 2.2e-16;
+        // dynamics of sway
+        v_dot = 0.2*r - 0.51*v - 1.3e-3*delta*(100.0*pow(u+2.2e-16,2) + 100.0*pow(v,2)) - 8.9e-5*delta*(210.0*pow(u+2.2e-16,2) + 210.0*pow(v,2));
+        // dynamics of yaw rate
+        r_dot = 0.035 * v - 1.0 * r + 8.9e-5 * delta * (100.0 * pow(u + 2.2e-16, 2) + 100.0 * pow(v, 2)) + 4.6e-4 * delta * (210.0 * pow(u + 2.2e-16, 2) + 210.0 * pow(v, 2));
+
+        nu_dot = casadi::vertcat(yaw_dot, u_dot, v_dot, r_dot);
+        casadi::Function x_dot = casadi::Function("x_dot", {sym_x, sym_u}, {nu_dot});
+
+        // optimization variables
+        X = casadi::SX::sym("X", 4, N+1);
+        U = casadi::SX::sym("U", 1, N);
+
+        // set initial state
+        sym_dx = X(1:4,1) - p_x0;
+        sym_dx(1) = ssa(sym_dx(1));
+
+        std::vector<casadi::SX> optims, g;
+        obj = 0;
+
+        for(int j = 0; j < nx; j++)
+            g.push_back(sym_dx(j));
+        // g = casadi::vertcat(g, sym_dx);
+
+        // optimization loop
+        for(int i = 0; i < N, i++){
+            
+            sym_x = X(1:4,i);
+            sym_u = U(1,i);
+            if(i > 1)
+                sym_du = U(1,i) - U(1,i-1);
+            else
+                sym_du = U(1,i);
+
+            casadi::SX psi_p = sym_x(1);
+            casadi::SX u_p = sym_x(2) + EPS;
+            casadi::SX v_p = sym_x(3);
+            casadi::SX r_p = sym_x(4);
+            
+            casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
+            casadi::SX cost_u = sym_du * R * sym_du;
+
+            obj = obj + cost_u + cost_x;
+
+            // multiple shooting
+            casadi::SX x_n = X(:,i+1);
+
+            // Runge-Kutta4
+            casadi::SX rk1 = x_dot({x_n, sym_u});
+
+            casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
+            casadi::SX rk2 = x_dot({x_n_r, sym_u});
+
+            x_n_r = x_n + 0.5*Ts*rk2;
+            casadi::SX rk3 = x_dot({x_n_r, sym_u});
+
+            x_n_r = x_n + Ts*rk3;
+            casadi::SX rk4 = x_dot({x_n_r, sym_u});
+
+            x_n_r = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+
+            // compute state difference
+            sym_dx = x_n - x_n_r;
+            sym_dx(1) = ssa(sym_dx(1));
+
+            g = casadi::vertcat(g, sym_dx);
+
+            // push into main vector being optimized
+            for(int j = 0; j < nx; j++){
+                g.push_back(sym_dx(j));
+                optims.push_back(X(j,i));
+            }
+            optims.push_back(U(i));
+
+        }
+        for(int j = 0; j < nx; j++)
+            optims.push_back(X(j,N+1));
+
+        // nlp problem
+        casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
+
+        // nlp options
+        casadi::Dict opts;
+        opts["max_iter"] = 300;
+        opts["print_level"] = 3;
+        opts["acceptable_tol"] = 1e-8;
+        opts["acceptable_obj_change_tol"] = 1e-6;
+        // TODO first try withut warm start
+        // opts["warm_start_init_point"] = "yes";
+
+        solver = nlpsol("solver", "ipopt", nlp, opts);
+
+        // define state bounds
+        ubx = std::vector<double> ubx(n, 10);
+        for(int i = 0; i < nx*(N+1); i++){
+            lbx.push_back(-inf);
+            ubx.push_back(inf);
+            lbg.push_back(0); 
+            ubg.push_back(0); 
+        }
+        for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
+            lbx.push_back(-DEG2RAD(40));
+            ubx.push_back(DEG2RAD(40));
+        }
+    }
+
+    // bool solveProblem(){
+
+    //     // TODO 
+    //     std::vector p0 = {0, 0.9, 0, 0};
+
+    //     std::map<std::string, casadi::DM> arg, res;
+    //     arg["lbx"] = lbx;
+    //     arg["ubx"] = ubx;
+    //     arg["lbg"] = lbg;
+    //     arg["ubg"] = ubg;
+    //     // arg["x0"] = x0;
+    //     arg["p"] = p0;
+
+    //     res = solver(arg);
+    //     std::vector<double> optimized_vars = res.at("x");
+    //     std::cout << "optimal input found that is: " << optimal_input(0) << std::endl;
+        
+    //     std::ofstream file;
+    //     std::string filename = "casadi_ipopt_results.m";
+    //     file.open(filename.c_str());
+    //     file << "% Results file from " __FILE__ << std::endl;
+    //     file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+    //     file << std::endl;
+    //     file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
+
+    // }
 
    // Destructor
-   ~MyCallback() override { std::cout << "MyCallback is destroyed here." << std::endl; };
+   ~MpcProblem() { std::cout << "MyCallback is destroyed here." << std::endl; };
 
-   // Initialize the object
-   void init() override {
-     std::cout << "initializing object" << std::endl;
-   }
 
-   // Number of inputs and outputs
-   casadi_int get_n_in() override { return 1;}
-   casadi_int get_n_out() override { return 1;}
-
-   // Evaluate numerically
-   std::vector<casadi::DM> eval(const std::vector<casadi::DM>& arg) const override {
-     casadi::DM x = arg.at(0);
-     std::cout << x << std::endl;
-     casadi::DM f = x_dot(arg);
-     return {f};
-   }
-
- private:
-   // Data members
-    casadi::Function x_dot;
  };
 
 int main(){
 
-    MyCallback cb ;
+    MpcProblem NMPC ;
 
-    casadi::SX sym_x = casadi::SX::sym("i0", 465);
-
-    casadi::Function f = cb;
-    std::cout << f << std::endl;
-    std::cout << f({sym_x}) << std::endl;
-
-    // casadi::Function g = casadi::Function("g", {sym_x}, {f(sym_x)});
     // std::cout << g(sym_x) << std::endl;
 
     return 0;
