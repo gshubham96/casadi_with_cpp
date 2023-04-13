@@ -185,7 +185,7 @@ class MpcProblem {
             casadi::SX v_p = sym_x(2);
             casadi::SX r_p = sym_x(3);
 
-            // objective function
+            //! TODO: Add beta to objective function
             casadi::SX delta_x = ssa(chi_d - psi_p);
             casadi::SX cost_x  = delta_x * Q * delta_x;
             casadi::SX cost_u  = sym_du * R * sym_du;
@@ -231,6 +231,7 @@ class MpcProblem {
             for(int j = 0; j < nx; j++)
                 optims((nx+nu)*i + j) = X(j,i);
             optims((nx+nu)*i + nx) = U(i);
+            std::coud << "input is at: " << (nx+nu)*i + nx << std::endl;
         }
 
         for(int j = 0; j < nx; j++)
