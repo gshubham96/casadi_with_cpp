@@ -273,7 +273,6 @@ class MpcProblem {
         // solver.print_options();
 
         // // define state bounds
-        ubx = std::vector<double> ubx(n, 10);
         for(int i = 0; i < nx*(N+1); i++){
             lbx.push_back(-casadi::inf);
             ubx.push_back(casadi::inf);
