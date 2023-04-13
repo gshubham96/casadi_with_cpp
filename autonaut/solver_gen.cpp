@@ -212,8 +212,6 @@ class MpcProblem {
             for(int j = 0; j < nx; j++)
                 x_n(j) = X(j,i+1);
 
-            std::cout << "check point * " << 3 << std::endl;
-
             casadi::SXDict args;
             // Stage 1
             args["i0"] = x_n;
@@ -249,8 +247,8 @@ class MpcProblem {
 
         }
 
-        std::cout << "4 g = " << g << std::endl;
-        std::cout << "5 obj = " << obj << std::endl;
+        // std::cout << "4 g = " << g << std::endl;
+        // std::cout << "5 obj = " << obj << std::endl;
 
 
         // for(int j = 0; j < nx; j++)
