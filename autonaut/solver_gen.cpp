@@ -74,7 +74,7 @@ class MpcProblem {
         delta = casadi::SX::sym("delta", 1);
 
         // optim vars for each shooting period 
-        sym_x = casadi::vertcat(psi, u, v, r);
+        sym_x = vertcat(psi, u, v, r);
         sym_u = delta;
 
         // model dims
@@ -91,21 +91,21 @@ class MpcProblem {
         v_c = Vc * sin(beta_c - beta_c);
         u_r = u_e - u_c;
         v_r = v - u_c;
-        nu_r = casadi::vertcat(u_r, v_r, r);
+        nu_r = vertcat(u_r, v_r, r);
         U_r2 = pow(u_r, 2) + pow(v_r, 2);
         beta = atan(v / u_e);
 
         // dynamics of yaw
-        yaw_dot = r;
+        casadi::SX yaw_dot = r;
         // dynamics of surge
-        u_dot = k_1 - 1.0 * u - 3.5e-3 * pow(delta, 2) * (53.0 * pow(u + 2.2e-16, 2) + 53.0 * pow(v, 2)) - 1.0 * k_2 * cos(psi) - 2.2e-16;
+        casadi::SX u_dot = k_1 - 1.0 * u - 3.5e-3 * pow(delta, 2) * (53.0 * pow(u + 2.2e-16, 2) + 53.0 * pow(v, 2)) - 1.0 * k_2 * cos(psi) - 2.2e-16;
         // dynamics of sway
-        v_dot = 0.2*r - 0.51*v - 1.3e-3*delta*(100.0*pow(u+2.2e-16,2) + 100.0*pow(v,2)) - 8.9e-5*delta*(210.0*pow(u+2.2e-16,2) + 210.0*pow(v,2));
+        casadi::SX v_dot = 0.2*r - 0.51*v - 1.3e-3*delta*(100.0*pow(u+2.2e-16,2) + 100.0*pow(v,2)) - 8.9e-5*delta*(210.0*pow(u+2.2e-16,2) + 210.0*pow(v,2));
         // dynamics of yaw rate
-        r_dot = 0.035 * v - 1.0 * r + 8.9e-5 * delta * (100.0 * pow(u + 2.2e-16, 2) + 100.0 * pow(v, 2)) + 4.6e-4 * delta * (210.0 * pow(u + 2.2e-16, 2) + 210.0 * pow(v, 2));
+        casadi::SX r_dot = 0.035 * v - 1.0 * r + 8.9e-5 * delta * (100.0 * pow(u + 2.2e-16, 2) + 100.0 * pow(v, 2)) + 4.6e-4 * delta * (210.0 * pow(u + 2.2e-16, 2) + 210.0 * pow(v, 2));
 
-        nu_dot = casadi::vertcat(yaw_dot, u_dot, v_dot, r_dot);
-        casadi::Function x_dot = casadi::Function("x_dot", {sym_x, sym_u}, {nu_dot});
+        casadi::SX nu_dot = casadi::vertcat(yaw_dot, u_dot, v_dot, r_dot);
+        casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
 
         std::cout << "2 x_dot = " << x_dot << std::endl
 
