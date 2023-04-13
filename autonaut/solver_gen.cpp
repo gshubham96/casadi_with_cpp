@@ -324,7 +324,7 @@ int main(){
 
     MpcProblem NMPC ;
 
-    NMPC.solveProblem()
+    std::cout<< NMPC.solveProblem() << std::endl;
 
     // std::cout << g(sym_x) << std::endl;
 
