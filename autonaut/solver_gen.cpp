@@ -261,29 +261,29 @@ class MpcProblem {
 
         // nlp options
         casadi::Dict opts;
-        opts["max_iter"] = 300;
-        opts["print_level"] = 3;
+        // opts["max_iter"] = 300;
+        // opts["print_level"] = 3;
         // opts["acceptable_tol"] = 1e-8;
         // opts["acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
         // opts["warm_start_init_point"] = "yes";
 
-        solver = nlpsol("solver", "ipopt", nlp, opts);
-        // solver = nlpsol("solver", "ipopt", nlp);
+        // solver = nlpsol("solver", "ipopt", nlp, opts);
+        solver = nlpsol("solver", "ipopt", nlp);
         // solver.print_options();
 
         // // define state bounds
-        // ubx = std::vector<double> ubx(n, 10);
-        // for(int i = 0; i < nx*(N+1); i++){
-        //     lbx.push_back(-inf);
-        //     ubx.push_back(inf);
-        //     lbg.push_back(0); 
-        //     ubg.push_back(0); 
-        // }
-        // for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
-        //     lbx.push_back(-DEG2RAD(40));
-        //     ubx.push_back(DEG2RAD(40));
-        // }
+        ubx = std::vector<double> ubx(n, 10);
+        for(int i = 0; i < nx*(N+1); i++){
+            lbx.push_back(-inf);
+            ubx.push_back(inf);
+            lbg.push_back(0); 
+            ubg.push_back(0); 
+        }
+        for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
+            lbx.push_back(-DEG2RAD(40));
+            ubx.push_back(DEG2RAD(40));
+        }
     }
 
     // bool solveProblem(){
