@@ -181,8 +181,8 @@ class MpcProblem {
 
         // optimization loop
         obj = 0;
-        // for(int i = 0; i < N; i++){
-        for(int i = 0; i < 2; i++){
+        for(int i = 0; i < N; i++){
+        // for(int i = 0; i < 2; i++){
             
             sym_u = U(i);
             for(int j = 0; j < nx; j++)
@@ -249,8 +249,8 @@ class MpcProblem {
             optims.push_back(U(i));
         }
 
-        std::cout << "4 g = " << g << std::endl;
-        std::cout << "5 obj = " << obj << std::endl;
+        // std::cout << "4 g = " << g << std::endl;
+        // std::cout << "5 obj = " << obj << std::endl;
 
 
         // for(int j = 0; j < nx; j++)
