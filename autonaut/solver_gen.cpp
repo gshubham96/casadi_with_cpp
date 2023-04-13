@@ -213,6 +213,8 @@ class MpcProblem {
 
             std::cout << "4 check point * " << 0.1 << std::endl;
             // Stage 2
+            std::cout << "4 check point unn_x " << sym_x << std::endl;
+            std::cout << "4 check point tuu " << 0.5*Ts*rk1 << std::endl;
             args["i0"] = sym_x + 0.5*Ts*rk1;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
