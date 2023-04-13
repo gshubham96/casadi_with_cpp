@@ -59,11 +59,9 @@ class MpcProblem {
             return diff;
         }
 
-        // casadi::SX ssa(casadi::SX diff) {
-        //     while (diff < -PI) diff += 2 * PI;
-        //     while (diff > PI) diff -= 2 * PI;
-        //     return diff;
-        // }
+        casadi::SX ssa(casadi::SX diff) {
+            return casadi::fmod(diff, 2*PI) - PI;
+        }
 
         casadi::Function solver;
 
@@ -177,7 +175,7 @@ class MpcProblem {
         // set initial state
         for(int j = 0; j < nx; j++)
             sym_dx.push_back(X(j,1) - p_x0(j));
-        // sym_dx(1) = ssa(sym_dx(1));
+        sym_dx(1) = ssa(sym_dx(1));
 
         for(int j = 0; j < nx; j++)
             g.push_back(sym_dx[j]);
