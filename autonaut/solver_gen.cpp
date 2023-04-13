@@ -208,39 +208,35 @@ class MpcProblem {
 
             // multiple shooting using Runge-Kutta4
             casadi::SXDict args, f_eval;
-            // // Stage 1
-            // args["i0"] = sym_x;
-            // args["i1"] = sym_u;
-            // f_eval = x_dot(args);
-            // casadi::SX rk1 = f_eval["o0"];
-
-            // // Stage 2
-            // args["i0"] = sym_x + 0.5*Ts*rk1;
-            // args["i1"] = sym_u;
-            // f_eval = x_dot(args);
-            // casadi::SX rk2 = f_eval["o0"];
-
-            // // Stage 3
-            // args["i0"] = sym_x + 0.5*Ts*rk2;
-            // args["i1"] = sym_u;
-            // f_eval = x_dot(args);
-            // casadi::SX rk3 = f_eval["o0"];
-
-            // // Stage 4
-            // args["i0"] = sym_x + Ts*rk3;
-            // args["i1"] = sym_u;
-            // f_eval = x_dot(args);
-            // casadi::SX rk4 = f_eval["o0"];
-
-            // Euler
+            // Stage 1
             args["i0"] = sym_x;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX eul = f_eval["o0"];
+            casadi::SX rk1 = f_eval["o0"];
+            std::cout << "rk1 " << "= " << rk1 << std::endl;
+            return false
+
+
+            // Stage 2
+            args["i0"] = sym_x + 0.5*Ts*rk1;
+            args["i1"] = sym_u;
+            f_eval = x_dot(args);
+            casadi::SX rk2 = f_eval["o0"];
+
+            // Stage 3
+            args["i0"] = sym_x + 0.5*Ts*rk2;
+            args["i1"] = sym_u;
+            f_eval = x_dot(args);
+            casadi::SX rk3 = f_eval["o0"];
+
+            // Stage 4
+            args["i0"] = sym_x + Ts*rk3;
+            args["i1"] = sym_u;
+            f_eval = x_dot(args);
+            casadi::SX rk4 = f_eval["o0"];
 
            // next state
-            // casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
-            casadi::SX sym_x_rk4 = sym_x + Ts * eul;
+            casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
             casadi::SX x_n = casadi::SX::sym("x_n", 4);
             for(int j = 0; j < nx; j++)
@@ -280,7 +276,7 @@ class MpcProblem {
         // opts["warm_start_init_point"] = "yes";
 
         // solver = nlpsol("solver", "ipopt", nlp, opts);
-        solver = nlpsol("solver", "ipopt", nlp);
+        // solver = nlpsol("solver", "ipopt", nlp);
         // solver.print_options();
 
         // define state bounds
@@ -309,7 +305,7 @@ class MpcProblem {
         // arg["x0"] = x0;
         arg["p"] = p0;
 
-        res = solver(arg);
+        // res = solver(arg);
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
