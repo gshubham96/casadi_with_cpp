@@ -264,7 +264,7 @@ class MpcProblem {
         opts["max_iter"] = 300;
         opts["print_level"] = 3;
         opts["acceptable_tol"] = 1e-8;
-        opts["acceptable_obj_change_tol"] = 1e-6;
+        // opts["acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
         // opts["warm_start_init_point"] = "yes";
 
