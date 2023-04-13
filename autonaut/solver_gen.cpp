@@ -46,7 +46,8 @@ class MpcProblem {
         casadi::SX obj;
 
         // constraints (multiple-shooting)
-        casadi::SX g;
+        std::vector<casadi::SX> optims, g;
+
 
         // helper vars
         casadi::SX sym_dx, sym_du;
@@ -164,19 +165,21 @@ class MpcProblem {
         // optimization variables
         X = casadi::SX::sym("X", 4, N+1);
         U = casadi::SX::sym("U", 1, N);
+        p_x0 = casadi::SX::sym("p_x0", 1, nx);
 
         // set initial state
-        sym_dx = X(1:4,1) - p_x0;
+        for(int j = 0; j < nx; j++)
+            sym_dx(j) = X(j,1) - p_x0(j);
         sym_dx(1) = ssa(sym_dx(1));
-
-        std::vector<casadi::SX> optims, g;
-        obj = 0;
 
         for(int j = 0; j < nx; j++)
             g.push_back(sym_dx(j));
-        g = casadi::vertcat(g, sym_dx);
+
+        std::cout << "3 g = " << g << std::endl;
+
 
         // // optimization loop
+        obj = 0;
         // for(int i = 0; i < N, i++){
             
         //     sym_x = X(1:4,i);
