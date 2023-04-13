@@ -253,7 +253,7 @@ class MpcProblem {
         // std::cout << "5 obj = " << obj << std::endl;
 
         for(int j = 0; j < nx; j++)
-            optims.push_back(X(j,N+1));
+            optims.push_back(X(j,N));
 
         // nlp problem
         // casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
