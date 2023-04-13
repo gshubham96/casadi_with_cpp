@@ -205,22 +205,22 @@ class MpcProblem {
             casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
             casadi::SX cost_u = sym_du * R * sym_du;
 
-            // obj = obj + cost_u + cost_x;
+            obj = obj + cost_u + cost_x;
 
-            // // multiple shooting
-            // casadi::SX x_n = X(:,i+1);
+            // multiple shooting
+            casadi::SX x_n = X(:,i+1);
 
-            // // Runge-Kutta4
-            // casadi::SX rk1 = x_dot({x_n, sym_u});
+            // Runge-Kutta4
+            casadi::SX rk1 = x_dot({x_n, sym_u});
 
-            // casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
-            // casadi::SX rk2 = x_dot({x_n_r, sym_u});
+            casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
+            casadi::SX rk2 = x_dot({x_n_r, sym_u});
 
-            // x_n_r = x_n + 0.5*Ts*rk2;
-            // casadi::SX rk3 = x_dot({x_n_r, sym_u});
+            x_n_r = x_n + 0.5*Ts*rk2;
+            casadi::SX rk3 = x_dot({x_n_r, sym_u});
 
-            // x_n_r = x_n + Ts*rk3;
-            // casadi::SX rk4 = x_dot({x_n_r, sym_u});
+            x_n_r = x_n + Ts*rk3;
+            casadi::SX rk4 = x_dot({x_n_r, sym_u});
 
             // x_n_r = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
