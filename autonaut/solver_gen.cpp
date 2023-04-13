@@ -177,7 +177,7 @@ class MpcProblem {
         // set initial state
         sym_dx = casadi::SX::sym("sym_dx", 4);
         for(int j = 0; j < nx; j++)
-            sym_dx(j) = X(j,1) - p_x0(j);
+            sym_dx(j) = X(j,0) - p_x0(j);
         sym_dx(0) = ssa(sym_dx(0));
 
         for(int j = 0; j < nx; j++)
