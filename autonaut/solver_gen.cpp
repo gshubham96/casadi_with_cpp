@@ -87,6 +87,7 @@ class MpcProblem {
         Vc = 0.35; beta_c = 1.57; Vw = 0; beta_w = 0; k_1 = 0; k_2 = 0;
 
         // system params
+        double D11, R11, INV_M11;
         D11 = 286.7200;
         R11 = -53.2158;
         INV_M11 = 0.0035;
