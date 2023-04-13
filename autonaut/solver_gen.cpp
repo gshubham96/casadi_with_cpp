@@ -184,8 +184,8 @@ class MpcProblem {
             g(j) = sym_dx[j];
 
         // optimization loop
-        for(int i = 0; i < N; i++){
-        // for(int i = 0; i < 2; i++){
+        // for(int i = 0; i < N; i++){
+        for(int i = 0; i < 2; i++){
             
             for(int j = 0; j < nx; j++)
                 sym_x(j) = X(j,i);
