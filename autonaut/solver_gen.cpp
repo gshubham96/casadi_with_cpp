@@ -180,61 +180,63 @@ class MpcProblem {
         for(int j = 0; j < nx; j++)
             g.push_back(sym_dx[j]);
 
-        std::cout << "3 g = " << g << std::endl;
-
-
-        // // optimization loop
+        // optimization loop
         obj = 0;
-        // for(int i = 0; i < N, i++){
+        for(int i = 0; i < N, i++){
             
-        //     sym_x = X(1:4,i);
-        //     sym_u = U(1,i);
-        //     if(i > 1)
-        //         sym_du = U(1,i) - U(1,i-1);
-        //     else
-        //         sym_du = U(1,i);
+            sym_x = X(1:4,i);
+            sym_u = U(1,i);
+            if(i > 1)
+                sym_du = U(1,i) - U(1,i-1);
+            else
+                sym_du = U(1,i);
 
-        //     casadi::SX psi_p = sym_x(1);
-        //     casadi::SX u_p = sym_x(2) + EPS;
-        //     casadi::SX v_p = sym_x(3);
-        //     casadi::SX r_p = sym_x(4);
+            casadi::SX psi_p = sym_x(1);
+            casadi::SX u_p = sym_x(2) + EPS;
+            casadi::SX v_p = sym_x(3);
+            casadi::SX r_p = sym_x(4);
             
-        //     casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
-        //     casadi::SX cost_u = sym_du * R * sym_du;
+            casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
+            casadi::SX cost_u = sym_du * R * sym_du;
 
-        //     obj = obj + cost_u + cost_x;
+            obj = obj + cost_u + cost_x;
 
-        //     // multiple shooting
-        //     casadi::SX x_n = X(:,i+1);
+            // multiple shooting
+            casadi::SX x_n = X(:,i+1);
 
-        //     // Runge-Kutta4
-        //     casadi::SX rk1 = x_dot({x_n, sym_u});
+            // Runge-Kutta4
+            casadi::SX rk1 = x_dot({x_n, sym_u});
 
-        //     casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
-        //     casadi::SX rk2 = x_dot({x_n_r, sym_u});
+            casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
+            casadi::SX rk2 = x_dot({x_n_r, sym_u});
 
-        //     x_n_r = x_n + 0.5*Ts*rk2;
-        //     casadi::SX rk3 = x_dot({x_n_r, sym_u});
+            x_n_r = x_n + 0.5*Ts*rk2;
+            casadi::SX rk3 = x_dot({x_n_r, sym_u});
 
-        //     x_n_r = x_n + Ts*rk3;
-        //     casadi::SX rk4 = x_dot({x_n_r, sym_u});
+            x_n_r = x_n + Ts*rk3;
+            casadi::SX rk4 = x_dot({x_n_r, sym_u});
 
-        //     x_n_r = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+            x_n_r = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
-        //     // compute state difference
-        //     sym_dx = x_n - x_n_r;
-        //     sym_dx(1) = ssa(sym_dx(1));
+            // compute state difference
+            sym_dx = x_n - x_n_r;
+            sym_dx(1) = ssa(sym_dx(1));
 
-        //     g = casadi::vertcat(g, sym_dx);
+            g = casadi::vertcat(g, sym_dx);
 
-        //     // push into main vector being optimized
-        //     for(int j = 0; j < nx; j++){
-        //         g.push_back(sym_dx(j));
-        //         optims.push_back(X(j,i));
-        //     }
-        //     optims.push_back(U(i));
+            // push into main vector being optimized
+            for(int j = 0; j < nx; j++){
+                g.push_back(sym_dx(j));
+                optims.push_back(X(j,i));
+            }
+            optims.push_back(U(i));
 
-        // }
+        }
+
+        std::cout << "4 g = " << g << std::endl;
+        std::cout << "5 obj = " << obj << std::endl;
+
+
         // for(int j = 0; j < nx; j++)
         //     optims.push_back(X(j,N+1));
 
