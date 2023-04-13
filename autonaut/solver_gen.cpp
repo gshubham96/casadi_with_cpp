@@ -50,7 +50,8 @@ class MpcProblem {
 
 
         // helper vars
-        casadi::SX sym_dx, sym_du;
+        std::vector<casadi::SX> sym_dx;
+        casadi::SX sym_du;
 
         double ssa(double diff) {
             while (diff < -PI) diff += 2 * PI;
@@ -175,7 +176,7 @@ class MpcProblem {
 
         // set initial state
         for(int j = 0; j < nx; j++)
-            sym_dx(j) = X(j,1) - p_x0(j);
+            sym_dx.push_back(X(j,1) - p_x0(j));
         // sym_dx(1) = ssa(sym_dx(1));
 
         for(int j = 0; j < nx; j++)
