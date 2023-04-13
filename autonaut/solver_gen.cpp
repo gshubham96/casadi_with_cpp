@@ -259,18 +259,16 @@ class MpcProblem {
         // nlp problem
         casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
 
-        // casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
+        // nlp options
+        casadi::Dict opts;
+        opts["max_iter"] = 300;
+        opts["print_level"] = 3;
+        opts["acceptable_tol"] = 1e-8;
+        opts["acceptable_obj_change_tol"] = 1e-6;
+        // TODO first try withut warm start
+        // opts["warm_start_init_point"] = "yes";
 
-        // // nlp options
-        // casadi::Dict opts;
-        // opts["max_iter"] = 300;
-        // opts["print_level"] = 3;
-        // opts["acceptable_tol"] = 1e-8;
-        // opts["acceptable_obj_change_tol"] = 1e-6;
-        // // TODO first try withut warm start
-        // // opts["warm_start_init_point"] = "yes";
-
-        // solver = nlpsol("solver", "ipopt", nlp, opts);
+        solver = nlpsol("solver", "ipopt", nlp, opts);
 
         // // define state bounds
         // ubx = std::vector<double> ubx(n, 10);
