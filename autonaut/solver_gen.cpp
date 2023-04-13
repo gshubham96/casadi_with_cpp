@@ -86,9 +86,6 @@ class MpcProblem {
         nx = 4; nu = 1; np = 11;
 
         // constant parameters for test - Vc, beta_c, Vw, beta_w,
-        // Vc = 0.35; beta_c = 1.57;
-        // Vw = 5;    beta_w = 1.57;
-        // k_1 = 0.1; k_2 = 0.1;
         chi_d = 0;
         Vc = 0.35; beta_c = 1.57; Vw = 5; beta_w = 1.57; k_1 = 0.9551; k_2 = -0.031775;
 
@@ -112,7 +109,6 @@ class MpcProblem {
 
         // detived states
         u_e = u + EPS;
-        u_e = u;    // #! TODO
         u_c = Vc * cos(beta_c - psi);
         v_c = Vc * sin(beta_c - psi);
         u_r = u_e - u_c;
@@ -151,8 +147,6 @@ class MpcProblem {
 
         casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
-
-        std::cout << "2. x_dot = " << x_dot << std::endl;
 
         // {
         //     std::vector<double> x(4, 0), u(1,0);
