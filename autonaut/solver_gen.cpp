@@ -110,7 +110,7 @@ class MpcProblem {
         std::cout << "2 x_dot = " << x_dot << std::endl;
 
         std::vector<double> x(4, 0), u(1,0);
-        x[1] = 0.9;
+        x[1] = 0.9; x[3] = 0.4;
         std::vector<casadi::DM> args = {casadi::DM(x), casadi::DM(u)};
         std::vector<casadi::DM> result = x_dot(args);
         std::cout << "3 x_dot(args) = " << result << std::endl;
