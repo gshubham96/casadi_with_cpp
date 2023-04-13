@@ -299,16 +299,16 @@ class MpcProblem {
         arg["p"] = p0;
 
         res = solver(arg);
-        std::vector<double> optimized_vars = res["x"];
+        // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
-        std::ofstream file;
-        std::string filename = "casadi_ipopt_results.m";
-        file.open(filename.c_str());
-        file << "% Results file from " __FILE__ << std::endl;
-        file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
-        file << std::endl;
-        file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
+        // std::ofstream file;
+        // std::string filename = "casadi_ipopt_results.m";
+        // file.open(filename.c_str());
+        // file << "% Results file from " __FILE__ << std::endl;
+        // file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+        // file << std::endl;
+        // file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
 
         return false;
 
