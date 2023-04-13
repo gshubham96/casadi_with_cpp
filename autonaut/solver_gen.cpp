@@ -181,7 +181,8 @@ class MpcProblem {
 
         // optimization loop
         obj = 0;
-        for(int i = 0; i < N; i++){
+        // for(int i = 0; i < N; i++){
+        for(int i = 0; i < 2; i++){
             
             sym_u = U(i);
             for(int j = 0; j < nx; j++)
