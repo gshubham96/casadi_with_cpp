@@ -215,7 +215,8 @@ class MpcProblem {
             std::cout << "4 check point * " << "0.0.4" << std::endl;
             f_eval = x_dot(args);
             std::cout << "4 check point * " << "0.0.5" << std::endl;
-            casadi::SX rk1 = f_eval.at("i0");
+            casadi::SX rk1 = f_eval["i0"];
+            std::cout << "4 check point * " << "0.0.6" << std::endl;
 
             std::cout << "4 check point * " << 0.1 << std::endl;
             // Stage 2
