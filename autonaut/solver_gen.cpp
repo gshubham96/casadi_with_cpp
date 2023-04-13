@@ -165,27 +165,22 @@ class MpcProblem {
         std::cout << std::fixed;
         std::cout << std::setprecision(5);
         std::cout << "3 x_dot(args) = " << result << std::endl;
-        std::cout << "1 " << std::endl;
-
 
         // optimization variables
         X = casadi::SX::sym("X", 4, N+1);
         U = casadi::SX::sym("U", 1, N);
         p_x0 = casadi::SX::sym("p_x0", 1, nx);
 
-        std::cout << "1 " << std::endl;
         // set initial state
         for(int j = 0; j < nx; j++)
             sym_dx.push_back(X(j,1) - p_x0(j));
         sym_dx[1] = ssa(sym_dx[1]);
 
-        std::cout << "1 " << std::endl;
         for(int j = 0; j < nx; j++)
             g.push_back(sym_dx[j]);
 
         // optimization loop
         obj = 0;
-        std::cout << "1 " << std::endl;
         for(int i = 0; i < N; i++){
             
         std::cout << "1 " << std::endl;
@@ -193,15 +188,15 @@ class MpcProblem {
             // for(int j = 0; j < nx; j++)
             //     sym_x(j) = X(j,i);
 
-            std::cout << "1 ";
+        std::cout << "1 " << std::endl;
             sym_x(0) = X(0,i);
-            std::cout << "1 ";
+        std::cout << "1 " << std::endl;
             sym_x(1) = X(1,i);
-            std::cout << "1 ";
+        std::cout << "1 " << std::endl;
             sym_x(2) = X(2,i);
-            std::cout << "1 ";
+        std::cout << "1 " << std::endl;
             sym_x(3) = X(3,i);
-            std::cout << "1 ";
+        std::cout << "1 " << std::endl;
 
             if(i > 0)
                 sym_du = U(i) - U(i-1);
