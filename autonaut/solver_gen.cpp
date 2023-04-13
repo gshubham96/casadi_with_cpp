@@ -176,7 +176,7 @@ class MpcProblem {
         // set initial state
         for(int j = 0; j < nx; j++)
             sym_dx(j) = X(j,1) - p_x0(j);
-        sym_dx(1) = ssa(sym_dx(1));
+        // sym_dx(1) = ssa(sym_dx(1));
 
         for(int j = 0; j < nx; j++)
             g.push_back(sym_dx(j));
