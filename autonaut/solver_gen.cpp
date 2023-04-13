@@ -211,6 +211,7 @@ class MpcProblem {
             f_eval = x_dot(args);
             casadi::SX rk1 = f_eval["i0"];
 
+            std::cout << "4 check point * " << 0.1 << std::endl;
             // Stage 2
             args["i0"] = sym_x + 0.5*Ts*rk1;
             args["i1"] = sym_u;
