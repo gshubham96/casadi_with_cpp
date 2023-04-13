@@ -310,6 +310,8 @@ class MpcProblem {
         file << std::endl;
         file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
 
+        return false;
+
     }
 
    // Destructor
