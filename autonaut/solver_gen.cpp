@@ -219,7 +219,11 @@ class MpcProblem {
             args["i1"] = sym_u;
 
             casadi::SXDict f_eval = x_dot(args);
-            std::cout << "f_eval = " << f_eval << std::endl;
+            for (auto& item : f_eval) {
+                std::cout << "Key: " << item.first << std::endl;
+                std::cout << "Value: " << item.second << std::endl;
+            }
+
             // casadi::SX rk1 = x_dot({x_n, sym_u});
 
             // casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
