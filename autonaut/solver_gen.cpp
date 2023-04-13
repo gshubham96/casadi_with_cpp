@@ -184,8 +184,8 @@ class MpcProblem {
             g(j) = sym_dx(j);
 
         // optimization loop
-        // for(int i = 0; i < N; i++){
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < N; i++){
+        // for(int i = 0; i < 3; i++){
             
             for(int j = 0; j < nx; j++)
                 sym_x(j) = X(j,i);
@@ -253,9 +253,8 @@ class MpcProblem {
         }
 
         // for(int j = 0; j < nx*(N+1); j++)
-        for(int j = 0; j < nx*3; j++)
-            std::cout << "g." << j  << " = " << g(j) << std::endl;
-
+        // for(int j = 0; j < nx*3; j++)
+            // std::cout << "g." << j  << " = " << g(j) << std::endl;
         // std::cout << "5 obj = " << obj << std::endl;
 
         for(int j = 0; j < nx; j++)
@@ -267,13 +266,13 @@ class MpcProblem {
         // nlp options
         casadi::Dict opts;
         // opts["max_iter"] = 300;
-        // opts["print_level"] = 3;
+        opts["print_level"] = 3;
         // opts["acceptable_tol"] = 1e-8;
         // opts["acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
         // opts["warm_start_init_point"] = "yes";
 
-        // solver = nlpsol("solver", "ipopt", nlp, opts);
+        solver = nlpsol("solver", "ipopt", nlp, opts);
         // solver = nlpsol("solver", "ipopt", nlp);
         // solver.print_options();
 
