@@ -202,8 +202,8 @@ class MpcProblem {
             casadi::SX cost_u = sym_du * R * sym_du;
 
             obj = obj + cost_u + cost_x;
+            std::cout << "4 check point * " << 0 << std::endl;
 
-            casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
             // multiple shooting using Runge-Kutta4
             casadi::SXDict args, f_eval;
