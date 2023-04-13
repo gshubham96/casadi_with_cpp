@@ -172,22 +172,22 @@ class MpcProblem {
             std::cout << "4. rk1 " << "= " << rk1 << std::endl;
 
             // Stage 2
-            args["i0"] = sym_x + 0.5*Ts*rk1;
-            args["i1"] = sym_u;
+            args["i0"] = x + 0.5*Ts*rk1;
+            args["i1"] = u;
             f_eval = x_dot(args);
             casadi::SX rk2 = f_eval["o0"];
             std::cout << "5. rk2 " << "= " << rk2 << std::endl;
 
             // Stage 3
-            args["i0"] = sym_x + 0.5*Ts*rk2;
-            args["i1"] = sym_u;
+            args["i0"] = x + 0.5*Ts*rk2;
+            args["i1"] = u;
             f_eval = x_dot(args);
             casadi::SX rk3 = f_eval["o0"];
             std::cout << "6. rk3 " << "= " << rk3 << std::endl;
 
             // Stage 4
-            args["i0"] = sym_x + Ts*rk3;
-            args["i1"] = sym_u;
+            args["i0"] = x + Ts*rk3;
+            args["i1"] = u;
             f_eval = x_dot(args);
             casadi::SX rk4 = f_eval["o0"];
             std::cout << "7. rk4 " << "= " << rk4 << std::endl;
