@@ -208,7 +208,9 @@ class MpcProblem {
             obj = obj + cost_u + cost_x;
 
             // multiple shooting
-            casadi::SX x_n = X(:,i+1);
+            casadi::SX x_n;
+            for(int j = 0; j < nx; j++)
+                x_n(j) = X(j,i+1);
 
             // Runge-Kutta4
             casadi::SX rk1 = x_dot({x_n, sym_u});
