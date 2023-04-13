@@ -205,11 +205,16 @@ class MpcProblem {
             std::cout << "4 check point * " << 0 << std::endl;
 
             // multiple shooting using Runge-Kutta4
+            std::cout << "4 check point * " << "0.0.1" << std::endl;
             casadi::SXDict args, f_eval;
+            std::cout << "4 check point * " << "0.0.2" << std::endl;
             // Stage 1
             args["i0"] = sym_x;
+            std::cout << "4 check point * " << "0.0.3" << std::endl;
             args["i1"] = sym_u;
+            std::cout << "4 check point * " << "0.0.4" << std::endl;
             f_eval = x_dot(args);
+            std::cout << "4 check point * " << "0.0.5" << std::endl;
             casadi::SX rk1 = f_eval.at("i0");
 
             std::cout << "4 check point * " << 0.1 << std::endl;
@@ -234,6 +239,7 @@ class MpcProblem {
             casadi::SX rk4 = f_eval.at("i0");
 
             std::cout << "4 check point * " << 0.4 << std::endl;
+
            // next state
             casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
