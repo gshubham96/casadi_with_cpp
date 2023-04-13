@@ -30,7 +30,7 @@ class MpcProblem {
         // std::vector<double> x0;
 
         // bounds
-        std::vector<double> ubx, lbx, ubu, lbu;
+        std::vector<double> ubx, lbx, ubu, lbu, lbg, ubg;
 
         // state vectors 
         casadi::SX psi, u, v, r;
