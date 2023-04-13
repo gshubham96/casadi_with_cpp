@@ -270,7 +270,7 @@ class MpcProblem {
 
         // solver = nlpsol("solver", "ipopt", nlp, opts);
         solver = nlpsol("solver", "ipopt", nlp);
-        nlpsol.print_options();
+        solver.print_options();
 
         // // define state bounds
         // ubx = std::vector<double> ubx(n, 10);
