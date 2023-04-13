@@ -149,7 +149,7 @@ class MpcProblem {
         casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
 
-        std::cout << "2 u_dot = " << u_dot << std::endl;
+        std::cout << "2 x_dot = " << x_dot << std::endl;
 
         std::vector<double> x(4, 0), u(1,0);
         x[1] = 0.49;  x[2] = 0.13; x[3] = -0.34;
@@ -161,20 +161,20 @@ class MpcProblem {
         std::cout << "3 x_dot(args) = " << result << std::endl;
 
 
-        // // optimization variables
-        // X = casadi::SX::sym("X", 4, N+1);
-        // U = casadi::SX::sym("U", 1, N);
+        // optimization variables
+        X = casadi::SX::sym("X", 4, N+1);
+        U = casadi::SX::sym("U", 1, N);
 
-        // // set initial state
-        // sym_dx = X(1:4,1) - p_x0;
-        // sym_dx(1) = ssa(sym_dx(1));
+        // set initial state
+        sym_dx = X(1:4,1) - p_x0;
+        sym_dx(1) = ssa(sym_dx(1));
 
-        // std::vector<casadi::SX> optims, g;
-        // obj = 0;
+        std::vector<casadi::SX> optims, g;
+        obj = 0;
 
-        // for(int j = 0; j < nx; j++)
-        //     g.push_back(sym_dx(j));
-        // g = casadi::vertcat(g, sym_dx);
+        for(int j = 0; j < nx; j++)
+            g.push_back(sym_dx(j));
+        g = casadi::vertcat(g, sym_dx);
 
         // // optimization loop
         // for(int i = 0; i < N, i++){
