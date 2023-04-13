@@ -115,7 +115,8 @@ class MpcProblem {
         std::cout << "2 x_dot = " << x_dot << std::endl;
 
         std::vector<double> x(4, 0), u(1,0);
-        x[1] = 0.49;  x[2] = 0.13; x[3] = -0.34;
+        // x[1] = 0.49;  x[2] = 0.13; x[3] = -0.34;
+        // x[1] = 0.49;  x[2] = 0.13; x[3] = -0.34;
         std::vector<casadi::DM> args = {casadi::DM(x), casadi::DM(u)};
         std::vector<casadi::DM> result = x_dot(args);
 
