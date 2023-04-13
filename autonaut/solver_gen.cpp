@@ -252,7 +252,9 @@ class MpcProblem {
             optims((nx+nu)*i + nx) = U(i);
         }
 
-        // std::cout << "4 g = " << g << std::endl;
+        for(int j = 0; j < nx*(N+1); j++)
+            std::cout << "g." << j  << " = " << g(j) << std::endl;
+
         // std::cout << "5 obj = " << obj << std::endl;
 
         for(int j = 0; j < nx; j++)
@@ -300,7 +302,7 @@ class MpcProblem {
         // arg["x0"] = x0;
         arg["p"] = p0;
 
-        res = solver(arg);
+        // res = solver(arg);
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
