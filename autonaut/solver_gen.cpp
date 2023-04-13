@@ -267,9 +267,10 @@ class MpcProblem {
         // opts["acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
         // opts["warm_start_init_point"] = "yes";
-        casadi::print_options();
 
         // solver = nlpsol("solver", "ipopt", nlp, opts);
+        solver = nlpsol("solver", "ipopt", nlp);
+        nlpsol.print_options();
 
         // // define state bounds
         // ubx = std::vector<double> ubx(n, 10);
