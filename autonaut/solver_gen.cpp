@@ -104,10 +104,10 @@ class MpcProblem {
         // dynamics of yaw rate
         casadi::SX r_dot = 0.035 * v - 1.0 * r + 8.9e-5 * delta * (100.0 * pow(u + 2.2e-16, 2) + 100.0 * pow(v, 2)) + 4.6e-4 * delta * (210.0 * pow(u + 2.2e-16, 2) + 210.0 * pow(v, 2));
 
-        casadi::SX nu_dot = casadi::vertcat(yaw_dot, u_dot, v_dot, r_dot);
+        casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
 
-        std::cout << "2 x_dot = " << x_dot << std::endl
+        std::cout << "2 x_dot = " << x_dot << std::endl;
 
         // // optimization variables
         // X = casadi::SX::sym("X", 4, N+1);
