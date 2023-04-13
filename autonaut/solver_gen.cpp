@@ -115,6 +115,9 @@ class MpcProblem {
         x[1] = 0.9; x[3] = 0.4;
         std::vector<casadi::DM> args = {casadi::DM(x), casadi::DM(u)};
         std::vector<casadi::DM> result = x_dot(args);
+
+        std::cout << std::fixed;
+        std::cout << std::setprecision(5);
         std::cout << "3 x_dot(args) = " << result << std::endl;
 
 
