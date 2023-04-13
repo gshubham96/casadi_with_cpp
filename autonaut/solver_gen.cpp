@@ -46,8 +46,7 @@ class MpcProblem {
         casadi::SX obj;
 
         // constraints (multiple-shooting)
-        std::vector<casadi::SX> optims, g;
-
+        casadi::SX optims, g;
 
         // helper vars
         std::vector<casadi::SX> sym_dx;
@@ -123,7 +122,6 @@ class MpcProblem {
 
         std::cout << "1 u_c & v_r = " << u_c << " --  " << v_r << std::endl;
 
-
         // dynamics of yaw
         casadi::SX yaw_dot = r;
 
@@ -171,16 +169,19 @@ class MpcProblem {
         U = casadi::SX::sym("U", 1, N);
         p_x0 = casadi::SX::sym("p_x0", 1, nx);
 
+        obj = 0;
+        g = casadi::SX::sym("g", nx*(N+1));
+        optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
+
         // set initial state
         for(int j = 0; j < nx; j++)
             sym_dx.push_back(X(j,1) - p_x0(j));
         sym_dx[1] = ssa(sym_dx[1]);
 
         for(int j = 0; j < nx; j++)
-            g.push_back(sym_dx[j]);
+            g(j) = sym_dx[j];
 
         // optimization loop
-        obj = 0;
         for(int i = 0; i < N; i++){
         // for(int i = 0; i < 2; i++){
             
@@ -241,12 +242,12 @@ class MpcProblem {
             sym_dx[1] = ssa(sym_dx[1]);
 
             for(int j = 0; j < nx; j++)
-                g.push_back(sym_dx[j]);
-
+                g(nx*(i+1) + j) = sym_dx[j];
+    
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
-                optims.push_back(X(j,i));
-            optims.push_back(U(i));
+                optims((nx+nu)*i + j) = X(j,i);
+            optims((nx+nu)*i + nx) = U(i);
         }
 
         // std::cout << "4 g = " << g << std::endl;
