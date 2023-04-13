@@ -245,7 +245,7 @@ class MpcProblem {
 
             for(int j = 0; j < nx; j++){
                 g(nx*(i+1) + j) = sym_dx(j);
-                std::cout << "g." << j  << " = " << g(j) << std::endl;
+                std::cout << "g." << j  << " = " << g(nx*(i+1) + j) << std::endl;
             }
 
             // push into main vector being optimized
