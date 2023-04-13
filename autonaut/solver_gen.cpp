@@ -209,7 +209,7 @@ class MpcProblem {
             args["i0"] = sym_x;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX rk1 = f_eval["i0"];
+            casadi::SX rk1 = f_eval["o0"];
 
             std::cout << "4 check point f_eval " << f_eval << std::endl;
             // Stage 2
