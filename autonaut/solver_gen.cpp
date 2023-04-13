@@ -84,8 +84,13 @@ class MpcProblem {
         // Vc = 0.35; beta_c = 1.57;
         // Vw = 5;    beta_w = 1.57;
         // k_1 = 0.1; k_2 = 0.1;
-
         Vc = 0.35; beta_c = 1.57; Vw = 0; beta_w = 0; k_1 = 0; k_2 = 0;
+
+        // system params
+        D11 = 286.7200;
+        R11 = -53.2158;
+        INV_M11 = 0.0035;
+
 
         // detived states
         u_e = u + EPS;
@@ -103,8 +108,15 @@ class MpcProblem {
 
         // dynamics of yaw
         casadi::SX yaw_dot = r;
+
         // dynamics of surge
-        casadi::SX u_dot = k_1 - 1.0 * u - 3.5e-3 * pow(delta, 2) * (53.0 * pow(u + 2.2e-16, 2) + 53.0 * pow(v, 2)) - 1.0 * k_2 * cos(psi) - 2.2e-16;
+        casadi::SX nu_c_dot_x = v_c * r;
+        casadi::SX tau_foil_x = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
+        casadi::SX tau_rudr_x = R11 * U_r2 * delta * delta ;
+        casadi::SX damping_x  = D11;
+
+        casadi::SX u_dot = nu_c_dot_x + INV_M11*(tau_foil_x + tau_rudr_x - damping_x*u_r);
+
         // dynamics of sway
         casadi::SX v_dot = 0.2*r - 0.51*v - 1.3e-3*delta*(100.0*pow(u+2.2e-16,2) + 100.0*pow(v,2)) - 8.9e-5*delta*(210.0*pow(u+2.2e-16,2) + 210.0*pow(v,2));
         // dynamics of yaw rate
