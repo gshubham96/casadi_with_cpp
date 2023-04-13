@@ -248,7 +248,6 @@ class MpcProblem {
             args["i1"] = sym_u;
             f_eval = x_dot(args);
             casadi::SX rk1 = f_eval["o0"];
-            std::cout << "rk1 " << "= " << rk1 << std::endl;
 
             // Stage 2
             args["i0"] = sym_x + 0.5*Ts*rk1;
@@ -275,19 +274,14 @@ class MpcProblem {
                 sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
             sym_dx(0) = ssa(sym_dx(0));
 
-            for(int j = 0; j < nx; j++){
+            for(int j = 0; j < nx; j++)
                 g(nx*(i+1) + j) = sym_dx(j);
-                // std::cout << "g." << nx*(i+1) + j << " = " << g(nx*(i+1) + j) << std::endl;
-            }
 
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
                 optims((nx+nu)*i + j) = X(j,i);
             optims((nx+nu)*i + nx) = U(i);
         }
-
-        // for(int j = 0; j < nx*(N+1); j++)
-        // std::cout << "5 obj = " << obj << std::endl;
 
         for(int j = 0; j < nx; j++)
             optims((nx+nu)*N + j) = X(j,N);
