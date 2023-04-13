@@ -184,6 +184,7 @@ class MpcProblem {
         obj = 0;
         for(int i = 0; i < N; i++){
             
+            std::cout << "1 ";
             sym_u = U(i);
             // for(int j = 0; j < nx; j++)
             //     sym_x(j) = X(j,i);
