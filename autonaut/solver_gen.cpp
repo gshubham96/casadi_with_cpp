@@ -165,7 +165,7 @@ class MpcProblem {
         std::cout << std::fixed;
         std::cout << std::setprecision(5);
         std::cout << "3 x_dot(args) = " << result << std::endl;
-        std::cout << "1 ";
+        std::cout << "1 " << std::endl;
 
 
         // optimization variables
@@ -173,7 +173,7 @@ class MpcProblem {
         U = casadi::SX::sym("U", 1, N);
         p_x0 = casadi::SX::sym("p_x0", 1, nx);
 
-        std::cout << "1 ";
+        std::cout << "1 " << std::endl;
         // set initial state
         for(int j = 0; j < nx; j++)
             sym_dx.push_back(X(j,1) - p_x0(j));
