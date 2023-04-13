@@ -211,28 +211,25 @@ class MpcProblem {
             f_eval = x_dot(args);
             casadi::SX rk1 = f_eval["o0"];
 
-            std::cout << "4 check point f_eval " << f_eval << std::endl;
             // Stage 2
-            std::cout << "4 check point unn_x " << sym_x << std::endl;
-            std::cout << "4 check point tuu " << 0.5*Ts*rk1 << std::endl;
             args["i0"] = sym_x + 0.5*Ts*rk1;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX rk2 = f_eval["i0"];
+            casadi::SX rk2 = f_eval["o0"];
 
             std::cout << "4 check point * " << 0.2 << std::endl;
             // Stage 3
             args["i0"] = sym_x + 0.5*Ts*rk2;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX rk3 = f_eval["i0"];
+            casadi::SX rk3 = f_eval["o0"];
 
             std::cout << "4 check point * " << 0.3 << std::endl;
             // Stage 4
             args["i0"] = sym_x + Ts*rk3;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
-            casadi::SX rk4 = f_eval["i0"];
+            casadi::SX rk4 = f_eval["o0"];
 
             std::cout << "4 check point * " << 0.4 << std::endl;
 
