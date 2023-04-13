@@ -269,13 +269,14 @@ class MpcProblem {
 
         // TODO 
         std::vector<double> p0 = {0.091855, 0.9821, 0.19964, 0.031876};
+        std::vector<double> x0 = generate_random_vector(nx*(N+1)+nu*N);
 
         std::map<std::string, casadi::DM> arg, res;
         arg["lbx"] = lbx;
         arg["ubx"] = ubx;
         arg["lbg"] = lbg;
         arg["ubg"] = ubg;
-        // arg["x0"] = x0;
+        arg["x0"] = x0;
         arg["p"] = p0;
 
         res = solver(arg);
@@ -292,6 +293,18 @@ class MpcProblem {
 
         return false;
 
+    }
+
+    // generates random vector for warm start
+    std::vector<double> generate_random_vector(int n) {
+        std::vector<double> result(n);
+        std::random_device rd; // obtain a random seed from the OS
+        std::mt19937 gen(rd()); // seed the generator
+        std::uniform_real_distribution<> distr(EPS, 1.0); // define the range
+        for (int i = 0; i < n; ++i) {
+            result[i] = distr(gen); // generate the random number and assign it to the vector
+        }
+        return result;
     }
 
    // Destructor
