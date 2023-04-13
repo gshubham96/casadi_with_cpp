@@ -168,32 +168,32 @@ class MpcProblem {
             args["i0"] = x;
             args["i1"] = u;
             f_eval = x_dot(args);
-            casadi::SX rk1 = f_eval["o0"];
+            casadi::DM rk1 = f_eval["o0"];
             std::cout << "4. rk1 " << "= " << rk1 << std::endl;
 
             // Stage 2
             args["i0"] = x + 0.5*Ts*rk1;
             args["i1"] = u;
             f_eval = x_dot(args);
-            casadi::SX rk2 = f_eval["o0"];
+            casadi::DM rk2 = f_eval["o0"];
             std::cout << "5. rk2 " << "= " << rk2 << std::endl;
 
             // Stage 3
             args["i0"] = x + 0.5*Ts*rk2;
             args["i1"] = u;
             f_eval = x_dot(args);
-            casadi::SX rk3 = f_eval["o0"];
+            casadi::DM rk3 = f_eval["o0"];
             std::cout << "6. rk3 " << "= " << rk3 << std::endl;
 
             // Stage 4
             args["i0"] = x + Ts*rk3;
             args["i1"] = u;
             f_eval = x_dot(args);
-            casadi::SX rk4 = f_eval["o0"];
+            casadi::DM rk4 = f_eval["o0"];
             std::cout << "7. rk4 " << "= " << rk4 << std::endl;
 
            // next state
-            casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+            casadi::DM sym_x_rk4 = x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
             std::cout << "8. x_n " << "= " << sym_x_rk4 << std::endl;
 
         }
