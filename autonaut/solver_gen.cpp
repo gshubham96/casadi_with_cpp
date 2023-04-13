@@ -257,7 +257,7 @@ class MpcProblem {
             optims((nx+nu)*N + j) = X(j,N);
 
         // nlp problem
-        casadi::SXDict nlp = {{"f", obj}, {"p", p_x0}};
+        casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
 
         // casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
 
