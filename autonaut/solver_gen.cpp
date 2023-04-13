@@ -97,6 +97,9 @@ class MpcProblem {
         U_r2 = pow(u_r, 2) + pow(v_r, 2);
         beta = atan(v / u_e);
 
+        std::cout << "1 u_c & v_r = " << u_c << " --  " << v_r << std::endl;
+
+
         // dynamics of yaw
         casadi::SX yaw_dot = r;
         // dynamics of surge
