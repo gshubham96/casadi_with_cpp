@@ -267,6 +267,7 @@ class MpcProblem {
         // opts["acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
         // opts["warm_start_init_point"] = "yes";
+        print_options();
 
         solver = nlpsol("solver", "ipopt", nlp, opts);
 
