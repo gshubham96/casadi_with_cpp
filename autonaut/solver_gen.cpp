@@ -92,7 +92,7 @@ class MpcProblem {
         R11 = -53.2158;
         INV_M11 = 0.0035;
 
-        double D22, R22, INV_M22m INV_M23;
+        double D22, R22, INV_M22, INV_M23;
         D22 = 194.56;
         R22 = -100.72;
         INV_M22 = 0.0026042; 
