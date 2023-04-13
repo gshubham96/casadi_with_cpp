@@ -184,8 +184,8 @@ class MpcProblem {
             g(j) = sym_dx(j);
 
         // optimization loop
-        for(int i = 0; i < N; i++){
-        // for(int i = 0; i < 3; i++){
+        // for(int i = 0; i < N; i++){
+        for(int i = 0; i < 2; i++){
             
             for(int j = 0; j < nx; j++)
                 sym_x(j) = X(j,i);
@@ -253,8 +253,8 @@ class MpcProblem {
         }
 
         // for(int j = 0; j < nx*(N+1); j++)
-        // for(int j = 0; j < nx*3; j++)
-            // std::cout << "g." << j  << " = " << g(j) << std::endl;
+        for(int j = 0; j < nx*2; j++)
+            std::cout << "g." << j  << " = " << g(j) << std::endl;
         // std::cout << "5 obj = " << obj << std::endl;
 
         for(int j = 0; j < nx; j++)
