@@ -165,6 +165,7 @@ class MpcProblem {
         std::cout << std::fixed;
         std::cout << std::setprecision(5);
         std::cout << "3 x_dot(args) = " << result << std::endl;
+        std::cout << "1 ";
 
 
         // optimization variables
