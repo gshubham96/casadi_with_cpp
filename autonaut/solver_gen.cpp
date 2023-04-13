@@ -231,11 +231,13 @@ class MpcProblem {
             for(int j = 0; j < nx; j++)
                 optims((nx+nu)*i + j) = X(j,i);
             optims((nx+nu)*i + nx) = U(i);
-            std::cout << "input is at: " << (nx+nu)*i + nx << std::endl;
         }
 
         for(int j = 0; j < nx; j++)
             optims((nx+nu)*N + j) = X(j,N);
+
+        for(int j = 0; j < nx*(N+1)+nu*N; j++)
+            std::cout << "optim." << (nx+nu)*i + nx << " :" << optim(j) << std::endl;
 
         // nlp problem
         casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
