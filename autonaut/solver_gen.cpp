@@ -81,9 +81,11 @@ class MpcProblem {
         nx = 4; nu = 1; np = 11;
 
         // constant parameters for test - Vc, beta_c, Vw, beta_w,
-        Vc = 0.35; beta_c = 1.57;
-        Vw = 5;    beta_w = 1.57;
-        k_1 = 0.1; k_2 = 0.1;
+        // Vc = 0.35; beta_c = 1.57;
+        // Vw = 5;    beta_w = 1.57;
+        // k_1 = 0.1; k_2 = 0.1;
+
+        Vc = 0; beta_c = 0; Vw = 0; beta_w = 0; k_1 = 0; k_2 = 0;
 
         // detived states
         u_e = u + EPS;
