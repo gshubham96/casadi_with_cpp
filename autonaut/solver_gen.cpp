@@ -202,8 +202,8 @@ class MpcProblem {
             casadi::SX v_p = sym_x(2);
             casadi::SX r_p = sym_x(3);
             
-            // casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
-            // casadi::SX cost_u = sym_du * R * sym_du;
+            casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
+            casadi::SX cost_u = sym_du * R * sym_du;
 
             // obj = obj + cost_u + cost_x;
 
