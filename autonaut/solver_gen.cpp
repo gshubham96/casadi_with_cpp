@@ -184,7 +184,10 @@ class MpcProblem {
         obj = 0;
         for(int i = 0; i < N; i++){
             
-            sym_u = U(1,i);
+            sym_u = U(i);
+            // for(int j = 0; j < nx; j++)
+            //     sym_x(j) = X(j,i);
+
             std::cout << "1 ";
             sym_x(0) = X(0,i);
             std::cout << "1 ";
@@ -195,10 +198,10 @@ class MpcProblem {
             sym_x(3) = X(3,i);
             std::cout << "1 ";
 
-            if(i > 1)
-                sym_du = U(1,i) - U(1,i-1);
+            if(i > 0)
+                sym_du = U(i) - U(i-1);
             else
-                sym_du = U(1,i);
+                sym_du = U(i);
 
             casadi::SX psi_p = sym_x(1);
             casadi::SX u_p = sym_x(2) + EPS;
