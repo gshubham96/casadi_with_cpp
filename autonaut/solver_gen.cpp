@@ -207,12 +207,17 @@ class MpcProblem {
 
             obj = obj + cost_u + cost_x;
 
-            // multiple shooting
+            // multiple shooting using Runge-Kutta4
             casadi::SX x_n;
             for(int j = 0; j < nx; j++)
                 x_n(j) = X(j,i+1);
 
-            // Runge-Kutta4
+            casadi::SXDict args;
+            // Stage 1
+            args["i0"] = x_n;
+            args["i1"] = sym_u;
+            casadi::SXDict f_eval = x_dot(args);
+            std::cout << "f_eval = " << f_eval << std::endl;
             casadi::SX rk1 = x_dot({x_n, sym_u});
 
             // casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
