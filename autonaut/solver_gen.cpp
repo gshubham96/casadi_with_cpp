@@ -112,7 +112,7 @@ class MpcProblem {
         casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
 
-        std::cout << "2 x_dot = " << x_dot << std::endl;
+        std::cout << "2 u_dot = " << u_dot << std::endl;
 
         std::vector<double> x(4, 0), u(1,0);
         // x[1] = 0.49;  x[2] = 0.13; x[3] = -0.34;
