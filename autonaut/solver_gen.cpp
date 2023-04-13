@@ -155,14 +155,14 @@ class MpcProblem {
 
         std::cout << "2 x_dot = " << x_dot << std::endl;
 
-        std::vector<double> x(4, 0), u(1,0);
-        x[1] = 0.49;  x[2] = 0.13; x[3] = -0.34;
-        std::vector<casadi::DM> args = {casadi::DM(x), casadi::DM(u)};
-        std::vector<casadi::DM> result = x_dot(args);
+        // std::vector<double> x(4, 0), u(1,0);
+        // x[1] = 0.49;  x[2] = 0.13; x[3] = -0.34;
+        // std::vector<casadi::DM> args = {casadi::DM(x), casadi::DM(u)};
+        // std::vector<casadi::DM> result = x_dot(args);
 
-        std::cout << std::fixed;
-        std::cout << std::setprecision(5);
-        std::cout << "3 x_dot(args) = " << result << std::endl;
+        // std::cout << std::fixed;
+        // std::cout << std::setprecision(5);
+        // std::cout << "3 x_dot(args) = " << result << std::endl;
 
         // optimization variables
         X = casadi::SX::sym("X", 4, N+1);
@@ -185,10 +185,10 @@ class MpcProblem {
         for(int i = 0; i < N; i++){
         // for(int i = 0; i < 2; i++){
             
-            sym_u = U(i);
             for(int j = 0; j < nx; j++)
                 sym_x(j) = X(j,i);
 
+            sym_u = U(i);
             if(i > 0)
                 sym_du = U(i) - U(i-1);
             else
@@ -199,7 +199,7 @@ class MpcProblem {
             casadi::SX v_p = sym_x(2);
             casadi::SX r_p = sym_x(3);
             
-            casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
+            casadi::SX cost_x = (chi_d - psi_p - atan(v_p/u_p)) * Q * (chi_d - psi_p - atan(v_p/u_p));
             casadi::SX cost_u = sym_du * R * sym_du;
 
             obj = obj + cost_u + cost_x;
