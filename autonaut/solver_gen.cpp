@@ -179,16 +179,16 @@ class MpcProblem {
             sym_dx.push_back(X(j,1) - p_x0(j));
         sym_dx[1] = ssa(sym_dx[1]);
 
-        std::cout << "1 ";
+        std::cout << "1 " << std::endl;
         for(int j = 0; j < nx; j++)
             g.push_back(sym_dx[j]);
 
         // optimization loop
         obj = 0;
-        std::cout << "1 ";
+        std::cout << "1 " << std::endl;
         for(int i = 0; i < N; i++){
             
-            std::cout << "1 ";
+        std::cout << "1 " << std::endl;
             sym_u = U(i);
             // for(int j = 0; j < nx; j++)
             //     sym_x(j) = X(j,i);
