@@ -212,10 +212,13 @@ class MpcProblem {
             for(int j = 0; j < nx; j++)
                 x_n(j) = X(j,i+1);
 
+            std::cout << "check point * " << 1 << std::endl;
+
             casadi::SXDict args;
             // Stage 1
             args["i0"] = x_n;
             args["i1"] = sym_u;
+
             casadi::SXDict f_eval = x_dot(args);
             std::cout << "f_eval = " << f_eval << std::endl;
             // casadi::SX rk1 = x_dot({x_n, sym_u});
