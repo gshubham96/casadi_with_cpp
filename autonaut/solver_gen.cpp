@@ -49,8 +49,7 @@ class MpcProblem {
         casadi::SX optims, g;
 
         // helper vars
-        std::vector<casadi::SX> sym_dx;
-        casadi::SX sym_du;
+        casadi::SX sym_du, sym_dx;
 
         double ssa(double diff) {
             while (diff < -PI) diff += 2 * PI;
@@ -176,12 +175,13 @@ class MpcProblem {
         optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
 
         // set initial state
+        sym_dx = casadi::SX::sym("sym_dx", 4);
         for(int j = 0; j < nx; j++)
-            sym_dx.push_back(X(j,1) - p_x0(j));
-        sym_dx[0] = ssa(sym_dx[0]);
+            sym_dx(j) = X(j,1) - p_x0(j);
+        sym_dx(0) = ssa(sym_dx(0));
 
         for(int j = 0; j < nx; j++)
-            g(j) = sym_dx[j];
+            g(j) = sym_dx(j);
 
         // optimization loop
         // for(int i = 0; i < N; i++){
@@ -240,11 +240,11 @@ class MpcProblem {
                 x_n(j) = X(j,i+1);
 
             for(int j = 0; j < nx; j++)
-                sym_dx.push_back(X(j,i) - sym_x_rk4(j));
-            sym_dx[1] = ssa(sym_dx[1]);
+                sym_dx(j) = X(j,i) - sym_x_rk4(j);
+            sym_dx(0) = ssa(sym_dx(0));
 
             for(int j = 0; j < nx; j++)
-                g(nx*(i+1) + j) = sym_dx[j];
+                g(nx*(i+1) + j) = sym_dx(j);
     
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
