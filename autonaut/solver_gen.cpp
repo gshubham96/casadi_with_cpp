@@ -264,16 +264,16 @@ class MpcProblem {
         casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
 
         // nlp options
-        casadi::Dict opts;
+        // casadi::Dict opts;
         // opts["max_iter"] = 300;
-        opts["print_level"] = 3;
+        // opts["print_level"] = 3;
         // opts["acceptable_tol"] = 1e-8;
         // opts["acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
         // opts["warm_start_init_point"] = "yes";
 
-        solver = nlpsol("solver", "ipopt", nlp, opts);
-        // solver = nlpsol("solver", "ipopt", nlp);
+        // solver = nlpsol("solver", "ipopt", nlp, opts);
+        solver = nlpsol("solver", "ipopt", nlp);
         // solver.print_options();
 
         // define state bounds
@@ -302,7 +302,7 @@ class MpcProblem {
         // arg["x0"] = x0;
         arg["p"] = p0;
 
-        // res = solver(arg);
+        res = solver(arg);
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
