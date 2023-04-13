@@ -92,6 +92,15 @@ class MpcProblem {
         R11 = -53.2158;
         INV_M11 = 0.0035;
 
+        D22 = 194.56;
+        R22 = -100.72;
+        INV_M22 = 0.0026042; 
+        INV_M23 = -0.00017773;
+
+        D33 = 1098.6;
+        R33 = 207.74;
+        INV_M32 = -0.00017773; 
+        INV_M33 = 0.000922343;
 
         // detived states
         u_e = u + EPS;
@@ -111,17 +120,29 @@ class MpcProblem {
         casadi::SX yaw_dot = r;
 
         // dynamics of surge
-        casadi::SX nu_c_dot_x = v_c * r;
-        casadi::SX tau_foil_x = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
-        casadi::SX tau_rudr_x = R11 * U_r2 * delta * delta ;
-        casadi::SX damping_x  = D11;
+        casadi::SX nu_c_dot_u = v_c * r;
+        casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
+        casadi::SX tau_rudr_u = R11 * U_r2 * delta * delta ;
+        casadi::SX damping_u  = D11;
 
-        casadi::SX u_dot = nu_c_dot_x + INV_M11*(tau_foil_x + tau_rudr_x - damping_x*u_r);
+        casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
 
         // dynamics of sway
-        casadi::SX v_dot = 0.2*r - 0.51*v - 1.3e-3*delta*(100.0*pow(u+2.2e-16,2) + 100.0*pow(v,2)) - 8.9e-5*delta*(210.0*pow(u+2.2e-16,2) + 210.0*pow(v,2));
+        casadi::SX nu_c_dot_v = -u_c * r;
+        casadi::SX tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
+        casadi::SX damping_v  = D22;
+
         // dynamics of yaw rate
-        casadi::SX r_dot = 0.035 * v - 1.0 * r + 8.9e-5 * delta * (100.0 * pow(u + 2.2e-16, 2) + 100.0 * pow(v, 2)) + 4.6e-4 * delta * (210.0 * pow(u + 2.2e-16, 2) + 210.0 * pow(v, 2));
+        casadi::SX tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
+        casadi::SX damping_r  = D33;
+
+        casadi::SX v_dot = nu_c_dot_v 
+                                + INV_M22*(tau_rudr_v - damping_v*v_r)
+                                + INV_M23*(tau_rudr_r - damping_r*r);
+
+        casadi::SX r_dot = 0 
+                            + INV_M32*(tau_rudr_v - damping_v*v_r)
+                            + INV_M33*(tau_rudr_r - damping_r*r);
 
         casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
