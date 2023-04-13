@@ -89,6 +89,7 @@ class MpcProblem {
 
         // detived states
         u_e = u + EPS;
+        u_e = u;    // #! TODO
         u_c = Vc * cos(beta_c - psi);
         v_c = Vc * sin(beta_c - psi);
         u_r = u_e - u_c;
