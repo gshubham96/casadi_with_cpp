@@ -107,101 +107,103 @@ class MpcProblem {
         nu_dot = casadi::vertcat(yaw_dot, u_dot, v_dot, r_dot);
         casadi::Function x_dot = casadi::Function("x_dot", {sym_x, sym_u}, {nu_dot});
 
-        // optimization variables
-        X = casadi::SX::sym("X", 4, N+1);
-        U = casadi::SX::sym("U", 1, N);
+        std::cout << "2 x_dot = " << x_dot << std::endl
 
-        // set initial state
-        sym_dx = X(1:4,1) - p_x0;
-        sym_dx(1) = ssa(sym_dx(1));
+        // // optimization variables
+        // X = casadi::SX::sym("X", 4, N+1);
+        // U = casadi::SX::sym("U", 1, N);
 
-        std::vector<casadi::SX> optims, g;
-        obj = 0;
+        // // set initial state
+        // sym_dx = X(1:4,1) - p_x0;
+        // sym_dx(1) = ssa(sym_dx(1));
 
-        for(int j = 0; j < nx; j++)
-            g.push_back(sym_dx(j));
+        // std::vector<casadi::SX> optims, g;
+        // obj = 0;
+
+        // for(int j = 0; j < nx; j++)
+        //     g.push_back(sym_dx(j));
         // g = casadi::vertcat(g, sym_dx);
 
-        // optimization loop
-        for(int i = 0; i < N, i++){
+        // // optimization loop
+        // for(int i = 0; i < N, i++){
             
-            sym_x = X(1:4,i);
-            sym_u = U(1,i);
-            if(i > 1)
-                sym_du = U(1,i) - U(1,i-1);
-            else
-                sym_du = U(1,i);
+        //     sym_x = X(1:4,i);
+        //     sym_u = U(1,i);
+        //     if(i > 1)
+        //         sym_du = U(1,i) - U(1,i-1);
+        //     else
+        //         sym_du = U(1,i);
 
-            casadi::SX psi_p = sym_x(1);
-            casadi::SX u_p = sym_x(2) + EPS;
-            casadi::SX v_p = sym_x(3);
-            casadi::SX r_p = sym_x(4);
+        //     casadi::SX psi_p = sym_x(1);
+        //     casadi::SX u_p = sym_x(2) + EPS;
+        //     casadi::SX v_p = sym_x(3);
+        //     casadi::SX r_p = sym_x(4);
             
-            casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
-            casadi::SX cost_u = sym_du * R * sym_du;
+        //     casadi::SX cost_x = (chi_d - psi - atan(v_p/u_p)) * Q * (chi_d - psi - atan(v_p/u_p));
+        //     casadi::SX cost_u = sym_du * R * sym_du;
 
-            obj = obj + cost_u + cost_x;
+        //     obj = obj + cost_u + cost_x;
 
-            // multiple shooting
-            casadi::SX x_n = X(:,i+1);
+        //     // multiple shooting
+        //     casadi::SX x_n = X(:,i+1);
 
-            // Runge-Kutta4
-            casadi::SX rk1 = x_dot({x_n, sym_u});
+        //     // Runge-Kutta4
+        //     casadi::SX rk1 = x_dot({x_n, sym_u});
 
-            casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
-            casadi::SX rk2 = x_dot({x_n_r, sym_u});
+        //     casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
+        //     casadi::SX rk2 = x_dot({x_n_r, sym_u});
 
-            x_n_r = x_n + 0.5*Ts*rk2;
-            casadi::SX rk3 = x_dot({x_n_r, sym_u});
+        //     x_n_r = x_n + 0.5*Ts*rk2;
+        //     casadi::SX rk3 = x_dot({x_n_r, sym_u});
 
-            x_n_r = x_n + Ts*rk3;
-            casadi::SX rk4 = x_dot({x_n_r, sym_u});
+        //     x_n_r = x_n + Ts*rk3;
+        //     casadi::SX rk4 = x_dot({x_n_r, sym_u});
 
-            x_n_r = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+        //     x_n_r = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
-            // compute state difference
-            sym_dx = x_n - x_n_r;
-            sym_dx(1) = ssa(sym_dx(1));
+        //     // compute state difference
+        //     sym_dx = x_n - x_n_r;
+        //     sym_dx(1) = ssa(sym_dx(1));
 
-            g = casadi::vertcat(g, sym_dx);
+        //     g = casadi::vertcat(g, sym_dx);
 
-            // push into main vector being optimized
-            for(int j = 0; j < nx; j++){
-                g.push_back(sym_dx(j));
-                optims.push_back(X(j,i));
-            }
-            optims.push_back(U(i));
+        //     // push into main vector being optimized
+        //     for(int j = 0; j < nx; j++){
+        //         g.push_back(sym_dx(j));
+        //         optims.push_back(X(j,i));
+        //     }
+        //     optims.push_back(U(i));
 
-        }
-        for(int j = 0; j < nx; j++)
-            optims.push_back(X(j,N+1));
+        // }
+        // for(int j = 0; j < nx; j++)
+        //     optims.push_back(X(j,N+1));
 
-        // nlp problem
-        casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
+        // // nlp problem
+        // casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
 
-        // nlp options
-        casadi::Dict opts;
-        opts["max_iter"] = 300;
-        opts["print_level"] = 3;
-        opts["acceptable_tol"] = 1e-8;
-        opts["acceptable_obj_change_tol"] = 1e-6;
-        // TODO first try withut warm start
-        // opts["warm_start_init_point"] = "yes";
+        // // nlp options
+        // casadi::Dict opts;
+        // opts["max_iter"] = 300;
+        // opts["print_level"] = 3;
+        // opts["acceptable_tol"] = 1e-8;
+        // opts["acceptable_obj_change_tol"] = 1e-6;
+        // // TODO first try withut warm start
+        // // opts["warm_start_init_point"] = "yes";
 
-        solver = nlpsol("solver", "ipopt", nlp, opts);
+        // solver = nlpsol("solver", "ipopt", nlp, opts);
 
-        // define state bounds
-        ubx = std::vector<double> ubx(n, 10);
-        for(int i = 0; i < nx*(N+1); i++){
-            lbx.push_back(-inf);
-            ubx.push_back(inf);
-            lbg.push_back(0); 
-            ubg.push_back(0); 
-        }
-        for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
-            lbx.push_back(-DEG2RAD(40));
-            ubx.push_back(DEG2RAD(40));
-        }
+        // // define state bounds
+        // ubx = std::vector<double> ubx(n, 10);
+        // for(int i = 0; i < nx*(N+1); i++){
+        //     lbx.push_back(-inf);
+        //     ubx.push_back(inf);
+        //     lbg.push_back(0); 
+        //     ubg.push_back(0); 
+        // }
+        // for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
+        //     lbx.push_back(-DEG2RAD(40));
+        //     ubx.push_back(DEG2RAD(40));
+        // }
     }
 
     // bool solveProblem(){
