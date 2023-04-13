@@ -214,7 +214,7 @@ class MpcProblem {
             f_eval = x_dot(args);
             casadi::SX rk1 = f_eval["o0"];
             std::cout << "rk1 " << "= " << rk1 << std::endl;
-            return false
+            return false;
 
 
             // Stage 2
