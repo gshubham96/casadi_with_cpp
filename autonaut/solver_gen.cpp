@@ -273,7 +273,7 @@ class MpcProblem {
         // opts["warm_start_init_point"] = "yes";
 
         // solver = nlpsol("solver", "ipopt", nlp, opts);
-        solver = nlpsol("solver", "ipopt", nlp);
+        // solver = nlpsol("solver", "ipopt", nlp);
         // solver.print_options();
 
         // define state bounds
