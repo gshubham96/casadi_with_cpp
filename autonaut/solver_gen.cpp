@@ -154,174 +154,171 @@ class MpcProblem {
 
         std::cout << "2. x_dot = " << x_dot << std::endl;
 
-        {
-            std::vector<double> x(4, 0), u(1,0);
-            x = {0.091855, 0.9821, 0.19964, 0.031876};
-            std::cout << "3. x " << "= " << x << std::endl;
+        // {
+        //     std::vector<double> x(4, 0), u(1,0);
+        //     x = {0.091855, 0.9821, 0.19964, 0.031876};
+        //     std::cout << "3. x " << "= " << x << std::endl;
 
-            std::cout << std::fixed;
-            std::cout << std::setprecision(5);
-
-            // multiple shooting using Runge-Kutta4
-            casadi::DMDict args, f_eval;
-            // Stage 1
-            args["i0"] = x;
-            args["i1"] = u;
-            f_eval = x_dot(args);
-            casadi::DM rk1 = f_eval["o0"];
-            std::cout << "4. rk1 " << "= " << rk1 << std::endl;
-
-            // Stage 2
-            args["i0"] = x + 0.5*Ts*rk1;
-            args["i1"] = u;
-            f_eval = x_dot(args);
-            casadi::DM rk2 = f_eval["o0"];
-            std::cout << "5. rk2 " << "= " << rk2 << std::endl;
-
-            // Stage 3
-            args["i0"] = x + 0.5*Ts*rk2;
-            args["i1"] = u;
-            f_eval = x_dot(args);
-            casadi::DM rk3 = f_eval["o0"];
-            std::cout << "6. rk3 " << "= " << rk3 << std::endl;
-
-            // Stage 4
-            args["i0"] = x + Ts*rk3;
-            args["i1"] = u;
-            f_eval = x_dot(args);
-            casadi::DM rk4 = f_eval["o0"];
-            std::cout << "7. rk4 " << "= " << rk4 << std::endl;
-
-           // next state
-            casadi::DM sym_x_rk4 = x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
-            std::cout << "8. x_n " << "= " << sym_x_rk4 << std::endl;
-
-        }
-
-
-        // // optimization variables
-        // X = casadi::SX::sym("X", 4, N+1);
-        // U = casadi::SX::sym("U", 1, N);
-        // p_x0 = casadi::SX::sym("p_x0", 1, nx);
-
-        // obj = 0;
-        // g = casadi::SX::sym("g", nx*(N+1));
-        // optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
-
-        // // set initial state
-        // sym_dx = casadi::SX::sym("sym_dx", 4);
-        // for(int j = 0; j < nx; j++)
-        //     sym_dx(j) = X(j,0) - p_x0(j);
-        // sym_dx(0) = ssa(sym_dx(0));
-
-        // for(int j = 0; j < nx; j++)
-        //     g(j) = sym_dx(j);
-
-        // // optimization loop
-        // for(int i = 0; i < N; i++){
-        // // for(int i = 0; i < 2; i++){
-            
-        //     for(int j = 0; j < nx; j++)
-        //         sym_x(j) = X(j,i);
-
-        //     sym_u = U(i);
-        //     if(i > 0)
-        //         sym_du = U(i) - U(i-1);
-        //     else
-        //         sym_du = U(i);
-
-        //     casadi::SX psi_p = sym_x(0);
-        //     casadi::SX u_p = sym_x(1) + EPS;
-        //     casadi::SX v_p = sym_x(2);
-        //     casadi::SX r_p = sym_x(3);
-            
-        //     casadi::SX cost_x = (chi_d - psi_p - atan(v_p/u_p)) * Q * (chi_d - psi_p - atan(v_p/u_p));
-        //     casadi::SX cost_u = sym_du * R * sym_du;
-
-        //     obj = obj + cost_u + cost_x;
+        //     std::cout << std::fixed;
+        //     std::cout << std::setprecision(5);
 
         //     // multiple shooting using Runge-Kutta4
-        //     casadi::SXDict args, f_eval;
+        //     casadi::DMDict args, f_eval;
         //     // Stage 1
-        //     args["i0"] = sym_x;
-        //     args["i1"] = sym_u;
+        //     args["i0"] = x;
+        //     args["i1"] = u;
         //     f_eval = x_dot(args);
-        //     casadi::SX rk1 = f_eval["o0"];
-        //     std::cout << "rk1 " << "= " << rk1 << std::endl;
+        //     casadi::DM rk1 = f_eval["o0"];
+        //     std::cout << "4. rk1 " << "= " << rk1 << std::endl;
 
         //     // Stage 2
-        //     args["i0"] = sym_x + 0.5*Ts*rk1;
-        //     args["i1"] = sym_u;
+        //     args["i0"] = x + 0.5*Ts*rk1;
+        //     args["i1"] = u;
         //     f_eval = x_dot(args);
-        //     casadi::SX rk2 = f_eval["o0"];
+        //     casadi::DM rk2 = f_eval["o0"];
+        //     std::cout << "5. rk2 " << "= " << rk2 << std::endl;
 
         //     // Stage 3
-        //     args["i0"] = sym_x + 0.5*Ts*rk2;
-        //     args["i1"] = sym_u;
+        //     args["i0"] = x + 0.5*Ts*rk2;
+        //     args["i1"] = u;
         //     f_eval = x_dot(args);
-        //     casadi::SX rk3 = f_eval["o0"];
+        //     casadi::DM rk3 = f_eval["o0"];
+        //     std::cout << "6. rk3 " << "= " << rk3 << std::endl;
 
         //     // Stage 4
-        //     args["i0"] = sym_x + Ts*rk3;
-        //     args["i1"] = sym_u;
+        //     args["i0"] = x + Ts*rk3;
+        //     args["i1"] = u;
         //     f_eval = x_dot(args);
-        //     casadi::SX rk4 = f_eval["o0"];
+        //     casadi::DM rk4 = f_eval["o0"];
+        //     std::cout << "7. rk4 " << "= " << rk4 << std::endl;
 
         //    // next state
-        //     casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+        //     casadi::DM sym_x_rk4 = x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+        //     std::cout << "8. x_n " << "= " << sym_x_rk4 << std::endl;
 
-        //     casadi::SX x_n = casadi::SX::sym("x_n", 4);
-        //     for(int j = 0; j < nx; j++)
-        //         x_n(j) = X(j,i+1);
-
-        //     for(int j = 0; j < nx; j++)
-        //         sym_dx(j) = X(j,i) - sym_x_rk4(j);
-        //     sym_dx(0) = ssa(sym_dx(0));
-
-        //     for(int j = 0; j < nx; j++){
-        //         g(nx*(i+1) + j) = sym_dx(j);
-        //         std::cout << "g." << nx*(i+1) + j << " = " << g(nx*(i+1) + j) << std::endl;
-        //     }
-
-        //     // push into main vector being optimized
-        //     for(int j = 0; j < nx; j++)
-        //         optims((nx+nu)*i + j) = X(j,i);
-        //     optims((nx+nu)*i + nx) = U(i);
         // }
 
-        // // for(int j = 0; j < nx*(N+1); j++)
-        // // std::cout << "5 obj = " << obj << std::endl;
 
-        // for(int j = 0; j < nx; j++)
-        //     optims((nx+nu)*N + j) = X(j,N);
+        // optimization variables
+        X = casadi::SX::sym("X", 4, N+1);
+        U = casadi::SX::sym("U", 1, N);
+        p_x0 = casadi::SX::sym("p_x0", 1, nx);
 
-        // // nlp problem
-        // casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
+        obj = 0;
+        g = casadi::SX::sym("g", nx*(N+1));
+        optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
 
-        // // nlp options
-        // // casadi::Dict opts;
-        // // opts["max_iter"] = 300;
-        // // opts["print_level"] = 3;
-        // // opts["acceptable_tol"] = 1e-8;
-        // // opts["acceptable_obj_change_tol"] = 1e-6;
-        // // TODO first try withut warm start
-        // // opts["warm_start_init_point"] = "yes";
+        // set initial state
+        sym_dx = casadi::SX::sym("sym_dx", 4);
+        for(int j = 0; j < nx; j++)
+            sym_dx(j) = X(j,0) - p_x0(j);
+        sym_dx(0) = ssa(sym_dx(0));
 
-        // // solver = nlpsol("solver", "ipopt", nlp, opts);
-        // // solver = nlpsol("solver", "ipopt", nlp);
-        // // solver.print_options();
+        for(int j = 0; j < nx; j++)
+            g(j) = sym_dx(j);
 
-        // // define state bounds
-        // for(int i = 0; i < nx*(N+1); i++){
-        //     lbx.push_back(-casadi::inf);
-        //     ubx.push_back(casadi::inf);
-        //     lbg.push_back(0); 
-        //     ubg.push_back(0); 
-        // }
-        // for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
-        //     lbx.push_back(-DEG2RAD(40));
-        //     ubx.push_back(DEG2RAD(40));
-        // }
+        // optimization loop
+        for(int i = 0; i < N; i++){
+        // for(int i = 0; i < 2; i++){
+            
+            for(int j = 0; j < nx; j++)
+                sym_x(j) = X(j,i);
+
+            sym_u = U(i);
+            if(i > 0)
+                sym_du = U(i) - U(i-1);
+            else
+                sym_du = U(i);
+
+            casadi::SX psi_p = sym_x(0);
+            casadi::SX u_p = sym_x(1) + EPS;
+            casadi::SX v_p = sym_x(2);
+            casadi::SX r_p = sym_x(3);
+
+            casadi::SX delta_x = ssa(chi_d - psi_p - atan(v_p/u_p));
+            casadi::SX cost_x  = delta_x * Q * delta_x;
+            casadi::SX cost_u  = sym_du * R * sym_du;
+
+            obj = obj + cost_u + cost_x;
+
+            // multiple shooting using Runge-Kutta4
+            casadi::SXDict args, f_eval;
+            // Stage 1
+            args["i0"] = sym_x;
+            args["i1"] = sym_u;
+            f_eval = x_dot(args);
+            casadi::SX rk1 = f_eval["o0"];
+            std::cout << "rk1 " << "= " << rk1 << std::endl;
+
+            // Stage 2
+            args["i0"] = sym_x + 0.5*Ts*rk1;
+            args["i1"] = sym_u;
+            f_eval = x_dot(args);
+            casadi::SX rk2 = f_eval["o0"];
+
+            // Stage 3
+            args["i0"] = sym_x + 0.5*Ts*rk2;
+            args["i1"] = sym_u;
+            f_eval = x_dot(args);
+            casadi::SX rk3 = f_eval["o0"];
+
+            // Stage 4
+            args["i0"] = sym_x + Ts*rk3;
+            args["i1"] = sym_u;
+            f_eval = x_dot(args);
+            casadi::SX rk4 = f_eval["o0"];
+
+           // next state
+            casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+
+            for(int j = 0; j < nx; j++)
+                sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
+            sym_dx(0) = ssa(sym_dx(0));
+
+            for(int j = 0; j < nx; j++){
+                g(nx*(i+1) + j) = sym_dx(j);
+                // std::cout << "g." << nx*(i+1) + j << " = " << g(nx*(i+1) + j) << std::endl;
+            }
+
+            // push into main vector being optimized
+            for(int j = 0; j < nx; j++)
+                optims((nx+nu)*i + j) = X(j,i);
+            optims((nx+nu)*i + nx) = U(i);
+        }
+
+        // for(int j = 0; j < nx*(N+1); j++)
+        // std::cout << "5 obj = " << obj << std::endl;
+
+        for(int j = 0; j < nx; j++)
+            optims((nx+nu)*N + j) = X(j,N);
+
+        // nlp problem
+        casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
+
+        // nlp options
+        // casadi::Dict opts;
+        // opts["max_iter"] = 300;
+        // opts["print_level"] = 3;
+        // opts["acceptable_tol"] = 1e-8;
+        // opts["acceptable_obj_change_tol"] = 1e-6;
+        // TODO first try withut warm start
+        // opts["warm_start_init_point"] = "yes";
+
+        // solver = nlpsol("solver", "ipopt", nlp, opts);
+        solver = nlpsol("solver", "ipopt", nlp);
+        // solver.print_options();
+
+        // define state bounds
+        for(int i = 0; i < nx*(N+1); i++){
+            lbx.push_back(-casadi::inf);
+            ubx.push_back(casadi::inf);
+            lbg.push_back(0); 
+            ubg.push_back(0); 
+        }
+        for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
+            lbx.push_back(-DEG2RAD(40));
+            ubx.push_back(DEG2RAD(40));
+        }
     }
 
     bool solveProblem(){
@@ -337,7 +334,7 @@ class MpcProblem {
         // arg["x0"] = x0;
         arg["p"] = p0;
 
-        // res = solver(arg);
+        res = solver(arg);
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
