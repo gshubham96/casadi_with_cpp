@@ -58,6 +58,12 @@ class MpcProblem {
             return diff;
         }
 
+        casadi::SX ssa(casadi::SX diff) {
+            while (diff < -PI) diff += 2 * PI;
+            while (diff > PI) diff -= 2 * PI;
+            return diff;
+        }
+
         casadi::Function solver;
 
     public:
