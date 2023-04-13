@@ -121,8 +121,6 @@ class MpcProblem {
         U_r2 = pow(u_r, 2) + pow(v_r, 2);
         beta = atan(v / u_e);
 
-        std::cout << "1 u_c & v_r = " << u_c << " --  " << v_r << std::endl;
-
         // dynamics of yaw
         casadi::SX yaw_dot = r;
 
@@ -154,11 +152,12 @@ class MpcProblem {
         casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
 
-        std::cout << "2 x_dot = " << x_dot << std::endl;
+        std::cout << "2. x_dot = " << x_dot << std::endl;
 
         {
             std::vector<double> x(4, 0), u(1,0);
             x = {0.091855, 0.9821, 0.19964, 0.031876};
+            std::cout << "3. x " << "= " << x << std::endl;
 
             std::cout << std::fixed;
             std::cout << std::setprecision(5);
@@ -170,28 +169,33 @@ class MpcProblem {
             args["i1"] = u;
             f_eval = x_dot(args);
             casadi::SX rk1 = f_eval["o0"];
-            std::cout << "rk1 " << "= " << rk1 << std::endl;
+            std::cout << "4. rk1 " << "= " << rk1 << std::endl;
 
             // Stage 2
             args["i0"] = sym_x + 0.5*Ts*rk1;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
             casadi::SX rk2 = f_eval["o0"];
+            std::cout << "5. rk2 " << "= " << rk2 << std::endl;
 
             // Stage 3
             args["i0"] = sym_x + 0.5*Ts*rk2;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
             casadi::SX rk3 = f_eval["o0"];
+            std::cout << "6. rk3 " << "= " << rk3 << std::endl;
 
             // Stage 4
             args["i0"] = sym_x + Ts*rk3;
             args["i1"] = sym_u;
             f_eval = x_dot(args);
             casadi::SX rk4 = f_eval["o0"];
+            std::cout << "7. rk4 " << "= " << rk4 << std::endl;
 
            // next state
             casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+            std::cout << "8. x_n " << "= " << sym_x_rk4 << std::endl;
+
         }
 
 
