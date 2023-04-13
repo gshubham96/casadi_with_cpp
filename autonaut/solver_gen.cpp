@@ -184,13 +184,13 @@ class MpcProblem {
         for(int i = 0; i < N; i++){
             
             sym_u = U(i);
-            // for(int j = 0; j < nx; j++)
-            //     sym_x(j) = X(j,i);
+            for(int j = 0; j < nx; j++)
+                sym_x(j) = X(j,i);
 
-            sym_x(0) = X(0,i);
-            sym_x(1) = X(1,i);
-            sym_x(2) = X(2,i);
-            sym_x(3) = X(3,i);
+            // sym_x(0) = X(0,i);
+            // sym_x(1) = X(1,i);
+            // sym_x(2) = X(2,i);
+            // sym_x(3) = X(3,i);
 
             if(i > 0)
                 sym_du = U(i) - U(i-1);
