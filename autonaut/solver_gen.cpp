@@ -203,6 +203,8 @@ class MpcProblem {
 
             obj = obj + cost_u + cost_x;
 
+            casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+
             // multiple shooting using Runge-Kutta4
             casadi::SXDict args, f_eval;
             // Stage 1
