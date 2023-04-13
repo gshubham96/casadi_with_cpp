@@ -184,8 +184,8 @@ class MpcProblem {
             g(j) = sym_dx(j);
 
         // optimization loop
-        for(int i = 0; i < N; i++){
-        // for(int i = 0; i < 2; i++){
+        // for(int i = 0; i < N; i++){
+        for(int i = 0; i < 2; i++){
             
             for(int j = 0; j < nx; j++)
                 sym_x(j) = X(j,i);
@@ -243,9 +243,11 @@ class MpcProblem {
                 sym_dx(j) = X(j,i) - sym_x_rk4(j);
             sym_dx(0) = ssa(sym_dx(0));
 
-            for(int j = 0; j < nx; j++)
+            for(int j = 0; j < nx; j++){
                 g(nx*(i+1) + j) = sym_dx(j);
-    
+                std::cout << "g." << j  << " = " << g(j) << std::endl;
+            }
+
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
                 optims((nx+nu)*i + j) = X(j,i);
@@ -253,8 +255,6 @@ class MpcProblem {
         }
 
         // for(int j = 0; j < nx*(N+1); j++)
-        // for(int j = 0; j < nx*2; j++)
-            // std::cout << "g." << j  << " = " << g(j) << std::endl;
         // std::cout << "5 obj = " << obj << std::endl;
 
         for(int j = 0; j < nx; j++)
@@ -302,7 +302,7 @@ class MpcProblem {
         // arg["x0"] = x0;
         arg["p"] = p0;
 
-        res = solver(arg);
+        // res = solver(arg);
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
