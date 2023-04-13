@@ -218,7 +218,7 @@ class MpcProblem {
             args["i1"] = sym_u;
             casadi::SXDict f_eval = x_dot(args);
             std::cout << "f_eval = " << f_eval << std::endl;
-            casadi::SX rk1 = x_dot({x_n, sym_u});
+            // casadi::SX rk1 = x_dot({x_n, sym_u});
 
             // casadi::SX x_n_r = x_n + 0.5*Ts*rk1;
             // casadi::SX rk2 = x_dot({x_n_r, sym_u});
