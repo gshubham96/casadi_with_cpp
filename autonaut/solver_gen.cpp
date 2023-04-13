@@ -109,6 +109,13 @@ class MpcProblem {
 
         std::cout << "2 x_dot = " << x_dot << std::endl;
 
+        std::vector<double> x(4, 0), u(1,0);
+        x[1] = 0.9;
+        std::vector<casadi::DM> args = {casadi::DM(x), casadi::DM(u)};
+        std::vector<casadi::DM> result = x_dot(args);
+        std::cout << "3 x_dot(args) = " << result << std::endl;
+
+
         // // optimization variables
         // X = casadi::SX::sym("X", 4, N+1);
         // U = casadi::SX::sym("U", 1, N);
