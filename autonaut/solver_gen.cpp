@@ -235,8 +235,8 @@ class MpcProblem {
             optims(nx*N + j) = X(j,N);
 
         // for(int j = 0; j < nx*(N+1) + nu*N; j++)
-        for(int j = 0; j < nx*(2); j++)
-            std::cout << "g." << j << " = " << g(j)  << std::endl;
+        // for(int j = 0; j < nx*(2); j++)
+            // std::cout << "g." << j << " = " << g(j)  << std::endl;
 
         // nlp problem
         casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
@@ -283,13 +283,13 @@ class MpcProblem {
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
-        // std::ofstream file;
-        // std::string filename = "casadi_ipopt_results.m";
-        // file.open(filename.c_str());
-        // file << "% Results file from " __FILE__ << std::endl;
-        // file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
-        // file << std::endl;
-        // file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
+        std::ofstream file;
+        std::string filename = "casadi_ipopt_results.m";
+        file.open(filename.c_str());
+        file << "% Results file from " __FILE__ << std::endl;
+        file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+        file << std::endl;
+        file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
 
         return false;
 
