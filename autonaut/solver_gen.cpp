@@ -233,8 +233,9 @@ class MpcProblem {
         for(int j = 0; j < nx; j++)
             optims(nx*N + j) = X(j,N);
 
-        for(int j = 0; j < nx*(N+1) + nu*N; j++)
-            std::cout << "optims." << j << " = " << optims(j)  << std::endl;
+        // for(int j = 0; j < nx*(N+1) + nu*N; j++)
+        for(int j = 0; j < nx*(N+1); j++)
+            std::cout << "g." << j << " = " << g(j)  << std::endl;
 
         // nlp problem
         casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
