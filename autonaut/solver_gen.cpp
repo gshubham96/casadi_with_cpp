@@ -87,7 +87,7 @@ class MpcProblem {
         nx = 4; nu = 1; np = 11;
 
         // constant parameters for test - Vc, beta_c, Vw, beta_w,
-        chi_d = 0;
+        chi_d = DEG2RAD(30);
         Vc = 0.35; beta_c = 1.57; Vw = 5; beta_w = 1.57; k_1 = 0.9551; k_2 = -0.031775;
 
         // system params
@@ -244,7 +244,7 @@ class MpcProblem {
         // nlp options
         casadi::Dict opts;
         opts["ipopt.max_iter"] = 1000;
-        opts["ipopt.print_level"] = 3;
+        opts["ipopt.print_level"] = 2;
         opts["ipopt.acceptable_tol"] = 1e-8;
         opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
@@ -289,7 +289,7 @@ class MpcProblem {
         file << "% Results file from " __FILE__ << std::endl;
         file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
         file << std::endl;
-        file << "optimized trajectory = " << optimized_vars << ";" << std::endl;
+        file << "optims = " << optimized_vars << ";" << std::endl;
 
         return false;
 
