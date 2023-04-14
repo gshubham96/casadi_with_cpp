@@ -281,7 +281,7 @@ class MpcProblem {
 
         res = solver(arg);
         // std::cout << "optimal input found that is: " << res.at("x") << std::endl;
-        std::vector<double> optimized_vars = res.at("x");
+        auto optimized_vars = res.at("x");
         
         std::ofstream file;
         std::string filename = "casadi_ipopt_results.m";
