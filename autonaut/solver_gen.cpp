@@ -280,7 +280,7 @@ class MpcProblem {
         arg["p"]   = p0;
 
         res = solver(arg);
-        // std::vector<double> optimized_vars = res["x"];
+        std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
         std::ofstream file;
