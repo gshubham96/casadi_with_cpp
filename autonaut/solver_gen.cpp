@@ -238,8 +238,8 @@ class MpcProblem {
 
         // nlp options
         casadi::Dict opts;
-        opts["ipopt.max_iter"] = 100;
-        opts["ipopt.print_level"] = 5;
+        opts["ipopt.max_iter"] = 50;
+        opts["ipopt.print_level"] = 6;
         opts["ipopt.acceptable_tol"] = 1e-8;
         opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
