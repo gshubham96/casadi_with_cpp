@@ -233,21 +233,22 @@ class MpcProblem {
         for(int j = 0; j < nx; j++)
             optims(nx*N + j) = X(j,N);
 
+        for(int j = 0; j < nx*(N+1) + nu*N; j++)
+            std::cout << "optims." << j << " = " << optims(j)  << std::endl;
+
         // nlp problem
         casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
 
         // nlp options
         casadi::Dict opts;
-        opts["ipopt.max_iter"] = 50;
-        opts["ipopt.print_level"] = 6;
+        opts["ipopt.max_iter"] = 1000;
+        opts["ipopt.print_level"] = 2;
         opts["ipopt.acceptable_tol"] = 1e-8;
         opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
         // TODO first try withut warm start
         opts["ipopt.warm_start_init_point"] = "yes";
 
         solver = nlpsol("solver", "ipopt", nlp, opts);
-        // solver = nlpsol("solver", "ipopt", nlp);
-        // solver.print_options();
 
         // define state bounds
         for(int i = 0; i < nx*(N+1); i++){
@@ -276,7 +277,7 @@ class MpcProblem {
         arg["x0"]  = x0;
         arg["p"]   = p0;
 
-        res = solver(arg);
+        // res = solver(arg);
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
