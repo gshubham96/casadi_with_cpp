@@ -234,7 +234,7 @@ class MpcProblem {
             optims(nx*N + j) = X(j,N);
 
         // for(int j = 0; j < nx*(N+1) + nu*N; j++)
-        for(int j = 0; j < nx*(N+1); j++)
+        for(int j = 0; j < nx*(2); j++)
             std::cout << "g." << j << " = " << g(j)  << std::endl;
 
         // nlp problem
