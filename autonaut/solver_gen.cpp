@@ -284,7 +284,7 @@ class MpcProblem {
         auto optimized_vars = res.at("x");
         
         std::ofstream file;
-        std::string filename = "casadi_ipopt_results.m";
+        std::string filename = "test.m";
         file.open(filename.c_str());
         file << "% Results file from " __FILE__ << std::endl;
         file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
