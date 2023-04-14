@@ -27,7 +27,7 @@ class MpcProblem {
         // params
         double chi_d;
         double Vc, beta_c, Vw, beta_w, k_1, k_2;
-        std::vector<double> x0;
+        // std::vector<double> x0;
 
         // bounds
         std::vector<double> ubx, lbx, ubu, lbu, lbg, ubg;
@@ -81,6 +81,9 @@ class MpcProblem {
         // optim vars for each shooting period 
         sym_x = vertcat(psi, u, v, r);
         sym_u = delta;
+
+        // Optimization problem
+        casadi::Opti opti = casadi::Opti();
 
         // model dims
         nx = 4; nu = 1; np = 11;
@@ -157,13 +160,18 @@ class MpcProblem {
         g = casadi::SX::sym("g", nx*(N+1));
         optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
 
+        // ! OPTI TEST
+        X = opti.variable(nx, N+1);
+        U = opti.variable(nx, N);
+        obj = opti.variable();
+        p_x0 = opti.parameter();
+
         // set initial state
         sym_dx = casadi::SX::sym("sym_dx", nx);
         for(int j = 0; j < nx; j++)
             sym_dx(j) = X(j,0) - p_x0(j);
         sym_dx(0) = ssa(sym_dx(0));
 
-        // fill in the constraint vector
         for(int j = 0; j < nx; j++)
             g(j) = sym_dx(j);
 
@@ -173,7 +181,6 @@ class MpcProblem {
             // assign current state
             for(int j = 0; j < nx; j++)
                 sym_x(j) = X(j,i);
-
             // assign current input or difference in input
             sym_u = U(i);
             if(i > 0)
@@ -181,8 +188,14 @@ class MpcProblem {
             else
                 sym_du = U(i);
 
+            // parameterize for readibility
+            casadi::SX psi_p = sym_x(0);
+            casadi::SX u_p = sym_x(1) + EPS;
+            casadi::SX v_p = sym_x(2);
+            casadi::SX r_p = sym_x(3);
+
             //! TODO: Add beta to objective function
-            casadi::SX delta_x = ssa(chi_d - sym_x(0));
+            casadi::SX delta_x = ssa(chi_d - psi_p);
             casadi::SX cost_x  = delta_x * Q * delta_x;
             casadi::SX cost_u  = sym_du * R * sym_du;
             obj = obj + cost_u + cost_x;
@@ -216,7 +229,6 @@ class MpcProblem {
            // next state
             casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
-            // introduce dynamics to constraints
             for(int j = 0; j < nx; j++)
                 sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
             sym_dx(0) = ssa(sym_dx(0));
@@ -226,12 +238,24 @@ class MpcProblem {
 
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
-                optims(nx*i + j) = X(j,i);
-            optims(nx*(N+1) + i) = U(i);
+                optims((nx+nu)*i + j) = X(j,i);
+            optims((nx+nu)*i + nx) = U(i);
+
+            // ! OPTI STACK
+            opti.subject_to(sym_dx == 0);
         }
 
+        // ! OPTI STACK
+        opti.minimize(obj);
+        opti.subject_to(-DEG2RAD(40) <= U <= DEG2RAD(40));                           // control is limited
+        opti.subject_to(X(0,0) == p_x0(0));
+        opti.subject_to(X(1,0) == p_x0(1));
+        opti.subject_to(X(2,0) == p_x0(2));
+        opti.subject_to(X(3,0) == p_x0(3));
+        opti.solver("ipopt");
+
         for(int j = 0; j < nx; j++)
-            optims(nx*N + j) = X(j,N);
+            optims((nx+nu)*N + j) = X(j,N);
 
         // nlp problem
         casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
@@ -268,6 +292,9 @@ class MpcProblem {
         std::vector<double> p0 = {0.091855, 0.9821, 0.19964, 0.031876};
         std::vector<double> x0 = generate_random_vector(nx*(N+1)+nu*N);
 
+        opti.set_value(p_x0, p0);
+        std::cout << opti.solve();
+
         std::map<std::string, casadi::DM> arg, res;
         arg["lbx"] = lbx;
         arg["ubx"] = ubx;
@@ -276,7 +303,7 @@ class MpcProblem {
         arg["x0"] = x0;
         arg["p"] = p0;
 
-        res = solver(arg);
+        // res = solver(arg);
         // std::vector<double> optimized_vars = res["x"];
         // std::cout << "optimal input found that is: " << optimized_vars(0) << std::endl;
         
