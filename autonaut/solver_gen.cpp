@@ -250,7 +250,7 @@ class MpcProblem {
         // TODO first try withut warm start
         opts["ipopt.warm_start_init_point"] = "yes";
 
-        solver = nlpsol("solver", "ipopt", nlp, opts);
+        solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
 
         // JIT?
         solver.generate_dependencies("nlp.c");
@@ -258,14 +258,14 @@ class MpcProblem {
         bool jit = true;
         if (jit) {
             // Create a new NLP solver instance using just-in-time compilation
-            solver = nlpsol("solver", "ipopt", "nlp.c");
+            solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
         } else {
             // Compile the c-code
             int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
             casadi_assert(flag==0, "Compilation failed");
 
             // Create a new NLP solver instance from the compiled code
-            solver = nlpsol("solver", "ipopt", "nlp.so");
+            solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
         }
 
 
