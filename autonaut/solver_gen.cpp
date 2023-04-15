@@ -258,7 +258,8 @@ class MpcProblem {
         bool jit = true;
         if (jit) {
             // Create a new NLP solver instance using just-in-time compilation
-            solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
+            casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
+            solver = casadi::nlpsol("solver", "ipopt", "nlp.c", optsi);
         } else {
             // Compile the c-code
             int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
