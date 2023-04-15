@@ -252,6 +252,23 @@ class MpcProblem {
 
         solver = nlpsol("solver", "ipopt", nlp, opts);
 
+        // JIT?
+        solver.generate_dependencies("nlp.c");
+        // Just-in-time compilation?
+        bool jit = true;
+        if (jit) {
+            // Create a new NLP solver instance using just-in-time compilation
+            solver = nlpsol("solver", "ipopt", "nlp.c");
+        } else {
+            // Compile the c-code
+            int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
+            casadi_assert(flag==0, "Compilation failed");
+
+            // Create a new NLP solver instance from the compiled code
+            solver = nlpsol("solver", "ipopt", "nlp.so");
+        }
+
+
         // define state bounds
         for(int i = 0; i < nx*(N+1); i++){
             lbx.push_back(-casadi::inf);
