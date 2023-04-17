@@ -54,7 +54,7 @@ namespace NMPC{
             double Tp = config_["Tp"], Ts = config_["Ts"], Q = config_["Q"], R = config_["R"];
             double model_dim = config_["model_dim"], model_type = config_["model_type"], cost_type = config_["cost_type"];
 
-            std::cout << data_from_file << std::endl;
+            std::cout << model_dim << std::endl;
 
             int N = floor(Tp / Ts);
 
