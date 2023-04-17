@@ -185,8 +185,10 @@ namespace NMPC{
                 // casadi constraints vector
                 casadi::SX chi_t_dot, chi_t = chi_d;
 
+                // casadi loop helper vars
+                casadi::SX sym_du, sym_dx = casadi::SX::sym("sym_dx", nx);
+
                 // Constraint MPC to start the trajectory from current position
-                sym_dx = casadi::SX::sym("sym_dx", nx);
                 for(int j = 0; j < nx; j++)
                     sym_dx(j) = X(j,0) - sym_x0(j);
                 sym_dx(0) = ssa(sym_dx(0));
