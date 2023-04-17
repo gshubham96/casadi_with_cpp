@@ -343,6 +343,9 @@ namespace NMPC{
             std::string file = "system.csv";
             std::cout << loadDefaultsFromFile(file, system_) << std::endl;
 
+            for(auto it = system_.cbegin(); it != system_.cend(); ++it)
+                std::cout << it->first << " " << it->second << "\n" << std::endl;
+            
             std::cout << system_ << std::endl;
 
             file = "config.csv";
