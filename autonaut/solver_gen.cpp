@@ -64,6 +64,45 @@ class MpcProblem {
 
         casadi::Function solver;
 
+        // Function to load defaults for config, params and system dynamics
+        bool loadDefaults(std::string file_name){
+
+            std::map<std::string, double> = state_;
+
+            // set state;
+            state_["psi"] = 0;  // [rad]
+            state_["u"] = 0.9;  // [m/s]
+            state_["v"] = 0;    // [m/s]
+            state_["r"] = 0;    // [rad/s]
+
+            // load default params from file [exported from MATLAB]
+            std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen" + file_name;
+
+            std::ifstream infile(file);
+            std::string line;
+            std::map<std::string, double> data_from_file;
+
+            while (std::getline(infile, line)) {
+                std::istringstream iss(line);
+                std::string key;
+                double value;
+
+                // skip this line if unable to read both key and value
+                if (!(iss >> key >> value))
+                    continue;                   
+
+                // store the key and value to map 
+                data_from_file[key] = value;
+            }
+
+            // print the data read from file
+            for (const auto& pair : data_from_file) {
+                std::cout << pair.first << ": " << pair.second << '\n';
+            }
+            
+        }
+
+
     public:
 
     MpcProblem(void){
@@ -252,28 +291,28 @@ class MpcProblem {
         solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
 
         // JIT?
-        solver.generate_dependencies("nlp.c");
-        // Just-in-time compilation?
-        bool jit = true;
-        if (jit) {
-            // Create a new NLP solver instance using just-in-time compilation
-            casadi::Dict optsi;
-            optsi["compiler"] = "shell";
-            optsi["jit"] = "True";
-            optsi["jit_options.compiler"] = "gcc";
-            optsi["jit_options.flags"] = "-O3";
+        // solver.generate_dependencies("nlp.c");
+        // // Just-in-time compilation?
+        // bool jit = true;
+        // if (jit) {
+        //     // Create a new NLP solver instance using just-in-time compilation
+        //     casadi::Dict optsi;
+        //     optsi["compiler"] = "shell";
+        //     optsi["jit"] = "True";
+        //     optsi["jit_options.compiler"] = "gcc";
+        //     optsi["jit_options.flags"] = "-O3";
             
-            solver = casadi::nlpsol("solver", "ipopt", "nlp.c", optsi);
-        } else {
-            std::cout << "Entering else block" << std::endl;
-            // Compile the c-code
-            int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
-            casadi_assert(flag==0, "Compilation failed");
+        //     solver = casadi::nlpsol("solver", "ipopt", "nlp.c", optsi);
+        // } else {
+        //     std::cout << "Entering else block" << std::endl;
+        //     // Compile the c-code
+        //     int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
+        //     casadi_assert(flag==0, "Compilation failed");
 
-            // Create a new NLP solver instance from the compiled code
-            solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
-            std::cout << "Exiting else block" << std::endl;
-        }
+        //     // Create a new NLP solver instance from the compiled code
+        //     solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
+        //     std::cout << "Exiting else block" << std::endl;
+        // }
 
 
         // define state bounds
@@ -307,8 +346,8 @@ class MpcProblem {
         // std::cout << "optimal input found that is: " << res.at("x") << std::endl;
         auto optimized_vars = res.at("x");
 
-        arg["x0"]  = optimized_vars;
-        res = solver(arg);
+        // arg["x0"]  = optimized_vars;
+        // res = solver(arg);
 
         std::ofstream file;
         std::string filename = "test.m";
@@ -317,6 +356,8 @@ class MpcProblem {
         file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
         file << std::endl;
         file << "optims = " << optimized_vars << ";" << std::endl;
+
+        loadDefaults("test.csv");
 
         return false;
 

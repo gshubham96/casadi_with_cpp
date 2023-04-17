@@ -46,7 +46,7 @@ namespace NMPC{
                 // return fmod(diff, 2*PI) - PI;
             }
 
-        // Function to load 
+        // Function to define and compile the NLP Optimization Problem
         bool defineMpcProblem(void){
 
             // assign configuration parameters
@@ -331,8 +331,40 @@ namespace NMPC{
             args_["ubg"] = ubg;
         }
 
-        bool loadDefaults(std::string file){
+        // Function to load defaults for config, params and system dynamics
+        bool loadDefaults(std::string file_name){
 
+            // set state;
+            state_["psi"] = 0;  // [rad]
+            state_["u"] = 0.9;  // [m/s]
+            state_["v"] = 0;    // [m/s]
+            state_["r"] = 0;    // [rad/s]
+
+            // load default params from file [exported from MATLAB]
+            std::string file = fs::current_path().parent_path().string() + "/code_gen/matlab" + file_name;
+
+            std::ifstream infile(file);
+            std::string line;
+            std::map<std::string, double> data_from_file;
+
+            while (std::getline(infile, line)) {
+                std::istringstream iss(line);
+                std::string key;
+                double value;
+
+                // skip this line if unable to read both key and value
+                if (!(iss >> key >> value))
+                    continue;                   
+
+                // store the key and value to map 
+                data_from_file[key] = value;
+            }
+
+            // print the data read from file
+            for (const auto& pair : data_from_file) {
+                std::cout << pair.first << ": " << pair.second << '\n';
+            }
+            
         }
 
         public:
