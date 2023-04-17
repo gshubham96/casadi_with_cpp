@@ -383,6 +383,8 @@ namespace NMPC{
                 std::string key;
                 double value;
 
+                std::cout << "in loop: "  << std::endl;
+
                 // skip this line if unable to read both key and value
                 if (!(iss >> key >> value))
                     continue;                   
