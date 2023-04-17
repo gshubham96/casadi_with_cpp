@@ -539,8 +539,8 @@ namespace NMPC{
 
     // Constructor
     CourseController(){
-        loadDefaults();
-        std::cout << defineMpcProblem() << std::endl;
+        std::cout << loadDefaults() << std::endl;
+        // std::cout << defineMpcProblem() << std::endl;
     }
 
     // Destructor
