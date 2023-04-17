@@ -86,7 +86,7 @@ namespace NMPC{
                 k_2 = sym_p(nx+6);
 
             // set initial position
-            casadi::SX::sym_x0;
+            casadi::SX sym_x0;
             for(int i = 0; i < nx; i++){
                 sym_x0(i) = sym_p(i);
             }
@@ -313,7 +313,7 @@ namespace NMPC{
             }
 
             // define state bounds
-            std::vector<double> = ubx, lbx, ubg, lbg;
+            std::vector<double> ubx, lbx, ubg, lbg;
             for(int i = 0; i < nx*(N+1); i++){
                 lbx.push_back(-casadi::inf);
                 ubx.push_back(casadi::inf);
