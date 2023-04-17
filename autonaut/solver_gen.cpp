@@ -60,7 +60,6 @@ class MpcProblem {
         casadi::SX ssa(casadi::SX diff) {
             diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
             return diff;
-            // return fmod(diff, 2*PI) - PI;
         }
 
         casadi::Function solver;
@@ -253,7 +252,7 @@ class MpcProblem {
         solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
 
         // // JIT?
-        // solver.generate_dependencies("nlp.c");
+        solver.generate_dependencies("nlp.c");
         // // Just-in-time compilation?
         // bool jit = false;
         // if (jit) {
