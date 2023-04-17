@@ -340,7 +340,7 @@ namespace NMPC{
             state_["v"] = 0;    // [m/s]
             state_["r"] = 0;    // [rad/s]
 
-            file = "system.csv";
+            std::string file = "system.csv";
             std::cout << loadDefaultsFromFile(file, system_) << std::endl;
 
             std::cout << system_ << std::endl;
