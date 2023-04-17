@@ -364,14 +364,15 @@ namespace NMPC{
             std::ifstream myFile(file);
             std::string line;
 
-            std::cout << myFile.is_open() << "LOOKING AT: " << file << std::endl;
+            std::cout << myFile.is_open() << " LOOKING AT: " << file << std::endl;
             if (myFile.fail()){
                 std::cout << "ERROR: FILE OPEN FAILED. " << myFile.is_open() << std::endl;
                 std::cout << "ERROR: LOOKING AT: " << file << std::endl;
                 return false;               
             }
 
-            std::cout << "check point " << 1 << std::endl;
+            std::getline(myFile, line);
+            std::cout << "check point " << line << std::endl;
 
             while (std::getline(myFile, line)) {
 
