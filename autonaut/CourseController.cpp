@@ -440,7 +440,7 @@ namespace NMPC{
                     params_[i.first] = i.second;
             }
 
-            bool updateMpcState(const std::map<std::string> &state){
+            bool updateMpcState(const std::map<std::string, double> &state){
                 // flag to check if state was updated
                 state_update = true;
                 // Update vehicle state
@@ -449,7 +449,7 @@ namespace NMPC{
                 
             }
 
-            bool updateMpcConfig(const std::map<std::string> &config){
+            bool updateMpcConfig(const std::map<std::string, double> &config){
                 config_update = true;
                 // Update Mpc Configuration parameters
                 for (auto i : config) 
@@ -464,7 +464,7 @@ namespace NMPC{
             bool optimizeMpcProblem(){
 
                 if(state_update == false){
-                    std::cerr << "Update state before solving NLP\n"
+                    std::cerr << "Update state before solving NLP\n";
                     return false;
                 }
 
@@ -476,7 +476,7 @@ namespace NMPC{
                 arg["ubg"] = args_["ubg"];
                 
                 // set Mpc parameters
-                std::vector param(np, 0);
+                std::vector<double> param(np, 0);
                 reWriteParams(param);
                 arg["p"] = param;
                 
