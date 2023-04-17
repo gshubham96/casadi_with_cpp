@@ -76,7 +76,7 @@ class MpcProblem {
             state_["r"] = 0;    // [rad/s]
 
             // load default params from file [exported from MATLAB]
-            std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen" + file_name;
+            std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
             // file = "/casadi_with_cpp/autonaut/matlab_gen/test.csv";
 
             std::cout << "PATH: " << file << std::endl;
