@@ -346,6 +346,8 @@ namespace NMPC{
                 args_["x0"] = generate_random_vector(nx*(N+1)+nu*N);
                 args_["lam_x0"] = generate_random_vector(nx*(N+1)+nu*N);
                 args_["lam_g0"] = generate_random_vector(nx*(N+1));
+
+                return true;
             }
 
             // Function to load defaults for config, params and system dynamics
