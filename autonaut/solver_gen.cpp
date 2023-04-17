@@ -82,6 +82,8 @@ class MpcProblem {
             std::string line;
             std::map<std::string, double> data_from_file;
 
+            std::cout << "file: " << infile << std::endl;
+
             while (std::getline(infile, line)) {
                 std::istringstream iss(line);
                 std::string key;
