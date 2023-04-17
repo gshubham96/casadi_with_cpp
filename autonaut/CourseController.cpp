@@ -494,14 +494,14 @@ namespace NMPC{
                 args_["lam_g"]  = res.at("lam_g");
 
                 // get optimal input trajectory
-                std::vector<double> optimized_vars = res.at("x");
-                input_traj_.clear();
-                for(int i = 0; i < nu*N; i++){
-                    int index = floor(nx*(N+1) + i);
-                    double test = optimized_vars.at(0);
-                    // input_traj_.push_back();
-                    // input_traj_.push_back(optimized_vars(nx*(N+1) + i));
-                }
+                std::vector<double> optimized_vars(res.at("x"));
+                // input_traj_.clear();
+                // for(int i = 0; i < nu*N; i++){
+                //     int index = floor(nx*(N+1) + i);
+                //     double test = optimized_vars.at(0);
+                //     // input_traj_.push_back();
+                //     // input_traj_.push_back(optimized_vars(nx*(N+1) + i));
+                // }
 
                 return true;
             }
