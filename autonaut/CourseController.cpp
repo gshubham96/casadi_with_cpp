@@ -494,7 +494,7 @@ namespace NMPC{
                 args_["lam_g"]  = res.at("lam_g");
 
                 // get optimal input trajectory
-                auto optimized_vars = res.at("x");
+                std::vector<double> optimized_vars = res.at("x");
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++){
                     int index = floor(nx*(N+1) + i);
