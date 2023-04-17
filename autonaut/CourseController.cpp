@@ -496,7 +496,7 @@ namespace NMPC{
                 // get optimal input trajectory
                 auto optimized_vars = res.at("x");
                 for(int i = 0; i < nu*N; i++){
-                    input_traj_[i] = optimized_vars[nx*(N+1) + i];
+                    input_traj_[i] = optimized_vars(nx*(N+1) + i);
                 }
 
                 return true;
@@ -525,7 +525,7 @@ int main(){
 
     NMPC::CourseController NMPC ;
 
-    std::cout<< NMPC.solveProblem() << std::endl;
+    // std::cout<< NMPC.solveProblem() << std::endl;
 
     // std::cout << g(sym_x) << std::endl;
 
