@@ -82,7 +82,7 @@ class MpcProblem {
             std::string line;
 
             if (myFile.fail())
-                std::cout << "ERROR: " << std::endl;
+                std::cout << "ERROR: " << myFile.is_open() << std::endl;
 
             while (std::getline(myFile, line)) {
 
