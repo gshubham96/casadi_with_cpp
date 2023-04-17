@@ -251,22 +251,22 @@ class MpcProblem {
 
         solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
 
-        // JIT?
-        solver.generate_dependencies("nlp.c");
-        // Just-in-time compilation?
-        bool jit = false;
-        if (jit) {
-            // Create a new NLP solver instance using just-in-time compilation
-            // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
-            solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
-        } else {
-            // Compile the c-code
-            int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
-            casadi_assert(flag==0, "Compilation failed");
+        // // JIT?
+        // solver.generate_dependencies("nlp.c");
+        // // Just-in-time compilation?
+        // bool jit = false;
+        // if (jit) {
+        //     // Create a new NLP solver instance using just-in-time compilation
+        //     // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
+        //     solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
+        // } else {
+        //     // Compile the c-code
+        //     int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
+        //     casadi_assert(flag==0, "Compilation failed");
 
-            // Create a new NLP solver instance from the compiled code
-            solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
-        }
+        //     // Create a new NLP solver instance from the compiled code
+        //     solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
+        // }
 
 
         // define state bounds
