@@ -81,7 +81,7 @@ class MpcProblem {
             std::ifstream myFile(file);
             std::string line;
 
-            if (stream.fail())
+            if (myFile.fail())
                 std::cout << "ERROR: " << std::endl;
 
             while (std::getline(myFile, line)) {
