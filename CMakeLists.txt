@@ -132,5 +132,5 @@ file(GLOB HEADER_FILES_H ${CMAKE_SOURCE_DIR}/include/*.h)
 add_executable(solver_gen autonaut/solver_gen.cpp)
 target_link_libraries(solver_gen ${CASADI_LIBRARIES})
 
-# add_executable(test_sym autonaut/test_sym.cpp)
-# target_link_libraries(test_sym ${CASADI_LIBRARIES})
+add_executable(CourseController autonaut/CourseController.cpp)
+target_link_libraries(CourseController ${CASADI_LIBRARIES})
