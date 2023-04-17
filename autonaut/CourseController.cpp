@@ -434,16 +434,16 @@ namespace NMPC{
         }
 
     // Destructor
-    ~MpcProblem() { 
+    ~CourseController() { 
         std::cout << "MyCallback is destroyed here." << std::endl; };
     };
 }
 
 int main(){
 
-    MpcProblem NMPC ;
+    CourseController NMPC ;
 
-    std::cout<< NMPC.solveProblem() << std::endl;
+    // std::cout<< NMPC.solveProblem() << std::endl;
 
     // std::cout << g(sym_x) << std::endl;
 
