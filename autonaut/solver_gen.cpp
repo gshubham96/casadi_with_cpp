@@ -247,7 +247,6 @@ class MpcProblem {
         opts["ipopt.print_level"] = 3;
         opts["ipopt.acceptable_tol"] = 1e-8;
         opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
-        // TODO first try withut warm start
         opts["ipopt.warm_start_init_point"] = "yes";
 
         solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
@@ -255,7 +254,7 @@ class MpcProblem {
         // JIT?
         solver.generate_dependencies("nlp.c");
         // Just-in-time compilation?
-        bool jit = true;
+        bool jit = false;
         if (jit) {
             // Create a new NLP solver instance using just-in-time compilation
             // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
