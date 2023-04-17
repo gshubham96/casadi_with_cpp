@@ -346,7 +346,7 @@ namespace NMPC{
             std::cout << loadDefaultsFromFile(file, system_) << std::endl;
 
             for(auto it = system_.cbegin(); it != system_.cend(); ++it)
-                std::cout << it->first << ", " << it->second << "\n" << std::endl;
+                std::cout << it->first << ", " << it->second << "\n";
             
             std::cout << system_ << std::endl;
 
@@ -354,7 +354,7 @@ namespace NMPC{
             std::cout << loadDefaultsFromFile(file, config_) << std::endl;
 
             for(auto it = config_.cbegin(); it != config_.cend(); ++it)
-                std::cout << it->first << " " << it->second << "\n" << std::endl;
+                std::cout << it->first << " " << it->second << "\n";
 
 
             return true;
