@@ -348,6 +348,8 @@ namespace NMPC{
             file = "config.csv";
             std::cout << loadDefaultsFromFile(file, config_) << std::endl;
 
+            return true;
+
         }
 
         bool loadDefaultsFromFile(std::string file_name, std::map<std::string, double> data_from_file){
