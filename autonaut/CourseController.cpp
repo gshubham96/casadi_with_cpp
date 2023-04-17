@@ -364,15 +364,11 @@ namespace NMPC{
             std::ifstream myFile(file);
             std::string line;
 
-            std::cout << myFile.is_open() << " LOOKING AT: " << file << std::endl;
             if (myFile.fail()){
                 std::cout << "ERROR: FILE OPEN FAILED. " << myFile.is_open() << std::endl;
                 std::cout << "ERROR: LOOKING AT: " << file << std::endl;
                 return false;               
             }
-
-            std::getline(myFile, line);
-            std::cout << "check point " << line << std::endl;
 
             while (std::getline(myFile, line)) {
 
@@ -387,17 +383,10 @@ namespace NMPC{
                 if (!(iss >> key >> value))
                     continue;                   
 
-                std::cout << "file: " << key << ", " << value << std::endl;
-
                 // store the key and value to map 
                 data_from_file[key] = value;
             }
             myFile.close();        
-
-            std::cout << "check point " << 2 << std::endl;
-
-            for(auto it = data_from_file.cbegin(); it != data_from_file.cend(); ++it)
-                std::cout << it->first << " " << it->second << "\n" << std::endl;
 
             return true;    
         }
