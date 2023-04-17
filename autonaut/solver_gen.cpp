@@ -67,7 +67,7 @@ class MpcProblem {
         // Function to load defaults for config, params and system dynamics
         bool loadDefaults(std::string file_name){
 
-            std::map<std::string, double> state_;
+            std::map<std::string, double> state_, data_from_file;
 
             // set state;
             state_["psi"] = 0;  // [rad]
@@ -78,20 +78,23 @@ class MpcProblem {
             // load default params from file [exported from MATLAB]
             std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen" + file_name;
 
-            std::ifstream infile(file);
+            std::ifstream myFile(file);
             std::string line;
-            std::map<std::string, double> data_from_file;
 
             while (std::getline(infile, line)) {
+
+                // create a stringstream to read the data
                 std::istringstream iss(line);
+
+                // create key and value variables to store the data
                 std::string key;
                 double value;
-
-                std::cout << "file: " << iss << std::endl;
 
                 // skip this line if unable to read both key and value
                 if (!(iss >> key >> value))
                     continue;                   
+
+                std::cout << "file: " << key << ", " << value << std::endl;
 
                 // store the key and value to map 
                 data_from_file[key] = value;
@@ -345,20 +348,20 @@ class MpcProblem {
         arg["x0"]  = x0;
         arg["p"]   = p0;
 
-        res = solver(arg);
+        // res = solver(arg);
         // std::cout << "optimal input found that is: " << res.at("x") << std::endl;
-        auto optimized_vars = res.at("x");
+        // auto optimized_vars = res.at("x");
 
         // arg["x0"]  = optimized_vars;
         // res = solver(arg);
 
-        std::ofstream file;
-        std::string filename = "test.m";
-        file.open(filename.c_str());
-        file << "% Results file from " __FILE__ << std::endl;
-        file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
-        file << std::endl;
-        file << "optims = " << optimized_vars << ";" << std::endl;
+        // std::ofstream file;
+        // std::string filename = "test.m";
+        // file.open(filename.c_str());
+        // file << "% Results file from " __FILE__ << std::endl;
+        // file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+        // file << std::endl;
+        // file << "optims = " << optimized_vars << ";" << std::endl;
 
         loadDefaults("test.csv");
 
