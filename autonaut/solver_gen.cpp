@@ -64,57 +64,6 @@ class MpcProblem {
 
         casadi::Function solver;
 
-        // Function to load defaults for config, params and system dynamics
-        bool loadDefaults(std::string file_name){
-
-            std::map<std::string, double> state_, data_from_file;
-
-            // set state;
-            state_["psi"] = 0;  // [rad]
-            state_["u"] = 0.9;  // [m/s]
-            state_["v"] = 0;    // [m/s]
-            state_["r"] = 0;    // [rad/s]
-
-            // load default params from file [exported from MATLAB]
-            std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
-            // file = "/casadi_with_cpp/autonaut/matlab_gen/test.csv";
-
-            std::cout << "PATH: " << file << std::endl;
-            std::ifstream myFile(file);
-            std::string line;
-
-            if (myFile.fail())
-                std::cout << "ERROR: " << myFile.is_open() << std::endl;
-
-            while (std::getline(myFile, line)) {
-
-                // create a stringstream to read the data
-                std::istringstream iss(line);
-
-                // create key and value variables to store the data
-                std::string key;
-                double value;
-
-                // skip this line if unable to read both key and value
-                if (!(iss >> key >> value))
-                    continue;                   
-
-                std::cout << "file: " << key << ", " << value << std::endl;
-
-                // store the key and value to map 
-                data_from_file[key] = value;
-            }
-            myFile.close();
-
-            // print the data read from file
-            for (const auto& pair : data_from_file) {
-                std::cout << pair.first << ": " << pair.second << '\n';
-            }
-            
-            return false;
-        }
-
-
     public:
 
     MpcProblem(void){
@@ -369,8 +318,7 @@ class MpcProblem {
         // file << std::endl;
         // file << "optims = " << optimized_vars << ";" << std::endl;
 
-        loadDefaults("test.csv");
-
+ 
         return false;
 
     }

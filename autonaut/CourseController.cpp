@@ -340,15 +340,33 @@ namespace NMPC{
             state_["v"] = 0;    // [m/s]
             state_["r"] = 0;    // [rad/s]
 
-            // load default params from file [exported from MATLAB]
-            std::string file = fs::current_path().parent_path().string() + "/code_gen/matlab" + file_name;
+            file = "system.csv";
+            cout << loadDefaultsFromFile(file, system_);
 
-            std::ifstream infile(file);
+            file = "config.csv";
+            cout << loadDefaultsFromFile(file, config);
+
+        }
+
+        bool loadDefaultsFromFile(std::string file_name, std::map<std::string, double> data_from_file){
+
+            std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
+
+            std::ifstream myFile(file);
             std::string line;
-            std::map<std::string, double> data_from_file;
 
-            while (std::getline(infile, line)) {
+            if (myFile.fail()){
+                std::cout << "ERROR: FILE OPEN FAILED. " << myFile.is_open() << std::endl;
+                std::cout << "ERROR: LOOKING AT: " << file << std::endl;
+                return false;               
+            }
+
+            while (std::getline(myFile, line)) {
+
+                // create a stringstream to read the data
                 std::istringstream iss(line);
+
+                // create key and value variables to store the data
                 std::string key;
                 double value;
 
@@ -356,15 +374,14 @@ namespace NMPC{
                 if (!(iss >> key >> value))
                     continue;                   
 
+                std::cout << "file: " << key << ", " << value << std::endl;
+
                 // store the key and value to map 
                 data_from_file[key] = value;
             }
+            myFile.close();        
 
-            // print the data read from file
-            for (const auto& pair : data_from_file) {
-                std::cout << pair.first << ": " << pair.second << '\n';
-            }
-            
+            return true;    
         }
 
         public:
