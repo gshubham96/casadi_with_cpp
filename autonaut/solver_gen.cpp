@@ -260,12 +260,14 @@ class MpcProblem {
             // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
             solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
         } else {
+            std::cout << "Entering else block" << std::endl;
             // Compile the c-code
             int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
             casadi_assert(flag==0, "Compilation failed");
 
             // Create a new NLP solver instance from the compiled code
             solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
+            std::cout << "Exiting else block" << std::endl;
         }
 
 
