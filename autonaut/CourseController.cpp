@@ -131,6 +131,10 @@ namespace NMPC{
 
                 // RUDDER
                 casadi::SX tau_rudr_u, tau_rudr_v, tau_rudr_r;
+
+                // #TODO WIND
+                casadi::SX tau_wind_u, tau_wind_v, tau_wind_r;
+
                 // If the model is nonlinear, consider nonlinear dynamics of the rudder
                 if(model_type == 0){
                     casadi::SX alpha_r = delta - atan(v_r/u_r);
@@ -144,8 +148,6 @@ namespace NMPC{
                     tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
                     tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
                 }
-
-                // #TODO WIND    
 
                 // #TODO CORIOLIS 
 
@@ -540,7 +542,7 @@ namespace NMPC{
     // Constructor
     CourseController(){
         std::cout << loadDefaults() << std::endl;
-        // std::cout << defineMpcProblem() << std::endl;
+        std::cout << defineMpcProblem() << std::endl;
     }
 
     // Destructor
