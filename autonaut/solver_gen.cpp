@@ -254,11 +254,16 @@ class MpcProblem {
         // JIT?
         solver.generate_dependencies("nlp.c");
         // Just-in-time compilation?
-        bool jit = false;
+        bool jit = true;
         if (jit) {
             // Create a new NLP solver instance using just-in-time compilation
-            // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
-            solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
+            casadi::Dict optsi;
+            optsi["compiler"] = "shell";
+            optsi["jit"] = "True";
+            optsi["jit_options.compiler"] = "gcc";
+            optsi["jit_options.flags"] = "-O3";
+            
+            solver = casadi::nlpsol("solver", "ipopt", "nlp.c", optsi);
         } else {
             std::cout << "Entering else block" << std::endl;
             // Compile the c-code
