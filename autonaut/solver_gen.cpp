@@ -100,6 +100,7 @@ class MpcProblem {
                 std::cout << pair.first << ": " << pair.second << '\n';
             }
             
+            return false;
         }
 
 
