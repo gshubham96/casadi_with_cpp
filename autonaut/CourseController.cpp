@@ -332,7 +332,7 @@ namespace NMPC{
         }
 
         // Function to load defaults for config, params and system dynamics
-        bool loadDefaults(std::string file_name){
+        bool loadDefaults(){
 
             // set state;
             state_["psi"] = 0;  // [rad]
