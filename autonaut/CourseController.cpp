@@ -443,6 +443,8 @@ namespace NMPC{
                 // Update defaul parameter list
                 for (auto i : param) 
                     params_[i.first] = i.second;
+
+                return true;
             }
 
             bool updateMpcState(const std::map<std::string, double> &state){
@@ -452,6 +454,7 @@ namespace NMPC{
                 for (auto i : state) 
                     state_[i.first] = i.second;
                 
+                return true;
             }
 
             bool updateMpcConfig(const std::map<std::string, double> &config){
@@ -459,11 +462,15 @@ namespace NMPC{
                 // Update Mpc Configuration parameters
                 for (auto i : config) 
                     config_[i.first] = i.second;
+
+                return true;
             }
 
             bool updateMpcReference(const double &reference){
                 // Update vehicle course reference
                 reference_ = reference;
+
+                return true;
             }
 
             bool optimizeMpcProblem(){
