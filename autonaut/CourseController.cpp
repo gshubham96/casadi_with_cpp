@@ -371,6 +371,8 @@ namespace NMPC{
                 return false;               
             }
 
+            std::cout << "check point " << 1 << std::endl;
+
             while (std::getline(myFile, line)) {
 
                 // create a stringstream to read the data
@@ -390,6 +392,8 @@ namespace NMPC{
                 data_from_file[key] = value;
             }
             myFile.close();        
+
+            std::cout << "check point " << 2 << std::endl;
 
             for(auto it = data_from_file.cbegin(); it != data_from_file.cend(); ++it)
                 std::cout << it->first << " " << it->second << "\n" << std::endl;
