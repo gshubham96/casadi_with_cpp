@@ -82,12 +82,12 @@ class MpcProblem {
             std::string line;
             std::map<std::string, double> data_from_file;
 
-            std::cout << "file: " << infile << std::endl;
-
             while (std::getline(infile, line)) {
                 std::istringstream iss(line);
                 std::string key;
                 double value;
+
+                std::cout << "file: " << iss << std::endl;
 
                 // skip this line if unable to read both key and value
                 if (!(iss >> key >> value))
