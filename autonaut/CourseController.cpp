@@ -500,16 +500,22 @@ namespace NMPC{
                 res = solver(arg);
                 t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-                // update variables for warm start
-                args_["x0"]  = res.at("x");
-                args_["lam_x"]  = res.at("lam_x");
-                args_["lam_g"]  = res.at("lam_g");
-
+                // TODO CAN BE MADE MORE EFFICIENT 
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
                     input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
+
+
+                // TODO CAN BE MADE MORE EFFICIENT 
+                // update variables for warm start
+                std::vector<double> lam_x(res.at("lam_x"));
+                std::vector<double> lam_g(res.at("lam_g"));
+                args_["x0"]  = optimized_vars;
+                args_["lam_x"]  = lam_x;
+                args_["lam_g"]  = lam_g;
+
 
                 return true;
             }
