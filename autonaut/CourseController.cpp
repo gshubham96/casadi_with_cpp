@@ -480,6 +480,11 @@ namespace NMPC{
                     return false;
                 }
 
+                if(initialized == false){
+                    std::cerr << "NLP not yet initialized\n";
+                    return false;
+                }
+
                 std::map<std::string, casadi::DM> arg, res;
                 // set state and input constraints
                 arg["lbx"] = args_["lbx"];
@@ -516,7 +521,6 @@ namespace NMPC{
                 args_["lam_x"]  = lam_x;
                 args_["lam_g"]  = lam_g;
 
-
                 return true;
             }
 
@@ -532,6 +536,12 @@ namespace NMPC{
                 int t_ind = floor(t_elapsed/Ts);
                 u_star = input_traj_[t_ind];
             }
+
+    // Constructor
+    CourseController(){
+        loadDefaults();
+        defineMpcProblem();
+    }
 
     // Destructor
     ~CourseController() { 
