@@ -392,7 +392,7 @@ namespace NMPC{
 
         bool solveProblem(){
 
-            loadDefaults()
+            loadDefaults();
 
             // TODO 
             // std::vector<double> p0 = {0.091855, 0.9821, 0.19964, 0.031876};
