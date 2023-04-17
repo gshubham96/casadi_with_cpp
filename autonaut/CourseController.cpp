@@ -389,6 +389,9 @@ namespace NMPC{
             }
             myFile.close();        
 
+            for(auto it = data_from_file.cbegin(); it != data_from_file.cend(); ++it)
+                std::cout << it->first << " " << it->second << "\n" << std::endl;
+
             return true;    
         }
 
