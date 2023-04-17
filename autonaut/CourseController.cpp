@@ -364,7 +364,7 @@ namespace NMPC{
             std::ifstream myFile(file);
             std::string line;
 
-            std::cout << "LOOKING AT: " << file << std::endl;
+            std::cout << myFile.is_open() << "LOOKING AT: " << file << std::endl;
             if (myFile.fail()){
                 std::cout << "ERROR: FILE OPEN FAILED. " << myFile.is_open() << std::endl;
                 std::cout << "ERROR: LOOKING AT: " << file << std::endl;
