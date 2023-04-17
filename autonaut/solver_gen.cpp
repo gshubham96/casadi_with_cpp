@@ -58,8 +58,9 @@ class MpcProblem {
         }
 
         casadi::SX ssa(casadi::SX diff) {
-            // return diff;
-            return fmod(diff, 2*PI) - PI;
+            diff -= (2*pi). * std::floor((diff + PI) * (1 / 2*PI));
+            return diff;
+            // return fmod(diff, 2*PI) - PI;
         }
 
         casadi::Function solver;
