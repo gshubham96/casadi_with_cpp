@@ -509,7 +509,7 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
-                    input_traj_.push_back(optimized_vars(nx*(N+1) + i));
+                    input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
 
                 return true;
             }
