@@ -81,7 +81,7 @@ class MpcProblem {
             std::ifstream myFile(file);
             std::string line;
 
-            while (std::getline(infile, line)) {
+            while (std::getline(myFile, line)) {
 
                 // create a stringstream to read the data
                 std::istringstream iss(line);
