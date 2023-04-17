@@ -391,31 +391,31 @@ namespace NMPC{
         bool solveProblem(){
 
             // TODO 
-            std::vector<double> p0 = {0.091855, 0.9821, 0.19964, 0.031876};
-            std::vector<double> x0 = generate_random_vector(nx*(N+1)+nu*N);
+            // std::vector<double> p0 = {0.091855, 0.9821, 0.19964, 0.031876};
+            // std::vector<double> x0 = generate_random_vector(nx*(N+1)+nu*N);
 
-            std::map<std::string, casadi::DM> arg, res;
-            arg["lbx"] = lbx;
-            arg["ubx"] = ubx;
-            arg["lbg"] = lbg;
-            arg["ubg"] = ubg;
-            arg["x0"]  = x0;
-            arg["p"]   = p0;
+            // std::map<std::string, casadi::DM> arg, res;
+            // arg["lbx"] = lbx;
+            // arg["ubx"] = ubx;
+            // arg["lbg"] = lbg;
+            // arg["ubg"] = ubg;
+            // arg["x0"]  = x0;
+            // arg["p"]   = p0;
 
-            res = solver(arg);
-            // std::cout << "optimal input found that is: " << res.at("x") << std::endl;
-            auto optimized_vars = res.at("x");
+            // res = solver(arg);
+            // // std::cout << "optimal input found that is: " << res.at("x") << std::endl;
+            // auto optimized_vars = res.at("x");
 
-            arg["x0"]  = optimized_vars;
-            res = solver(arg);
+            // arg["x0"]  = optimized_vars;
+            // res = solver(arg);
 
-            std::ofstream file;
-            std::string filename = "test.m";
-            file.open(filename.c_str());
-            file << "% Results file from " __FILE__ << std::endl;
-            file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
-            file << std::endl;
-            file << "optims = " << optimized_vars << ";" << std::endl;
+            // std::ofstream file;
+            // std::string filename = "test.m";
+            // file.open(filename.c_str());
+            // file << "% Results file from " __FILE__ << std::endl;
+            // file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+            // file << std::endl;
+            // file << "optims = " << optimized_vars << ";" << std::endl;
 
             return false;
 
@@ -441,7 +441,7 @@ namespace NMPC{
 
 int main(){
 
-    CourseController NMPC ;
+    NMPC::CourseController NMPC ;
 
     // std::cout<< NMPC.solveProblem() << std::endl;
 
