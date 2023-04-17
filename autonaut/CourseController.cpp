@@ -341,10 +341,12 @@ namespace NMPC{
             state_["r"] = 0;    // [rad/s]
 
             file = "system.csv";
-            cout << loadDefaultsFromFile(file, system_);
+            std::cout << loadDefaultsFromFile(file, system_) << std::endl;
+
+            std::cout << system_ << std::endl;
 
             file = "config.csv";
-            cout << loadDefaultsFromFile(file, config);
+            std::cout << loadDefaultsFromFile(file, config_) << std::endl;
 
         }
 
