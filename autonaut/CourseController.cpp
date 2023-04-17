@@ -507,6 +507,8 @@ namespace NMPC{
 
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
+                input_traj_ = res.at("x");
+                // myvec.erase(myvec.begin(), myvec.begin() + N);
                 // input_traj_.clear();
                 // for(int i = 0; i < nu*N; i++){
                 //     int index = floor(nx*(N+1) + i);
