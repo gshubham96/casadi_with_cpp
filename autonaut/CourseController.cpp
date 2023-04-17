@@ -501,9 +501,9 @@ namespace NMPC{
                 t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
                 // update variables for warm start
-                // args_["x0"]  = res.at("x0");
-                // args_["lam_x"]  = res.at("lam_x");
-                // args_["lam_g"]  = res.at("lam_g");
+                args_["x0"]  = res.at("x");
+                args_["lam_x"]  = res.at("lam_x");
+                args_["lam_g"]  = res.at("lam_g");
 
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
