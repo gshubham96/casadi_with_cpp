@@ -81,6 +81,9 @@ class MpcProblem {
             std::ifstream myFile(file);
             std::string line;
 
+            if (stream.fail())
+                std::cout << "ERROR: " << std::endl;
+
             while (std::getline(myFile, line)) {
 
                 // create a stringstream to read the data
@@ -99,6 +102,7 @@ class MpcProblem {
                 // store the key and value to map 
                 data_from_file[key] = value;
             }
+            myFile.close();
 
             // print the data read from file
             for (const auto& pair : data_from_file) {
