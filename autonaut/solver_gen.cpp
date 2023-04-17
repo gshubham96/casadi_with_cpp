@@ -77,6 +77,7 @@ class MpcProblem {
 
             // load default params from file [exported from MATLAB]
             std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen" + file_name;
+            file = "/casadi_with_cpp/autonaut/matlab_gen/test.csv"
 
             std::ifstream myFile(file);
             std::string line;
