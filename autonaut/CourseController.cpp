@@ -401,9 +401,12 @@ namespace NMPC{
 
             bool reWriteParams(std::vector<double> &param){
 
-                for(int i = 0; i < nx; i++)
-                    param[i] = state_[i];
-                
+                // set initial state
+                param[0] = state_["psi"];
+                param[1] = state_["u"];
+                param[2] = state_["v"];
+                param[3] = state_["r"];
+                // set other params                
                 param[nx] = reference_;
                 param[nx+1] = params_["Vc"];
                 param[nx+2] = params_["beta_c"];
