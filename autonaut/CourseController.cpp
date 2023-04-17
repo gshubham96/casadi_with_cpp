@@ -498,7 +498,8 @@ namespace NMPC{
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++){
                     int index = floor(nx*(N+1) + i);
-                    input_traj_.push_back(optimized_vars(index));
+                    double test = optimized_vars(index);
+                    // input_traj_.push_back();
                     // input_traj_.push_back(optimized_vars(nx*(N+1) + i));
                 }
 
