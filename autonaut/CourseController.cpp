@@ -392,6 +392,8 @@ namespace NMPC{
 
         bool solveProblem(){
 
+            loadDefaults()
+
             // TODO 
             // std::vector<double> p0 = {0.091855, 0.9821, 0.19964, 0.031876};
             // std::vector<double> x0 = generate_random_vector(nx*(N+1)+nu*N);
@@ -445,7 +447,7 @@ int main(){
 
     NMPC::CourseController NMPC ;
 
-    // std::cout<< NMPC.solveProblem() << std::endl;
+    std::cout<< NMPC.solveProblem() << std::endl;
 
     // std::cout << g(sym_x) << std::endl;
 
