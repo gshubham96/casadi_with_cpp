@@ -67,7 +67,7 @@ class MpcProblem {
         // Function to load defaults for config, params and system dynamics
         bool loadDefaults(std::string file_name){
 
-            std::map<std::string, double> = state_;
+            std::map<std::string, double> state_;
 
             // set state;
             state_["psi"] = 0;  // [rad]
