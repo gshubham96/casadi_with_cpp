@@ -301,6 +301,15 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
 
+                for(int i = 0; i < N; i = i + nx + nu){
+                    for(int j = 0; j < nx; j++){
+                        std::cout << "st: " << optims(nx * i + j);                    
+                    }
+                    std::cout << "cn: " << optims(nx*(N+1)+i);                    
+                }
+                    std::cout << optims(i) << ", " << std::endl;
+                    optims(nx*N + j) = X(j,N);
+
                 std::cout << "checkpoint 5.1: " << std::endl;
                 // nlp problem
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
