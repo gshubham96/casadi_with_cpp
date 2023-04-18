@@ -87,7 +87,7 @@ class MpcProblem {
         nx = 4; nu = 1; np = 11;
 
         // constant parameters for test - Vc, beta_c, Vw, beta_w,
-        chi_d = DEG2RAD(30);
+        chi_d = 0;
         Vc = 0.35; beta_c = 1.57; Vw = 5; beta_w = 1.57; k_1 = 0.9551; k_2 = -0.031775;
 
         // system params
@@ -308,7 +308,22 @@ class MpcProblem {
 
         auto optimized_vars = res.at("x");
         arg["x0"]  = optimized_vars;
-        res = solver(arg);
+
+        for(int i = 0; i < 90; i=i+10){
+            std::cout << "N: " << i << ", st: ";
+            for(int j = 0; j < 4; j++)
+                std::cout << optimized_vars[4 * i + j] << ", ";                    
+            std::cout << "cn: " << optimized_vars[4*(91)+i] << std::endl;                    
+        }
+        std::cout << "N: " << N << ", st: ";
+        for(int j = 0; j < 4; j++)
+            std::cout << optimized_vars[4*90 + j] << ", ";                    
+
+        std::cout << "\n\ndesired course angle: " << 0 << std::endl;
+        std::cout << "final course angle: " << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
+
+
+        // res = solver(arg);
 
         // std::ofstream file;
         // std::string filename = "test.m";
