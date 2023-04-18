@@ -56,6 +56,10 @@ namespace NMPC{
 
                 std::cout << "checkpoint 1: " << std::endl;
 
+                for (auto i : config_) 
+                    std::cout << "param name: " << i.first << ", param value: " << i.second << std::endl;
+
+
                 // assign configuration parameters
                 nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
                 Tp = config_["Tp"]; Ts = config_["Ts"];
