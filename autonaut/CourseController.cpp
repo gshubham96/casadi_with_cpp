@@ -85,9 +85,9 @@ namespace NMPC{
                 double D22 = system_["D22"], R22 = system_["R22"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
                 double D33 = system_["D33"], R33 = system_["R33"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
 
-                std::cout << "system dynamics: " << std::endl;
-                for (auto i : system_) 
-                    std::cout << "(" << i.first << ", " << i.second << "), ";
+                // std::cout << "system dynamics: " << std::endl;
+                // for (auto i : system_) 
+                //     std::cout << "(" << i.first << ", " << i.second << "), ";
 
                 // named symbolica vars
                 casadi::SX 
