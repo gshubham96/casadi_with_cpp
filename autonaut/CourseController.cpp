@@ -298,7 +298,7 @@ namespace NMPC{
                     optims(nx*N + j) = X(j,N);
 
                 for(int i = 0; i < N; i++){
-                    std::cout << "st: ";
+                    std::cout << "N: " << i << ", st: ";
                     for(int j = 0; j < nx; j++)
                         std::cout << optims(nx * i + j) << ", ";                    
                     std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
