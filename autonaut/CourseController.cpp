@@ -441,6 +441,11 @@ namespace NMPC{
                 
                 std::vector<double> param_vector;
 
+                std::cout << "loading state_: ";
+                for(auto i : state_)
+                    std::cout << state_[i] << ", ";
+                std::cout << "\n";
+
                 // set initial state
                 param_vector.push_back(state_["psi"]);
                 param_vector.push_back(state_["u"]);
