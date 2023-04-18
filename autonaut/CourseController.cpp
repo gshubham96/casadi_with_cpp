@@ -638,13 +638,13 @@ namespace NMPC{
                 double Ts = config_["Ts"];
 
                 // set default parameters
-                std::map<std::string, double> params_d;
-                params_d["Vc"] = 0.35; params_d["beta_c"] = 1.57;
-                params_d["Vw"] = 5; params_d["beta_w"] = 1.57;
-                params_d["k_1"] = 0.9551; params_d["k_2"] = -0.031775;
-                params_d["Q"] = 4.5; params_d["R"] = 3;
+                // std::map<std::string, double> params_d;
+                params_["Vc"] = 0.35; params_["beta_c"] = 1.57;
+                params_["Vw"] = 5; params_["beta_w"] = 1.57;
+                params_["k_1"] = 0.9551; params_["k_2"] = -0.031775;
+                params_["Q"] = 4.5; params_["R"] = 3;
 
-                this->updateMpcParams(params_d);
+                // this->updateMpcParams(params_d);
 
                 // multiple shooting using Runge-Kutta4
                 casadi::DMDict args, f_eval;
