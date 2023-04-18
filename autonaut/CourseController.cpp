@@ -439,15 +439,18 @@ namespace NMPC{
             // cosntructs a mpc-friendly format parameter vector
             std::vector<double> reWriteParams(){
                 
+                casadi::DM param_vector = casadi::DM
+
+                std::vector<double> posi(2, 0);
+                posi[0] = state_["psi"];
+                posi[1] = state_["u"];
+
                 std::vector<double> param_vector;
 
                 std::cout << "loading state_: ";
                 for(auto i : state_)
                     std::cout << i.first << ":" << i.second << ", ";
                 std::cout << "\n";
-
-                std::cout << "what is going on!" << ":" << state_["psi"] << "\n";
-                std::cout << "what is going on!" << ":" << state_["u"] << "\n";
 
                 // set initial state
                 param_vector.push_back(state_["psi"]);
@@ -458,6 +461,11 @@ namespace NMPC{
                 std::cout << "loading params 1: ";
                 for(auto i : param_vector)
                     std::cout << param_vector[i] << ", ";
+                std::cout << "\n";
+
+                std::cout << "loading posi 1: ";
+                for(auto i : posi)
+                    std::cout << posi[i] << ", ";
                 std::cout << "\n";
 
                 // set other params                
