@@ -601,6 +601,8 @@ namespace NMPC{
                 // otherwise, find the closest time index and send that input
                 int t_ind = floor(t_elapsed/Ts);
                 u_star = input_traj_[t_ind];
+
+                return true;
             }
 
     // Constructor
