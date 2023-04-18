@@ -22,6 +22,10 @@ namespace NMPC{
     class CourseController {
 
         private:
+            // ##################################
+            // ##-------MEMBER VARIABLES-------##
+            // ##################################
+
             // initialization variable
             bool initialized, state_update, config_update;
             // lengths of state, input and paramter vectors
@@ -40,17 +44,22 @@ namespace NMPC{
             casadi::Function solver;
             // optimized input trajectory
             std::vector<double> input_traj_;
+            
+            // ##################################
+            // ##-------MEMBER FUNCTIONS-------##
+            // ##################################
 
-            double ssa(double diff) {
+            // wrap the angle between [-pi, pi]
+            void ssa(double &diff) {
                 while (diff < -PI) diff += 2 * PI;
                 while (diff > PI) diff -= 2 * PI;
                 return diff;
             }
 
-            casadi::SX ssa(casadi::SX diff) {
+            // wrap the angle between [-pi, pi] for SX Symbolics
+            void ssa(casadi::SX &diff) {
                 diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
                 return diff;
-                // return fmod(diff, 2*PI) - PI;
             }
 
             // Function to define and compile the NLP Optimization Problem
@@ -116,13 +125,15 @@ namespace NMPC{
                 // ################################################
 
                 // CURRENTS
-                casadi::SX nu_c_dot_u = v_c * r;
-                casadi::SX nu_c_dot_v = -u_c * r;
+                casadi::SX 
+                    nu_c_dot_u = v_c * r,
+                    nu_c_dot_v = -u_c * r;
 
                 // DAMPING
-                casadi::SX damping_u  = D11;
-                casadi::SX damping_v  = D22;
-                casadi::SX damping_r  = D33;
+                casadi::SX 
+                    damping_u  = D11,
+                    damping_v  = D22;
+                    damping_r  = D33;
 
                 // YAW
                 casadi::SX yaw_dot = r;
@@ -167,6 +178,7 @@ namespace NMPC{
 
                 // full state dynamics
                 casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
+
                 // expressed as a function for loop evaluation
                 casadi::Function x_dot("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
@@ -194,7 +206,7 @@ namespace NMPC{
                 // Constraint MPC to start the trajectory from current position
                 for(int j = 0; j < nx; j++)
                     sym_dx(j) = X(j,0) - sym_p(j);
-                sym_dx(0) = ssa(sym_dx(0));
+                ssa(sym_dx(0));
 
                 // fill in the constraint vector
                 for(int j = 0; j < nx; j++)
@@ -215,8 +227,10 @@ namespace NMPC{
                         sym_du = U(i);
 
                     // trajectory
-                    chi_t_dot = ssa(chi_d - chi_t);
-                    chi_t = ssa(chi_t + Ts * chi_t_dot);
+                    chi_t_dot = chi_d - chi_t;
+                    ssa(chi_t_dot);
+                    chi_t = chi_t + Ts * chi_t_dot;
+                    ssa(chi_t);
 
                     // assign states for readibility
                     casadi::SX
@@ -229,7 +243,8 @@ namespace NMPC{
                     casadi::SX delta_x;
                     if(cost_type == 0){
                         casadi::SX beta = atan(sym_x(2) / sym_x(1) + EPS);
-                        delta_x = ssa(chi_d - sym_x(0) - beta);
+                        delta_x = chi_d - sym_x(0) - beta;
+                        ssa(delta_x);
                     }
                     else if(cost_type == 1){
                         casadi::SX
@@ -262,22 +277,16 @@ namespace NMPC{
 
                     // Stage 2
                     args["i0"] = sym_x + 0.5*Ts*rk1;
-                    args["i1"] = sym_u;
-                    args["i2"] = sym_p;
                     f_eval = x_dot(args);
                     casadi::SX rk2 = f_eval["o0"];
 
                     // Stage 3
                     args["i0"] = sym_x + 0.5*Ts*rk2;
-                    args["i1"] = sym_u;
-                    args["i2"] = sym_p;
                     f_eval = x_dot(args);
                     casadi::SX rk3 = f_eval["o0"];
 
                     // Stage 4
                     args["i0"] = sym_x + Ts*rk3;
-                    args["i1"] = sym_u;
-                    args["i2"] = sym_p;
                     f_eval = x_dot(args);
                     casadi::SX rk4 = f_eval["o0"];
 
@@ -287,7 +296,7 @@ namespace NMPC{
                     // introduce dynamics to constraints
                     for(int j = 0; j < nx; j++)
                         sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
-                    sym_dx(0) = ssa(sym_dx(0));
+                    ssa(sym_dx(0));
 
                     for(int j = 0; j < nx; j++)
                         g(nx*(i+1) + j) = sym_dx(j);
@@ -324,19 +333,19 @@ namespace NMPC{
                 solver.generate_dependencies("nlp.c");
 
                 // #TODO Just-in-time compilation?
-                // bool jit = false;
-                // if (jit) {
-                //     // Create a new NLP solver instance using just-in-time compilation
-                //     // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
-                //     solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
-                // } else {
-                //     // Compile the c-code
-                //     int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
-                //     casadi_assert(flag==0, "Compilation failed");
+                bool jit = false;
+                if (jit) {
+                    // Create a new NLP solver instance using just-in-time compilation
+                    // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
+                    solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
+                } else {
+                    // Compile the c-code
+                    int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
+                    casadi_assert(flag==0, "Compilation failed");
 
-                //     // Create a new NLP solver instance from the compiled code
-                //     solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
-                // }
+                    // Create a new NLP solver instance from the compiled code
+                    solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
+                }
 
                 // define state bounds
                 std::vector<double> ubx, lbx, ubg, lbg;
@@ -384,6 +393,7 @@ namespace NMPC{
 
             }
 
+            // reads data from file and stores in passed arg
             bool loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file){
 
                 std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
