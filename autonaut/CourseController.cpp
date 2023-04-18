@@ -54,7 +54,7 @@ namespace NMPC{
             // Function to define and compile the NLP Optimization Problem
             bool defineMpcProblem(void){
 
-                std::cout << "checkpoint 1: " << std::endl;
+                // std::cout << "checkpoint 1: " << std::endl;
 
                 for (auto i : config_) 
                     std::cout << "param name: " << i.first << ", param value: " << i.second << std::endl;
@@ -107,7 +107,6 @@ namespace NMPC{
                     U_r2 = pow(u_r, 2) + pow(v_r, 2),
                     beta = atan(v / u_e);
 
-                std::cout << "checkpoint 2: " << std::endl;
                 // ################################################
                 // ###----------------DYNAMICS------------------###
                 // ################################################
@@ -167,7 +166,6 @@ namespace NMPC{
                 // expressed as a function for loop evaluation
                 casadi::Function x_dot("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
-                std::cout << "checkpoint 3: " << std::endl;
                 // ################################################
                 // ###----------------LOOP SETUP----------------###
                 // ################################################
@@ -198,7 +196,6 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     g(j) = sym_dx(j);
 
-                std::cout << "checkpoint 4: " << std::endl;
                 // optimization loop
                 for(int i = 0; i < N; i++){
 
@@ -296,23 +293,20 @@ namespace NMPC{
                         optims(nx*i + j) = X(j,i);
                     optims(nx*(N+1) + i) = U(i);
                 }
-                std::cout << "checkpoint 5: " << std::endl;
 
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
 
-                for(int i = 0; i < N; i = i + nx + nu){
+                for(int i = 0; i < N; i++){
                     std::cout << "st: ";
                     for(int j = 0; j < nx; j++)
                         std::cout << optims(nx * i + j) << ", ";                    
                     std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
                 }
 
-                std::cout << "checkpoint 5.1: " << std::endl;
                 // nlp problem
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
 
-                std::cout << "checkpoint 5.2: " << std::endl;
                 // nlp options
                 casadi::Dict opts;
                 opts["ipopt.max_iter"] = 300;
@@ -321,12 +315,10 @@ namespace NMPC{
                 opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
                 opts["ipopt.warm_start_init_point"] = "yes";
 
-                std::cout << "checkpoint 5.3: " << std::endl;
                 solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
                 solver.generate_dependencies("nlp.c");
 
                 // Just-in-time compilation?
-                std::cout << "checkpoint 5.4: " << std::endl;
                 bool jit = false;
                 if (jit) {
                     // Create a new NLP solver instance using just-in-time compilation
