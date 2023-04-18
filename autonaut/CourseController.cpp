@@ -437,28 +437,30 @@ namespace NMPC{
             }
 
             // cosntructs a mpc-friendly format parameter vector
-            bool reWriteParams(std::vector<double> &param){
+            std::vector<double> reWriteParams(){
+                
+                std::vector<double> param_vector;
 
                 // set initial state
-                param[0] = state_["psi"];
-                param[1] = state_["u"];
-                param[2] = state_["v"];
-                param[3] = state_["r"];
+                param_vector[0] = state_["psi"];
+                param_vector[1] = state_["u"];
+                param_vector[2] = state_["v"];
+                param_vector[3] = state_["r"];
                 // set other params                
-                param[4] = reference_;
-                param[5] = params_["Vc"];
-                param[6] = params_["beta_c"];
-                param[7] = params_["Vw"];
-                param[8] = params_["beta_w"];
-                param[9] = params_["k_1"];
-                param[10] = params_["k_2"];
+                param_vector[4] = reference_;
+                param_vector[5] = params_["Vc"];
+                param_vector[6] = params_["beta_c"];
+                param_vector[7] = params_["Vw"];
+                param_vector[8] = params_["beta_w"];
+                param_vector[9] = params_["k_1"];
+                param_vector[10] = params_["k_2"];
                 // get costs from configuration object
-                param[11] = config_["Q"];
-                param[12] = config_["R"];
+                param_vector[11] = config_["Q"];
+                param_vector[12] = config_["R"];
 
                 std::cout << "loading params: ";
-                for(auto i : param)
-                    std::cout << param[i] << ", ";
+                for(auto i : param_vector)
+                    std::cout << param_vector[i] << ", ";
                 std::cout << "\n";
 
 
@@ -563,9 +565,7 @@ namespace NMPC{
                 arg["ubg"] = args_["ubg"];
                 
                 // set Mpc parameters
-                std::vector<double> param(np, 0);
-                reWriteParams(param);
-                arg["p"] = param;
+                arg["p"] = reWriteParams();
                 
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
