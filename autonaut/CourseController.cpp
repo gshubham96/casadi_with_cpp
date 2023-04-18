@@ -676,7 +676,7 @@ namespace NMPC{
                     rk2[i] *= 2;
                     rk3[i] *= 2;
 
-                    x_rk4[i] = p0[i] + (Ts/6) * (rk1[i] + rk2[i] + rk3[i] + rk4[i])
+                    x_rk4[i] = p0[i] + (Ts/6) * (rk1[i] + rk2[i] + rk3[i] + rk4[i]);
                 }
                 std::cout << "state: " << x_rk4 << std::endl;
 
