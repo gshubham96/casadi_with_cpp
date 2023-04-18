@@ -637,7 +637,7 @@ namespace NMPC{
                 params_d["k_1"] = 0.9551; params_d["k_2"] = -0.031775;
                 params_d["Q"] = 4.5; params_d["R"] = 3;
 
-                nmpc.updateMpcParams(params_d);
+                updateMpcParams(params_d);
 
                 // multiple shooting using Runge-Kutta4
                 casadi::DMDict args, f_eval;
