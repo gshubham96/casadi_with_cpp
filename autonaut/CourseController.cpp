@@ -56,8 +56,10 @@ namespace NMPC{
 
                 // std::cout << "checkpoint 1: " << std::endl;
 
+                std::cout << "Configuring with parameters: " << std::endl;
                 for (auto i : config_) 
-                    std::cout << "param name: " << i.first << ", param value: " << i.second << std::endl;
+                    std::cout << "(" << i.first << ", " << i.second << "), ";
+                std::cout << std::endl;
 
                 // assign configuration parameters
                 nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
@@ -297,12 +299,13 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
 
-                for(int i = 0; i < N; i++){
-                    std::cout << "N: " << i << ", st: ";
-                    for(int j = 0; j < nx; j++)
-                        std::cout << optims(nx * i + j) << ", ";                    
-                    std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
-                }
+                // // Print Optimization Variable
+                // for(int i = 0; i < N; i++){
+                //     std::cout << "N: " << i << ", st: ";
+                //     for(int j = 0; j < nx; j++)
+                //         std::cout << optims(nx * i + j) << ", ";                    
+                //     std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
+                // }
 
                 // nlp problem
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
@@ -333,7 +336,6 @@ namespace NMPC{
                 //     solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
                 // }
 
-                std::cout << "checkpoint 6: " << std::endl;
                 // define state bounds
                 std::vector<double> ubx, lbx, ubg, lbg;
                 for(int i = 0; i < nx*(N+1); i++){
@@ -356,7 +358,6 @@ namespace NMPC{
                 args_["lam_x0"] = generate_random_vector(nx*(N+1)+nu*N);
                 args_["lam_g0"] = generate_random_vector(nx*(N+1));
 
-                std::cout << "checkpoint 7: " << std::endl;
                 return true;
             }
 
@@ -477,6 +478,12 @@ namespace NMPC{
                 for (auto i : config) 
                     config_[i.first] = i.second;
 
+                // relaunch the configuration function
+                if(defineMpcProblem())
+                    std::cout << "Problem configured succesfully" << std::endl;
+                else
+                    std::cout << "configuration failed!\n"
+
                 return true;
             }
 
@@ -557,6 +564,21 @@ namespace NMPC{
         std::cout << defineMpcProblem() << std::endl;
     }
 
+    // allow user to skip configuration
+    CourseController(bool flag){
+        std::cout << loadDefaults() << std::endl;
+        if(flag)
+            std::cout << "skipping configuration for now!" << std::endl;
+        else{
+            // relaunch the configuration function
+            if(defineMpcProblem())
+                std::cout << "Problem configured succesfully" << std::endl;
+            else
+                std::cout << "configuration failed!\n"
+        }
+
+    }
+
     // Destructor
     ~CourseController() { 
         std::cout << "MyCallback is destroyed here." << std::endl; };
@@ -565,7 +587,35 @@ namespace NMPC{
 
 int main(){
 
-    NMPC::CourseController NMPC ;
+    // instantiate a controller with default values
+    NMPC::CourseController nmpc;
+
+    // set default parameters
+    std::map<std::string, double> params_d;
+    params_d["Vc"] = 0.35; params_d["beta_c"] = 1.57;
+    params_d["Vw"] = 5; params_d["beta_w"] = 1.57;
+    params_d["k_1"] = 0.9551; params_d["k_2"] = -0.031775;
+    params_d["Q"] = 4.5; params_d["R"] = 3;
+
+    nmpc.updateMpcParams(params_d);
+
+    // update MPC state
+    std::map<std::string, double> state_d;
+    state_d["psi"] = 0.091855;
+    state_d["u"] = 0.9821;
+    state_d["v"] = 0.19964;
+    state_d["r"] = 0.031876;
+
+    nmpc.updateMpcState(state_d);
+
+    // update MPC reference
+    double chi_ref = RAD2DEG(30);
+    nmpc.updateMpcReference(chi_ref);
+
+    // solve the optimization problem
+    // double 
+
+    
 
     // std::cout<< NMPC.solveProblem() << std::endl;
 
