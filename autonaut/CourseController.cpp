@@ -624,42 +624,56 @@ namespace NMPC{
 
             void test_dynamics(){
 
-                    double Ts = config_["Ts"];
+                // initial position
+                std::vector<double> pn(4,0), p0 = {0.091855, 0.9821, 0.19964, 0.031876};
 
-                    // multiple shooting using Runge-Kutta4
-                    casadi::DMDict args, f_eval;
-                    std::vector<double> pn(4,0), p0 = {0.091855, 0.9821, 0.19964, 0.031876};
+                // get rk configs
+                double Ts = config_["Ts"];
 
-                    // Stage 1
-                    args["i0"] = p0;
-                    args["i1"] = 0;
-                    args["i2"] = reWriteParams();
-                    f_eval = x_dot(args);
-                    std::vector<double> rk1(f_eval["o0"]);
+                // set default parameters
+                std::map<std::string, double> params_d;
+                params_d["Vc"] = 0.35; params_d["beta_c"] = 1.57;
+                params_d["Vw"] = 5; params_d["beta_w"] = 1.57;
+                params_d["k_1"] = 0.9551; params_d["k_2"] = -0.031775;
+                params_d["Q"] = 4.5; params_d["R"] = 3;
 
-                    std::cout << "res = " << rk1 << std::endl;
+                nmpc.updateMpcParams(params_d);
 
-                    // // Stage 2
-                    // for(int i=0; i<nx; i++)
-                    //     pn[i] = p0[i] + 0.5*Ts*rk1(i);
-                    // args["i0"] = pn;
-                    // f_eval = x_dot(args);
-                    // std::vector<casadi::DM> rk2 = f_eval["o0"];
+                // multiple shooting using Runge-Kutta4
+                casadi::DMDict args, f_eval;
 
+                // Stage 1
+                args["i0"] = p0;
+                args["i1"] = 0;
+                args["i2"] = reWriteParams();
+                f_eval = x_dot(args);
+                std::vector<double> rk1(f_eval["o0"]);
 
+                // Stage 2
+                for(int i=0; i<nx; i++)
+                    pn[i] = p0[i] + 0.5*Ts*rk1[i];
+                args["i0"] = pn;
+                f_eval = x_dot(args);
+                std::vector<double> rk2(f_eval["o0"]);
 
-                    // // Stage 3
-                    // args["i0"] = sym_x + 0.5*Ts*rk2;
-                    // f_eval = x_dot(args);
-                    // casadi::SX rk3 = f_eval["o0"];
+                // Stage 3
+                for(int i=0; i<nx; i++)
+                    pn[i] = p0[i] + 0.5*Ts*rk2[i];
+                args["i0"] = pn;
+                f_eval = x_dot(args);
+                std::vector<double> rk3(f_eval["o0"]);
 
-                    // // Stage 4
-                    // args["i0"] = sym_x + Ts*rk3;
-                    // f_eval = x_dot(args);
-                    // casadi::SX rk4 = f_eval["o0"];
+                // Stage 4
+                for(int i=0; i<nx; i++)
+                    pn[i] = p0[i] + Ts*rk3[i];
+                args["i0"] = pn;
+                f_eval = x_dot(args);
+                std::vector<double> rk4(f_eval["o0"]);
 
-                    // // next state
-                    // casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+                // next state
+                std::vector<double> x_rk4 = p0 + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+
+                std::cout << "state: " << x_rk4 << std::endl;
 
             }
 
