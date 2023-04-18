@@ -463,9 +463,7 @@ namespace NMPC{
                     std::cout << param_vector[i] << ", ";
                 std::cout << "\n";
 
-
-
-                return true;
+                return param_vector;
             }
 
             // generates random vector for warm start
