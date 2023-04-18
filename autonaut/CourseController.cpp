@@ -560,6 +560,9 @@ namespace NMPC{
                 reWriteParams(param);
                 arg["p"] = param;
                 
+                for(auto i : param)
+                    std::cout << param << ", "
+
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
                 arg["lam_x0"] = args_["lam_x0"];
@@ -690,7 +693,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    double chi_ref = DEG2RAD(30);
+    double chi_ref = 0.5236;
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
