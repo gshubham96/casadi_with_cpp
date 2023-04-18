@@ -749,8 +749,8 @@ int main(){
     // instantiate a controller with default values
     NMPC::CourseController nmpc;
 
-    nmpc.test_dynamics();
-    return 0;
+    // nmpc.test_dynamics();
+    // return 0;
 
     // set default parameters
     std::map<std::string, double> params_d;
