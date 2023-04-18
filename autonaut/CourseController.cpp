@@ -456,6 +456,13 @@ namespace NMPC{
                 param[11] = config_["Q"];
                 param[12] = config_["R"];
 
+                std::cout << "loading params: ";
+                for(auto i : param)
+                    std::cout << param[i] << ", ";
+                std::cout << "\n";
+
+
+
                 return true;
             }
 
@@ -560,10 +567,6 @@ namespace NMPC{
                 reWriteParams(param);
                 arg["p"] = param;
                 
-                std::cout << "loading params: ";
-                for(auto i : param)
-                    std::cout << param[i] << ", ";
-
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
                 arg["lam_x0"] = args_["lam_x0"];
