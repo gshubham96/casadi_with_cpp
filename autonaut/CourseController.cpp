@@ -242,10 +242,8 @@ namespace NMPC{
                     // 0 minimizes the different in course angle'
                     casadi::SX delta_x;
                     if(cost_type == 0){
-                        // casadi::SX beta = atan(sym_x(2) / sym_x(1) + EPS);
-                        // delta_x = ssa(chi_d - sym_x(0) - beta);
-                        // delta_x = ssa(chi_d - sym_x(0));
-                        delta_x = ssa(chi_d - sym_x(0));
+                        casadi::SX beta = atan(v_p / u_p);
+                        delta_x = ssa(chi_d - psi_p - beta);
                     }
                     else if(cost_type == 1){
                         casadi::SX
@@ -261,6 +259,9 @@ namespace NMPC{
                         vec_chi_d(1) = sin(chi_t);
 
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
+                    }
+                    else if(cost_type == 2){
+                        delta_x = (chi_d - psi_p);
                     }
 
                     casadi::SX cost_x  = delta_x * Q * delta_x;
