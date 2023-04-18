@@ -320,7 +320,7 @@ namespace NMPC{
                 // nlp options
                 casadi::Dict opts;
                 opts["ipopt.max_iter"] = 300;
-                opts["ipopt.print_level"] = 2;
+                opts["ipopt.print_level"] = 0;
                 opts["ipopt.acceptable_tol"] = 1e-8;
                 opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
                 opts["ipopt.warm_start_init_point"] = "yes";
@@ -442,6 +442,10 @@ namespace NMPC{
                 std::vector<double> posi(2, 0);
                 posi[0] = state_["psi"];
                 posi[1] = state_["u"];
+                std::cout << "loading posi 1: ";
+                for(auto i : posi)
+                    std::cout << posi[i] << ", ";
+                std::cout << "\n";
 
                 std::vector<double> param_vector;
 
@@ -456,15 +460,10 @@ namespace NMPC{
                 param_vector.push_back(state_["v"]);
                 param_vector.push_back(state_["r"]);
 
-                std::cout << "loading params 1: ";
-                for(auto i : param_vector)
-                    std::cout << param_vector[i] << ", ";
-                std::cout << "\n";
-
-                std::cout << "loading posi 1: ";
-                for(auto i : posi)
-                    std::cout << posi[i] << ", ";
-                std::cout << "\n";
+                // std::cout << "loading params 1: ";
+                // for(auto i : param_vector)
+                //     std::cout << param_vector[i] << ", ";
+                // std::cout << "\n";
 
                 // set other params                
                 param_vector.push_back(reference_);
