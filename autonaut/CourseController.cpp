@@ -473,11 +473,6 @@ namespace NMPC{
                 param_vector[9] = config_["Q"];
                 param_vector[10] = config_["R"];
 
-                std::cout << "loading param_vector: ";
-                for(int i = 0; i < np; i++)
-                    std::cout << param_vector[i] << ", ";
-                std::cout << "\n";
-
                 return param_vector;
             }
 
