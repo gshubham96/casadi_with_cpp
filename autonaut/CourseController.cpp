@@ -522,7 +522,7 @@ namespace NMPC{
                 
                 // set initial trajectory for warm start
                 arg["x0"]  = args_["x0"];
-                arg["lam_x"]  = args_["lam_x"];
+                arg["lam_x0"]  = args_["lam_x0"];
                 arg["lam_g0"]  = args_["lam_g0"];
 
                 res = solver(arg);
@@ -538,10 +538,10 @@ namespace NMPC{
 
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
-                std::vector<double> lam_x(res.at("lam_x"));
+                std::vector<double> lam_x(res.at("lam_x0"));
                 std::vector<double> lam_g(res.at("lam_g0"));
                 args_["x0"]  = optimized_vars;
-                args_["lam_x"]  = lam_x;
+                args_["lam_x0"]  = lam_x;
                 args_["lam_g0"]  = lam_g;
 
                 return true;
