@@ -52,6 +52,7 @@ namespace NMPC{
             // wrap the angle between [-pi, pi]
             double ssa(double diff) {
                 diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
+                return diff;
             }
 
             // wrap the angle between [-pi, pi] for SX Symbolics
@@ -328,19 +329,19 @@ namespace NMPC{
                 solver.generate_dependencies("nlp.c");
 
                 // #TODO Just-in-time compilation?
-                bool jit = false;
-                if (jit) {
-                    // Create a new NLP solver instance using just-in-time compilation
-                    // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
-                    solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
-                } else {
-                    // Compile the c-code
-                    int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
-                    casadi_assert(flag==0, "Compilation failed");
+                // bool jit = false;
+                // if (jit) {
+                //     // Create a new NLP solver instance using just-in-time compilation
+                //     // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
+                //     solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
+                // } else {
+                //     // Compile the c-code
+                //     int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
+                //     casadi_assert(flag==0, "Compilation failed");
 
-                    // Create a new NLP solver instance from the compiled code
-                    solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
-                }
+                //     // Create a new NLP solver instance from the compiled code
+                //     solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
+                // }
 
                 // define state bounds
                 std::vector<double> ubx, lbx, ubg, lbg;
