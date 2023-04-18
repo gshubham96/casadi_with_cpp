@@ -329,19 +329,20 @@ namespace NMPC{
                 solver.generate_dependencies("nlp.c");
 
                 // #TODO Just-in-time compilation?
-                // bool jit = false;
-                // if (jit) {
-                //     // Create a new NLP solver instance using just-in-time compilation
-                //     // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
-                //     solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
-                // } else {
-                //     // Compile the c-code
-                //     int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
-                //     casadi_assert(flag==0, "Compilation failed");
+                bool jit = false;
+                if (jit) {
+                    // Create a new NLP solver instance using just-in-time compilation
+                    // casadi::Dict optsi = {"compiler": "shell", "jit": True, "jit_options": {"compiler": "gcc","flags": ["-O3"]}};
+                    solver = casadi::nlpsol("solver", "ipopt", "nlp.c");
+                } 
+                else {
+                    // Compile the c-code
+                    int flag = system("gcc -fPIC -shared -O3 nlp.c -o nlp.so");
+                    casadi_assert(flag==0, "Compilation failed");
 
-                //     // Create a new NLP solver instance from the compiled code
-                //     solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
-                // }
+                    // Create a new NLP solver instance from the compiled code
+                    solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
+                }
 
                 // define state bounds
                 std::vector<double> ubx, lbx, ubg, lbg;
@@ -351,11 +352,13 @@ namespace NMPC{
                     lbg.push_back(0);
                     ubg.push_back(0); 
                 }
+
                 for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
                     lbx.push_back(-DEG2RAD(40));
                     ubx.push_back(DEG2RAD(40));
                 }
 
+                // setup lower and upper bounds for constraints as well as warm start
                 args_["lbx"] = lbx;
                 args_["ubx"] = ubx;
                 args_["lbg"] = lbg;
@@ -678,8 +681,12 @@ int main(){
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
-    if(nmpc.optimizeMpcProblem())
+    if(nmpc.optimizeMpcProblem()){
         std::cout << "optimization succesful" << std::endl;
+        double u_opt;
+        if (nmpc.getOptimalInput(u_opt))
+            std::cout << "optimal output is: " << u_opt << std::endl;
+    }
     else
         std::cout << "optimization failed :(" << std::endl;
 
