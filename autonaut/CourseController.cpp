@@ -451,6 +451,12 @@ namespace NMPC{
                 param_vector.push_back(state_["u"]);
                 param_vector.push_back(state_["v"]);
                 param_vector.push_back(state_["r"]);
+
+                std::cout << "loading params 1: ";
+                for(auto i : param_vector)
+                    std::cout << param_vector[i] << ", ";
+                std::cout << "\n";
+
                 // set other params                
                 param_vector.push_back(reference_);
                 param_vector.push_back(params_["Vc"]);
