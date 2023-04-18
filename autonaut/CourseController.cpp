@@ -661,6 +661,7 @@ namespace NMPC{
                 f_eval = x_dot(args);
                 std::vector<double> rk1(f_eval["o0"]);
 
+                std::cout << "params used: " << reWriteParams() << std::endl;
                 std::cout << "rk1: " << rk1 << std::endl;
 
                 // Stage 2
