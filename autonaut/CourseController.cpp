@@ -372,7 +372,7 @@ namespace NMPC{
                 state_["r"] = 0;    // [rad/s]
 
                 // get system dynamics
-                std::string file = "system.csv";
+                std::string file = "system.csv";                
                 std::cout << loadDefaultsFromFile(file, system_) << std::endl;
                 
                 // get MpcConfigurationParameters
@@ -615,7 +615,10 @@ int main(){
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
-    // double 
+    if(nmpc.optimizeMpcProblem())
+        std::cout << "optimization succesful" << std::endl;
+    else
+        std::cout << "optimization failed :(" << std::endl;
 
     
 
