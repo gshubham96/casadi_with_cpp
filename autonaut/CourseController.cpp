@@ -51,15 +51,15 @@ namespace NMPC{
 
             // wrap the angle between [-pi, pi]
             void ssa(double &diff) {
-                while (diff < -PI) diff += 2 * PI;
-                while (diff > PI) diff -= 2 * PI;
-                return diff;
+                while (diff < -PI) 
+                    diff += 2 * PI;
+                while (diff > PI) 
+                    diff -= 2 * PI;
             }
 
             // wrap the angle between [-pi, pi] for SX Symbolics
             void ssa(casadi::SX &diff) {
                 diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
-                return diff;
             }
 
             // Function to define and compile the NLP Optimization Problem
@@ -132,7 +132,7 @@ namespace NMPC{
                 // DAMPING
                 casadi::SX 
                     damping_u  = D11,
-                    damping_v  = D22;
+                    damping_v  = D22,
                     damping_r  = D33;
 
                 // YAW
