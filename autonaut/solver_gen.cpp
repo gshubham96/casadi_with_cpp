@@ -303,12 +303,12 @@ class MpcProblem {
         arg["x0"]  = x0;
         arg["p"]   = p0;
 
-        // res = solver(arg);
+        res = solver(arg);
         // std::cout << "optimal input found that is: " << res.at("x") << std::endl;
         // auto optimized_vars = res.at("x");
 
-        // arg["x0"]  = optimized_vars;
-        // res = solver(arg);
+        arg["x0"]  = optimized_vars;
+        res = solver(arg);
 
         // std::ofstream file;
         // std::string filename = "test.m";
