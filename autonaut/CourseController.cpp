@@ -50,7 +50,7 @@ namespace NMPC{
             // ##################################
 
             // wrap the angle between [-pi, pi]
-            void ssa(double &diff) {
+            double ssa(double diff) {
                 while (diff < -PI) 
                     diff += 2 * PI;
                 while (diff > PI) 
@@ -58,7 +58,7 @@ namespace NMPC{
             }
 
             // wrap the angle between [-pi, pi] for SX Symbolics
-            void ssa(casadi::SX &diff) {
+            casadi::SX ssa(casadi::SX diff) {
                 diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
             }
 
@@ -206,7 +206,7 @@ namespace NMPC{
                 // Constraint MPC to start the trajectory from current position
                 for(int j = 0; j < nx; j++)
                     sym_dx(j) = X(j,0) - sym_p(j);
-                ssa(sym_dx(0));
+                sym_dx(0) = ssa(sym_dx(0));
 
                 // fill in the constraint vector
                 for(int j = 0; j < nx; j++)
@@ -227,11 +227,9 @@ namespace NMPC{
                         sym_du = U(i);
 
                     // trajectory
-                    chi_t_dot = chi_d - chi_t;
-                    ssa(chi_t_dot);
-                    chi_t = chi_t + Ts * chi_t_dot;
-                    ssa(chi_t);
-
+                    chi_t_dot = ssa(chi_d - chi_t);
+                    chi_t = ssa(chi_t + Ts * chi_t_dot);
+                    
                     // assign states for readibility
                     casadi::SX
                         psi_p = sym_x(0),
@@ -243,8 +241,7 @@ namespace NMPC{
                     casadi::SX delta_x;
                     if(cost_type == 0){
                         casadi::SX beta = atan(sym_x(2) / sym_x(1) + EPS);
-                        delta_x = chi_d - sym_x(0) - beta;
-                        ssa(delta_x);
+                        delta_x = ssa(chi_d - sym_x(0) - beta);
                     }
                     else if(cost_type == 1){
                         casadi::SX
@@ -257,7 +254,7 @@ namespace NMPC{
 
                         casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
                         vec_chi_d(0) = cos(chi_t);
-                        vec_chi_d(0) = sin(chi_t);
+                        vec_chi_d(1) = sin(chi_t);
 
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
                     }
@@ -296,7 +293,7 @@ namespace NMPC{
                     // introduce dynamics to constraints
                     for(int j = 0; j < nx; j++)
                         sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
-                    ssa(sym_dx(0));
+                    sym_dx(0) = ssa(sym_dx(0));
 
                     for(int j = 0; j < nx; j++)
                         g(nx*(i+1) + j) = sym_dx(j);
