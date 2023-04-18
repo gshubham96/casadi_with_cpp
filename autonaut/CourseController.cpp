@@ -501,12 +501,9 @@ namespace NMPC{
                 }
 
                 // Update vehicle state
-                std::cout << "my state is: ";
-                for (auto i : state) {
+                for (auto i : state) 
                     state_[i.first] = i.second;
-                    std::cout << i.first << ":" << i.second << ", ";
 
-                }                
                 return true;
             }
 
@@ -699,14 +696,14 @@ int main(){
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
-    // if(nmpc.optimizeMpcProblem()){
-    //     std::cout << "optimization succesful" << std::endl;
-    //     double u_opt;
-    //     if (nmpc.getOptimalInput(u_opt))
-    //         std::cout << "optimal output is: " << u_opt << std::endl;
-    // }
-    // else
-    //     std::cout << "optimization failed :(" << std::endl;
+    if(nmpc.optimizeMpcProblem()){
+        std::cout << "optimization succesful" << std::endl;
+        double u_opt;
+        if (nmpc.getOptimalInput(u_opt))
+            std::cout << "optimal output is: " << u_opt << std::endl;
+    }
+    else
+        std::cout << "optimization failed :(" << std::endl;
 
     // nmpc.updateMpcState(state_d);
     // if(nmpc.optimizeMpcProblem())
