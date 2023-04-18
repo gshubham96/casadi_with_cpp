@@ -644,18 +644,20 @@ namespace NMPC{
                     f_eval = x_dot(args);
                     std::vector<casadi::DM> rk2 = f_eval["o0"];
 
-                    // Stage 3
-                    args["i0"] = sym_x + 0.5*Ts*rk2;
-                    f_eval = x_dot(args);
-                    casadi::SX rk3 = f_eval["o0"];
 
-                    // Stage 4
-                    args["i0"] = sym_x + Ts*rk3;
-                    f_eval = x_dot(args);
-                    casadi::SX rk4 = f_eval["o0"];
 
-                    // next state
-                    casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+                    // // Stage 3
+                    // args["i0"] = sym_x + 0.5*Ts*rk2;
+                    // f_eval = x_dot(args);
+                    // casadi::SX rk3 = f_eval["o0"];
+
+                    // // Stage 4
+                    // args["i0"] = sym_x + Ts*rk3;
+                    // f_eval = x_dot(args);
+                    // casadi::SX rk4 = f_eval["o0"];
+
+                    // // next state
+                    // casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
             }
 
@@ -715,6 +717,9 @@ int main(){
 
     // instantiate a controller with default values
     NMPC::CourseController nmpc;
+
+    nmpc.test_dynamics();
+    return 0;
 
     // set default parameters
     std::map<std::string, double> params_d;
