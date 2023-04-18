@@ -171,6 +171,11 @@ namespace NMPC{
                 // dynamics of surge
                 casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
 
+                std::cout << "nu_c_dot_u: " << nu_c_dot_u << std::endl;
+                std::cout << "tau_foil_u: " << tau_foil_u << std::endl;
+                std::cout << "tau_rudr_u: " << tau_rudr_u << std::endl;
+                std::cout << "damping_u: " << damping_u << std::endl;
+
                 // dynamics of sway
                 casadi::SX v_dot = nu_c_dot_v 
                                         + INV_M22*(tau_rudr_v - damping_v*v_r)
