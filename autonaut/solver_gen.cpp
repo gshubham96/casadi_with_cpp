@@ -306,7 +306,7 @@ class MpcProblem {
         res = solver(arg);
         // std::cout << "optimal input found that is: " << res.at("x") << std::endl;
 
-        auto optimized_vars = res.at("x");
+        std::vector<double> optimized_vars(res.at("x"));
         arg["x0"]  = optimized_vars;
 
         for(int i = 0; i < 90; i=i+10){
@@ -321,7 +321,6 @@ class MpcProblem {
 
         std::cout << "\n\ndesired course angle: " << 0 << std::endl;
         std::cout << "final course angle: " << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
-
 
         // res = solver(arg);
 
