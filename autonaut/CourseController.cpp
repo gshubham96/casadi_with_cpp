@@ -561,8 +561,9 @@ namespace NMPC{
                 arg["ubg"] = args_["ubg"];
                 
                 // set Mpc parameters
-                arg["p"] = reWriteParams();
-                std::cout << "params: " << reWriteParams() << std::endl;
+                std::vector p = reWriteParams();
+                arg["p"] = p
+                std::cout << "params: " << p << std::endl;
                 
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
@@ -594,6 +595,11 @@ namespace NMPC{
                         std::cout << optimized_vars[nx * i + j] << ", ";                    
                     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
                 }
+                for(int j = 0; j < nx; j++)
+                    std::cout << optimized_vars[nx * N + j] << ", ";                    
+
+                std::cout << "desired course angle" << p[5] << std::endl;
+                std::cout << "final course angle" << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
 
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
