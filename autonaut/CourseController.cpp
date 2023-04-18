@@ -597,9 +597,9 @@ namespace NMPC{
                 }
                 std::cout << "N: " << N << ", st: ";
                 for(int j = 0; j < nx; j++)
-                    std::cout << optimized_vars[nx * N + j] << "\n";                    
+                    std::cout << optimized_vars[nx * N + j] << ", ";                    
 
-                std::cout << "desired course angle" << p[5] << std::endl;
+                std::cout << "\ndesired course angle" << p[5] << std::endl;
                 std::cout << "final course angle" << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
 
                 // TODO CAN BE MADE MORE EFFICIENT 
