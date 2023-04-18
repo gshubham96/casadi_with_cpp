@@ -649,6 +649,8 @@ namespace NMPC{
                 f_eval = x_dot(args);
                 std::vector<double> rk1(f_eval["o0"]);
 
+                std::cout << "rk1: " << rk1 << std::endl;
+
                 // Stage 2
                 for(int i=0; i<nx; i++)
                     pn[i] = p0[i] + 0.5*Ts*rk1[i];
@@ -678,7 +680,7 @@ namespace NMPC{
 
                     x_rk4[i] = p0[i] + (Ts/6) * (rk1[i] + rk2[i] + rk3[i] + rk4[i]);
                 }
-                std::cout << "state: " << x_rk4 << std::endl;
+                // std::cout << "state: " << x_rk4 << std::endl;
 
             }
 
