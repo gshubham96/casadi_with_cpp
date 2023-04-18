@@ -602,6 +602,8 @@ namespace NMPC{
                 int t_ind = floor(t_elapsed/Ts);
                 u_star = input_traj_[t_ind];
 
+                std::cout << "full traj\n" << input_traj_ << std::endl;
+
                 return true;
             }
 
