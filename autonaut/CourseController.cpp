@@ -541,7 +541,7 @@ namespace NMPC{
                 for(int i = 0; i < nu*N; i++)
                     input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
 
-                std::cout << "checkpoint 6: " << std::endl;
+                std::cout << "checkpoint 6: " << res << std::endl;
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
                 std::vector<double> lam_x(res.at("lam_x0"));
