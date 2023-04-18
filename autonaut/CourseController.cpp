@@ -523,7 +523,7 @@ namespace NMPC{
                 // set initial trajectory for warm start
                 arg["x0"]  = args_["x0"];
                 arg["lam_x"]  = args_["lam_x"];
-                arg["lam_g"]  = args_["lam_g"];
+                arg["lam_g0"]  = args_["lam_g0"];
 
                 res = solver(arg);
                 t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -539,10 +539,10 @@ namespace NMPC{
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
                 std::vector<double> lam_x(res.at("lam_x"));
-                std::vector<double> lam_g(res.at("lam_g"));
+                std::vector<double> lam_g(res.at("lam_g0"));
                 args_["x0"]  = optimized_vars;
                 args_["lam_x"]  = lam_x;
-                args_["lam_g"]  = lam_g;
+                args_["lam_g0"]  = lam_g;
 
                 return true;
             }
@@ -619,7 +619,6 @@ int main(){
         std::cout << "optimization succesful" << std::endl;
     else
         std::cout << "optimization failed :(" << std::endl;
-
     
 
     // std::cout<< NMPC.solveProblem() << std::endl;
