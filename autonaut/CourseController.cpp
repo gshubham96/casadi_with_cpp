@@ -175,6 +175,7 @@ namespace NMPC{
                 std::cout << "tau_foil_u: " << tau_foil_u << std::endl;
                 std::cout << "tau_rudr_u: " << tau_rudr_u << std::endl;
                 std::cout << "damping_u: " << damping_u*u_r << std::endl;
+                std::cout << "u_dot: " << u_dot << std::endl;
 
                 // dynamics of sway
                 casadi::SX v_dot = nu_c_dot_v 
