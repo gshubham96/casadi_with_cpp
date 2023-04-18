@@ -48,8 +48,9 @@ namespace NMPC{
             }
 
             casadi::SX ssa(casadi::SX diff) {
-                // return diff;
-                return fmod(diff, 2*PI) - PI;
+                diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
+                return diff;
+                // return fmod(diff, 2*PI) - PI;
             }
 
             // Function to define and compile the NLP Optimization Problem
