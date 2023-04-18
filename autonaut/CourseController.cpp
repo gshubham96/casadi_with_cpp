@@ -572,7 +572,13 @@ namespace NMPC{
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
 
-                std::cout << "full traj: " << res.at("x") << std::endl;
+                std::ofstream file;
+                std::string filename = "test.m";
+                file.open(filename.c_str());
+                file << "% Results file from " __FILE__ << std::endl;
+                file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+                file << std::endl;
+                file << "optims = " << optimized_vars << ";" << std::endl;
 
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
@@ -697,11 +703,11 @@ int main(){
     else
         std::cout << "optimization failed :(" << std::endl;
 
-    nmpc.updateMpcState(state_d);
-    if(nmpc.optimizeMpcProblem())
-        std::cout << "optimization succesful" << std::endl;
-    else
-        std::cout << "optimization failed :(" << std::endl;
+    // nmpc.updateMpcState(state_d);
+    // if(nmpc.optimizeMpcProblem())
+    //     std::cout << "optimization succesful" << std::endl;
+    // else
+    //     std::cout << "optimization failed :(" << std::endl;
 
 
     return 0;
