@@ -545,8 +545,11 @@ namespace NMPC{
                 // update variables for warm start
                 std::vector<double> lam_x(res.at("lam_x0"));
                 std::vector<double> lam_g(res.at("lam_g0"));
+                std::cout << "checkpoint 6.2: " << std::endl;
                 args_["x0"]  = optimized_vars;
+                std::cout << "checkpoint 6.3: " << std::endl;
                 args_["lam_x0"]  = lam_x;
+                std::cout << "checkpoint 6.4: " << std::endl;
                 args_["lam_g0"]  = lam_g;
 
                 std::cout << "checkpoint 7: " << std::endl;
