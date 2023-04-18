@@ -10,9 +10,10 @@
 // floor
 #include <cmath>    
 
-#define PI 3.14159
+#define PI M_PI
 #define EPS 1e-9
 #define DEG2RAD(angle) ((angle) * M_PI / 180.0)
+#define RAD2DEG(angle) ((angle) * 180.0 / M_PI)
 
 namespace fs = std::filesystem;
 
@@ -574,7 +575,7 @@ namespace NMPC{
             if(defineMpcProblem())
                 std::cout << "Problem configured succesfully" << std::endl;
             else
-                std::cout << "configuration failed!\n"
+                std::cout << "configuration failed!\n";
         }
 
     }
