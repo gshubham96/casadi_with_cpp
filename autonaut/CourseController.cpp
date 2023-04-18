@@ -27,7 +27,7 @@ namespace NMPC{
             // ##################################
 
             // initialization variable
-            bool initialized, state_update, config_update;
+            int initialized;
             // lengths of state, input and paramter vectors
             int nx, nu, np, N;
             // time of last update
@@ -382,13 +382,22 @@ namespace NMPC{
                 state_["r"] = 0;    // [rad/s]
 
                 // get system dynamics
-                std::string file = "system.csv";                
-                std::cout << loadDefaultsFromFile(file, system_) << std::endl;
-                
-                // get MpcConfigurationParameters
-                file = "config.csv";
-                std::cout << loadDefaultsFromFile(file, config_) << std::endl;
+                std::string file = "system.csv";
+                if(loadDefaultsFromFile(file, system_))
+                    std::cout << "Data loading from file " << file << " succeeded!" << std::endl;             
+                else{
+                    std::cout << "Data loading from file " << file << " FAILED!" << std::endl;             
+                    return false;
+                }
 
+                file = "config.csv";
+                if(loadDefaultsFromFile(file, config_))
+                    std::cout << "Data loading from file " << file << " succeeded!" << std::endl;             
+                else{
+                    std::cout << "Data loading from file " << file << " FAILED!" << std::endl;             
+                    return false;
+                }
+                
                 return true;
 
             }
@@ -428,6 +437,7 @@ namespace NMPC{
                 return true;    
             }
 
+            // cosntructs a mpc-friendly format parameter vector
             bool reWriteParams(std::vector<double> &param){
 
                 // set initial state
@@ -443,6 +453,7 @@ namespace NMPC{
                 param[nx+4] = params_["beta_w"];
                 param[nx+5] = params_["k_1"];
                 param[nx+6] = params_["k_2"];
+                // get costs from configuration object
                 param[nx+7] = config_["Q"];
                 param[nx+8] = config_["R"];
 
@@ -462,10 +473,15 @@ namespace NMPC{
             }
 
         public:
+            // updates parameters such as wind, currents, etc
+            // need to do it atlease once
             bool updateMpcParams(const std::map<std::string, double> &param){
                 // Controller is ready to run when parameters are set
-                if(initialized == false)
-                    initialized = true;
+                switch(initialized){
+                    case -1: std::cout << "configure problem first!\n"; return false;
+                    case  0: initialized++; break;
+                    default: break;
+                }
 
                 // Update defaul parameter list
                 for (auto i : param) 
@@ -474,8 +490,17 @@ namespace NMPC{
                 return true;
             }
 
+            // updates mpc state
             bool updateMpcState(const std::map<std::string, double> &state){
+
                 // flag to check if state was updated
+                switch(initialized){
+                    case -1: std::cout << "configure problem first!\n"; return false;
+                    case  0: std::cout << "update parameters first!\n"; return false;
+                    case  1: initialized++; break;
+                    default: break;
+                }
+
                 state_update = true;
                 // Update vehicle state
                 for (auto i : state) 
@@ -484,8 +509,16 @@ namespace NMPC{
                 return true;
             }
 
+            // updates config parameters if user wants to change the NLP
             bool updateMpcConfig(const std::map<std::string, double> &config){
-                config_update = true;
+
+                // recompile NLP if configuration parameters are changed
+                for(auto i : config){
+                    if(i.first.compare("Q") == 0 || i.first.compare("R") == 0)
+                        continue;
+                    initialized = -1;
+                }
+
                 // Update Mpc Configuration parameters
                 for (auto i : config) 
                     config_[i.first] = i.second;
@@ -500,23 +533,21 @@ namespace NMPC{
                 return true;
             }
 
+            // updates course reference angle [rad]
             bool updateMpcReference(const double &reference){
                 // Update vehicle course reference
                 reference_ = reference;
-
                 return true;
             }
 
             bool optimizeMpcProblem(){
 
-                if(state_update == false){
-                    std::cerr << "Update state before solving NLP\n";
-                    return false;
-                }
-
-                if(initialized == false){
-                    std::cerr << "NLP not yet initialized\n";
-                    return false;
+                // flag to check if nlp was set up and parameters were updated
+                switch(initialized){
+                    case -1: std::cout << "configure problem first!\n"; return false;
+                    case  0: std::cout << "update parameters first!\n"; return false;
+                    case  1: std::cout << "update state first!\n"; return false;
+                    default: break;
                 }
 
                 std::map<std::string, casadi::DM> arg, res;
@@ -532,9 +563,9 @@ namespace NMPC{
                 arg["p"] = param;
                 
                 // set initial trajectory for warm start
-                arg["x0"]  = args_["x0"];
-                arg["lam_x0"]  = args_["lam_x0"];
-                arg["lam_g0"]  = args_["lam_g0"];
+                arg["x0"] = args_["x0"];
+                arg["lam_x0"] = args_["lam_x0"];
+                arg["lam_g0"] = args_["lam_g0"];
 
                 res = solver(arg);
                 t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -554,18 +585,21 @@ namespace NMPC{
                 args_["lam_x0"]  = lam_x;
                 args_["lam_g0"]  = lam_g;
 
-                state_update = false;
+                initialized--;
                 return true;
             }
 
             bool getOptimalInput(double &u_star){
+                // get current time
                 double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
                 double t_elapsed = (t_update - t_now);
+
                 // fail if NLP has not been run for a long time
                 if(t_elapsed > 0.25*Tp){
                     std::cerr << "time since last NLP run exceeds threshold\n";
                     return false;
                 }
+
                 // otherwise, find the closest time index and send that input
                 int t_ind = floor(t_elapsed/Ts);
                 u_star = input_traj_[t_ind];
@@ -573,19 +607,40 @@ namespace NMPC{
 
     // Constructor
     CourseController(){
-        std::cout << loadDefaults() << std::endl;
-        std::cout << defineMpcProblem() << std::endl;
+        initialized = -1;
+        // loading defaults from a file
+        if(loadDefaults())
+            std::cout << "default options loaded!\n";
+        else{
+            std::cout << "could not load default options, exiting since user did not specify initilization variables\n";
+            return;
+        }
+        // configuring the problem with default vars
+        if(defineMpcProblem())
+            std::cout << "Problem configured succesfully" << std::endl;
+            initialized++;
+        else{
+            std::cout << "configuration failed!\n";
+            return;
+        }
     }
 
     // allow user to skip configuration
     CourseController(bool flag){
-        std::cout << loadDefaults() << std::endl;
+        initialized = -1;
+        // loading defaults from a file
+        if(loadDefaults())
+            std::cout << "default options loaded!\n";
+        else{
+            std::cout << "could not load default options, make sure to update ALL MPC configs parameters before configuration";
+        }
         if(flag)
             std::cout << "skipping configuration for now!" << std::endl;
         else{
             // relaunch the configuration function
             if(defineMpcProblem())
                 std::cout << "Problem configured succesfully" << std::endl;
+                initialized++;
             else
                 std::cout << "configuration failed!\n";
         }
@@ -594,7 +649,7 @@ namespace NMPC{
 
     // Destructor
     ~CourseController() { 
-        std::cout << "MyCallback is destroyed here." << std::endl; };
+        std::cout << "My class is destroyed here. :(" << std::endl; };
     };
 }
 
