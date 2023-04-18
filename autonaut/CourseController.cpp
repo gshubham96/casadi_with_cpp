@@ -445,16 +445,16 @@ namespace NMPC{
                 param[2] = state_["v"];
                 param[3] = state_["r"];
                 // set other params                
-                param[nx] = reference_;
-                param[nx+1] = params_["Vc"];
-                param[nx+2] = params_["beta_c"];
-                param[nx+3] = params_["Vw"];
-                param[nx+4] = params_["beta_w"];
-                param[nx+5] = params_["k_1"];
-                param[nx+6] = params_["k_2"];
+                param[4] = reference_;
+                param[5] = params_["Vc"];
+                param[6] = params_["beta_c"];
+                param[7] = params_["Vw"];
+                param[8] = params_["beta_w"];
+                param[9] = params_["k_1"];
+                param[10] = params_["k_2"];
                 // get costs from configuration object
-                param[nx+7] = config_["Q"];
-                param[nx+8] = config_["R"];
+                param[11] = config_["Q"];
+                param[12] = config_["R"];
 
                 return true;
             }
@@ -501,9 +501,12 @@ namespace NMPC{
                 }
 
                 // Update vehicle state
-                for (auto i : state) 
+                std::cout << "my state is: ";
+                for (auto i : state) {
                     state_[i.first] = i.second;
-                
+                    std::cout << i.first << ":" << i.second << ", ";
+
+                }                
                 return true;
             }
 
