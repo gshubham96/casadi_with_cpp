@@ -442,8 +442,9 @@ namespace NMPC{
                 std::vector<double> posi(2, 0);
                 posi[0] = state_["psi"];
                 posi[1] = state_["u"];
+
                 std::cout << "loading posi 1: ";
-                for(auto i : posi)
+                for(int i = 0; i < 2; i++)
                     std::cout << posi[i] << ", ";
                 std::cout << "\n";
 
