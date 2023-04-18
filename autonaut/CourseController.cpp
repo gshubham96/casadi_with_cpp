@@ -40,6 +40,8 @@ namespace NMPC{
             std::map<std::string, double> config_, params_, state_;
             // initial guess for warm start
             std::map<std::string, std::vector<double>> args_;
+            // dynamics
+            casadi::Function x_dot;
             // NLP Solver
             casadi::Function solver;
             // optimized input trajectory
@@ -179,7 +181,7 @@ namespace NMPC{
                 casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
 
                 // expressed as a function for loop evaluation
-                casadi::Function x_dot("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
+                x_dot = casadi::Function("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
                 // ################################################
                 // ###----------------LOOP SETUP----------------###
@@ -618,6 +620,43 @@ namespace NMPC{
                 u_star = input_traj_[t_ind];
 
                 return true;
+            }
+
+            void test_dynamics(){
+
+                    double Ts = config_["Ts"];
+
+                    // multiple shooting using Runge-Kutta4
+                    casadi::DMDict args, f_eval;
+                    std::vector<double> pn(4,0), p0 = {0.091855, 0.9821, 0.19964, 0.031876};
+
+                    // Stage 1
+                    args["i0"] = p0;
+                    args["i1"] = 0;
+                    args["i2"] = reWriteParams();
+                    f_eval = x_dot(args);
+                    std::vector<casadi::DM> rk1 = f_eval["o0"];
+
+                    // Stage 2
+                    for(int i=0; i<nx; i++)
+                        pn[i] = p0[i] + 0.5*Ts*rk1(i);
+                    args["i0"] = pn;
+                    f_eval = x_dot(args);
+                    std::vector<casadi::DM> rk2 = f_eval["o0"];
+
+                    // Stage 3
+                    args["i0"] = sym_x + 0.5*Ts*rk2;
+                    f_eval = x_dot(args);
+                    casadi::SX rk3 = f_eval["o0"];
+
+                    // Stage 4
+                    args["i0"] = sym_x + Ts*rk3;
+                    f_eval = x_dot(args);
+                    casadi::SX rk4 = f_eval["o0"];
+
+                    // next state
+                    casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+
             }
 
     // Constructor
