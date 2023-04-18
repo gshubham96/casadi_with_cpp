@@ -690,7 +690,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    double chi_ref = RAD2DEG(30);
+    double chi_ref = DEG2RAD(30);
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
