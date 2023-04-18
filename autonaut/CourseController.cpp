@@ -442,21 +442,21 @@ namespace NMPC{
                 std::vector<double> param_vector;
 
                 // set initial state
-                param_vector[0] = state_["psi"];
-                param_vector[1] = state_["u"];
-                param_vector[2] = state_["v"];
-                param_vector[3] = state_["r"];
+                param_vector.push_back(state_["psi"]);
+                param_vector.push_back(state_["u"]);
+                param_vector.push_back(state_["v"]);
+                param_vector.push_back(state_["r"]);
                 // set other params                
-                param_vector[4] = reference_;
-                param_vector[5] = params_["Vc"];
-                param_vector[6] = params_["beta_c"];
-                param_vector[7] = params_["Vw"];
-                param_vector[8] = params_["beta_w"];
-                param_vector[9] = params_["k_1"];
-                param_vector[10] = params_["k_2"];
+                param_vector.push_back(reference_);
+                param_vector.push_back(params_["Vc"]);
+                param_vector.push_back(params_["beta_c"]);
+                param_vector.push_back(params_["Vw"]);
+                param_vector.push_back(params_["beta_w"]);
+                param_vector.push_back(params_["k_1"]);
+                param_vector.push_back(params_["k_2"]);
                 // get costs from configuration object
-                param_vector[11] = config_["Q"];
-                param_vector[12] = config_["R"];
+                param_vector.push_back(config_["Q"]);
+                param_vector.push_back(config_["R"]);
 
                 std::cout << "loading params: ";
                 for(auto i : param_vector)
