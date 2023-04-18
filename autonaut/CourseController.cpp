@@ -536,6 +536,7 @@ namespace NMPC{
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
+                std::cout << "checkpoint 5.1: " << std::endl;
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
                     input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
