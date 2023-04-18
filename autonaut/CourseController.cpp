@@ -54,6 +54,8 @@ namespace NMPC{
             // Function to define and compile the NLP Optimization Problem
             bool defineMpcProblem(void){
 
+                std::cout << "checkpoint 1: " << std::endl;
+
                 // assign configuration parameters
                 nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
                 Tp = config_["Tp"]; Ts = config_["Ts"];
@@ -110,6 +112,7 @@ namespace NMPC{
                     U_r2 = pow(u_r, 2) + pow(v_r, 2),
                     beta = atan(v / u_e);
 
+                std::cout << "checkpoint 2: " << std::endl;
                 // ################################################
                 // ###----------------DYNAMICS------------------###
                 // ################################################
@@ -169,6 +172,7 @@ namespace NMPC{
                 // expressed as a function for loop evaluation
                 casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
 
+                std::cout << "checkpoint 3: " << std::endl;
                 // ################################################
                 // ###----------------LOOP SETUP----------------###
                 // ################################################
@@ -199,6 +203,7 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     g(j) = sym_dx(j);
 
+                std::cout << "checkpoint 4: " << std::endl;
                 // optimization loop
                 for(int i = 0; i < N; i++){
 
@@ -292,6 +297,7 @@ namespace NMPC{
                         optims(nx*i + j) = X(j,i);
                     optims(nx*(N+1) + i) = U(i);
                 }
+                std::cout << "checkpoint 5: " << std::endl;
 
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
@@ -325,6 +331,7 @@ namespace NMPC{
                     solver = casadi::nlpsol("solver", "ipopt", "nlp.so");
                 }
 
+                std::cout << "checkpoint 6: " << std::endl;
                 // define state bounds
                 std::vector<double> ubx, lbx, ubg, lbg;
                 for(int i = 0; i < nx*(N+1); i++){
@@ -347,6 +354,7 @@ namespace NMPC{
                 args_["lam_x0"] = generate_random_vector(nx*(N+1)+nu*N);
                 args_["lam_g0"] = generate_random_vector(nx*(N+1));
 
+                std::cout << "checkpoint 7: " << std::endl;
                 return true;
             }
 
