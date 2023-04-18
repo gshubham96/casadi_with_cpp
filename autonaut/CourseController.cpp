@@ -562,7 +562,7 @@ namespace NMPC{
                 
                 // set Mpc parameters
                 std::vector p = reWriteParams();
-                arg["p"] = p
+                arg["p"] = p;
                 std::cout << "params: " << p << std::endl;
                 
                 // set initial trajectory for warm start
