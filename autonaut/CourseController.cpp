@@ -84,6 +84,7 @@ namespace NMPC{
                     sym_u = delta,
                     sym_p = casadi::SX::sym("p_x0", np);
 
+                std::cout << "checkpoint 1.5: " << std::endl;
                 // environmental parameters that are constant over a given horizon
                 casadi::SX
                     chi_d = sym_p(nx),
