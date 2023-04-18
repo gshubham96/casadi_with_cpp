@@ -543,6 +543,7 @@ namespace NMPC{
                 args_["lam_x0"]  = lam_x;
                 args_["lam_g0"]  = lam_g;
 
+                state_update = false;
                 return true;
             }
 
