@@ -443,7 +443,7 @@ namespace NMPC{
 
                 std::cout << "loading state_: ";
                 for(auto i : state_)
-                    std::cout << state_[i] << ", ";
+                    std::cout << i.first << ":" << i.second << ", ";
                 std::cout << "\n";
 
                 // set initial state
