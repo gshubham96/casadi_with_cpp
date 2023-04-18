@@ -498,19 +498,16 @@ namespace NMPC{
 
             bool optimizeMpcProblem(){
 
-                std::cout << "checkpoint 1: " << std::endl;
                 if(state_update == false){
                     std::cerr << "Update state before solving NLP\n";
                     return false;
                 }
 
-                std::cout << "checkpoint 2: " << std::endl;
                 if(initialized == false){
                     std::cerr << "NLP not yet initialized\n";
                     return false;
                 }
 
-                std::cout << "checkpoint 3: " << std::endl;
                 std::map<std::string, casadi::DM> arg, res;
                 // set state and input constraints
                 arg["lbx"] = args_["lbx"];
@@ -528,33 +525,24 @@ namespace NMPC{
                 arg["lam_x0"]  = args_["lam_x0"];
                 arg["lam_g0"]  = args_["lam_g0"];
 
-                std::cout << "checkpoint 4: " << std::endl;
                 res = solver(arg);
                 t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-                std::cout << "checkpoint 5: " << std::endl;
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
-                std::cout << "checkpoint 5.1: " << std::endl;
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
                     input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
 
-                std::cout << "checkpoint 6: " << res << std::endl;
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
                 std::vector<double> lam_x(res.at("lam_x"));
-                std::cout << "checkpoint 6.1: " << std::endl;
                 std::vector<double> lam_g(res.at("lam_g"));
-                std::cout << "checkpoint 6.2: " << std::endl;
                 args_["x0"]  = optimized_vars;
-                std::cout << "checkpoint 6.3: " << std::endl;
                 args_["lam_x0"]  = lam_x;
-                std::cout << "checkpoint 6.4: " << std::endl;
                 args_["lam_g0"]  = lam_g;
 
-                std::cout << "checkpoint 7: " << std::endl;
                 return true;
             }
 
