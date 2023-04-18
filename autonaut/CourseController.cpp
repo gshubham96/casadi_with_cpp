@@ -241,8 +241,9 @@ namespace NMPC{
                     // 0 minimizes the different in course angle'
                     casadi::SX delta_x;
                     if(cost_type == 0){
-                        casadi::SX beta = atan(sym_x(2) / sym_x(1) + EPS);
-                        delta_x = ssa(chi_d - sym_x(0) - beta);
+                        // casadi::SX beta = atan(sym_x(2) / sym_x(1) + EPS);
+                        // delta_x = ssa(chi_d - sym_x(0) - beta);
+                        delta_x = ssa(chi_d - sym_x(0));
                     }
                     else if(cost_type == 1){
                         casadi::SX
@@ -599,8 +600,8 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     std::cout << optimized_vars[nx * N + j] << ", ";                    
 
-                std::cout << "\ndesired course angle" << p[5] << std::endl;
-                std::cout << "final course angle" << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
+                std::cout << "\n\ndesired course angle: " << p[5] << std::endl;
+                std::cout << "final course angle: " << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
 
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
