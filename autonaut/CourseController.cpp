@@ -470,8 +470,8 @@ namespace NMPC{
                 param_vector[9] = params_["k_1"];
                 param_vector[10] = params_["k_2"];
                 // set costs
-                param_vector[9] = config_["Q"];
-                param_vector[10] = config_["R"];
+                param_vector[11] = config_["Q"];
+                param_vector[12] = config_["R"];
 
                 return param_vector;
             }
