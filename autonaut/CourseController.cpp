@@ -97,12 +97,6 @@ namespace NMPC{
                     Q = sym_p(nx+7),
                     R = sym_p(nx+8);
 
-                // set initial position
-                casadi::SX sym_x0;
-                for(int i = 0; i < nx; i++){
-                    sym_x0(i) = sym_p(i);
-                }
-
                 // detived states
                 casadi::SX
                     u_e = u + EPS,
@@ -197,7 +191,7 @@ namespace NMPC{
 
                 // Constraint MPC to start the trajectory from current position
                 for(int j = 0; j < nx; j++)
-                    sym_dx(j) = X(j,0) - sym_x0(j);
+                    sym_dx(j) = X(j,0) - sym_p(j);
                 sym_dx(0) = ssa(sym_dx(0));
 
                 // fill in the constraint vector
