@@ -439,8 +439,6 @@ namespace NMPC{
             // cosntructs a mpc-friendly format parameter vector
             std::vector<double> reWriteParams(){
                 
-                casadi::DM param_vector = casadi::DM
-
                 std::vector<double> posi(2, 0);
                 posi[0] = state_["psi"];
                 posi[1] = state_["u"];
