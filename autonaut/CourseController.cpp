@@ -595,7 +595,7 @@ namespace NMPC{
                         std::cout << optimized_vars[nx * i + j] << ", ";                    
                     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
                 }
-                std::cout << "N: " << i << ", st: ";
+                std::cout << "N: " << N << ", st: ";
                 for(int j = 0; j < nx; j++)
                     std::cout << optimized_vars[nx * N + j] << "\n";                    
 
