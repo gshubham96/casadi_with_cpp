@@ -446,7 +446,8 @@ namespace NMPC{
                     std::cout << i.first << ":" << i.second << ", ";
                 std::cout << "\n";
 
-                std::cout << "what is going on!" << ":" << state_["psi"] << ", ";
+                std::cout << "what is going on!" << ":" << state_["psi"] << "\n";
+                std::cout << "what is going on!" << ":" << state_["u"] << "\n";
 
                 // set initial state
                 param_vector.push_back(state_["psi"]);
