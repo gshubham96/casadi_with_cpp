@@ -620,16 +620,12 @@ int main(){
     else
         std::cout << "optimization failed :(" << std::endl;
 
-    // nmpc.updateMpcState(state_d);
+    nmpc.updateMpcState(state_d);
     if(nmpc.optimizeMpcProblem())
         std::cout << "optimization succesful" << std::endl;
     else
         std::cout << "optimization failed :(" << std::endl;
 
-
-    // std::cout<< NMPC.solveProblem() << std::endl;
-
-    // std::cout << g(sym_x) << std::endl;
 
     return 0;
 }
