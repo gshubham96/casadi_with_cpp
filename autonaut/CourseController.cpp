@@ -85,10 +85,6 @@ namespace NMPC{
                 double D22 = system_["D22"], R22 = system_["R22"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
                 double D33 = system_["D33"], R33 = system_["R33"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
 
-                // std::cout << "system dynamics: " << std::endl;
-                // for (auto i : system_) 
-                //     std::cout << "(" << i.first << ", " << i.second << "), ";
-
                 // named symbolica vars
                 casadi::SX 
                     psi = casadi::SX::sym("psi", 1),
@@ -170,14 +166,6 @@ namespace NMPC{
 
                 // dynamics of surge
                 casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
-
-                std::cout << " ################################# "<< std::endl;
-                std::cout << "nu_c_dot_u: " << nu_c_dot_u << std::endl;
-                std::cout << "tau_foil_u: " << tau_foil_u << std::endl;
-                std::cout << "tau_rudr_u: " << tau_rudr_u << std::endl;
-                std::cout << "damping_u: " << damping_u*u_r << std::endl;
-                std::cout << "u_dot: " << u_dot << std::endl;
-                std::cout << " ################################# "<< std::endl;
 
                 // dynamics of sway
                 casadi::SX v_dot = nu_c_dot_v 
@@ -574,6 +562,7 @@ namespace NMPC{
                 
                 // set Mpc parameters
                 arg["p"] = reWriteParams();
+                std::cout << "params: " << reWriteParams() << std::endl;
                 
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
