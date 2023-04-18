@@ -560,8 +560,9 @@ namespace NMPC{
                 reWriteParams(param);
                 arg["p"] = param;
                 
+                std::cout << "loading params: ";
                 for(auto i : param)
-                    std::cout << param << ", ";
+                    std::cout << param(i) << ", ";
 
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
@@ -613,8 +614,6 @@ namespace NMPC{
                 // otherwise, find the closest time index and send that input
                 int t_ind = floor(t_elapsed/Ts);
                 u_star = input_traj_[t_ind];
-
-                std::cout << "full traj\n" << input_traj_ << std::endl;
 
                 return true;
             }
