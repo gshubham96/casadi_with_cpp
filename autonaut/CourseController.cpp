@@ -301,9 +301,11 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
 
+                std::cout << "checkpoint 5.1: " << std::endl;
                 // nlp problem
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
 
+                std::cout << "checkpoint 5.2: " << std::endl;
                 // nlp options
                 casadi::Dict opts;
                 opts["ipopt.max_iter"] = 300;
@@ -312,10 +314,12 @@ namespace NMPC{
                 opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
                 opts["ipopt.warm_start_init_point"] = "yes";
 
+                std::cout << "checkpoint 5.3: " << std::endl;
                 solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
                 solver.generate_dependencies("nlp.c");
 
                 // Just-in-time compilation?
+                std::cout << "checkpoint 5.4: " << std::endl;
                 bool jit = false;
                 if (jit) {
                     // Create a new NLP solver instance using just-in-time compilation
