@@ -51,15 +51,13 @@ namespace NMPC{
 
             // wrap the angle between [-pi, pi]
             double ssa(double diff) {
-                while (diff < -PI) 
-                    diff += 2 * PI;
-                while (diff > PI) 
-                    diff -= 2 * PI;
+                diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
             }
 
             // wrap the angle between [-pi, pi] for SX Symbolics
             casadi::SX ssa(casadi::SX diff) {
                 diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
+                return diff;
             }
 
             // Function to define and compile the NLP Optimization Problem
