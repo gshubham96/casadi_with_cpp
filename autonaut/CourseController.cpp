@@ -255,24 +255,28 @@ namespace NMPC{
                     // Stage 1
                     args["i0"] = sym_x;
                     args["i1"] = sym_u;
+                    args["i2"] = sym_p;
                     f_eval = x_dot(args);
                     casadi::SX rk1 = f_eval["o0"];
 
                     // Stage 2
                     args["i0"] = sym_x + 0.5*Ts*rk1;
                     args["i1"] = sym_u;
+                    args["i2"] = sym_p;
                     f_eval = x_dot(args);
                     casadi::SX rk2 = f_eval["o0"];
 
                     // Stage 3
                     args["i0"] = sym_x + 0.5*Ts*rk2;
                     args["i1"] = sym_u;
+                    args["i2"] = sym_p;
                     f_eval = x_dot(args);
                     casadi::SX rk3 = f_eval["o0"];
 
                     // Stage 4
                     args["i0"] = sym_x + Ts*rk3;
                     args["i1"] = sym_u;
+                    args["i2"] = sym_p;
                     f_eval = x_dot(args);
                     casadi::SX rk4 = f_eval["o0"];
 
