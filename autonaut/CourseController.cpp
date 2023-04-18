@@ -59,6 +59,7 @@ namespace NMPC{
 
             // wrap the angle between [-pi, pi] for SX Symbolics
             casadi::SX ssa(casadi::SX diff) {
+                return diff;
                 diff -= (2*PI) * floor((diff + PI) * (1 / 2*PI));
                 return diff;
             }
@@ -243,6 +244,7 @@ namespace NMPC{
                     if(cost_type == 0){
                         // casadi::SX beta = atan(sym_x(2) / sym_x(1) + EPS);
                         // delta_x = ssa(chi_d - sym_x(0) - beta);
+                        // delta_x = ssa(chi_d - sym_x(0));
                         delta_x = ssa(chi_d - sym_x(0));
                     }
                     else if(cost_type == 1){
