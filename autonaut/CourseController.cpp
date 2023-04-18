@@ -261,7 +261,7 @@ namespace NMPC{
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
                     }
                     else if(cost_type == 2){
-                        delta_x = (chi_d - psi_p);
+                        delta_x = chi_d - psi_p;
                     }
 
                     casadi::SX cost_x  = delta_x * Q * delta_x;
@@ -305,8 +305,8 @@ namespace NMPC{
 
                     // push into the main vector being optimized
                     for(int j = 0; j < nx; j++)
-                        optims(nx*i + j) = X(j,i);
-                    optims(nx*(N+1) + i) = U(i);
+                        optims(nx*i + j) = sym_x(j);
+                    optims(nx*(N+1) + i) = sym_u;
                 }
 
                 for(int j = 0; j < nx; j++)
