@@ -439,47 +439,28 @@ namespace NMPC{
             // cosntructs a mpc-friendly format parameter vector
             std::vector<double> reWriteParams(){
                 
-                std::vector<double> posi(2, 0);
-                posi[0] = state_["psi"];
-                posi[1] = state_["u"];
-
-                std::cout << "loading posi 1: ";
-                for(int i = 0; i < 2; i++)
-                    std::cout << posi[i] << ", ";
-                std::cout << "\n";
-
-                std::vector<double> param_vector;
-
-                std::cout << "loading state_: ";
-                for(auto i : state_)
-                    std::cout << i.first << ":" << i.second << ", ";
-                std::cout << "\n";
+                std::vector<double> param_vector(np, 0);
 
                 // set initial state
-                param_vector.push_back(state_["psi"]);
-                param_vector.push_back(state_["u"]);
-                param_vector.push_back(state_["v"]);
-                param_vector.push_back(state_["r"]);
+                param_vector[0] = state_["psi"];
+                param_vector[1] = state_["u"];
+                param_vector[2] = state_["v"];
+                param_vector[3] = state_["r"];
+                // set desired state
+                param_vector[4] = reference_;
+                // set env params                
+                param_vector[5] = params_["Vc"];
+                param_vector[6] = params_["beta_c"];
+                param_vector[7] = params_["Vw"];
+                param_vector[8] = params_["beta_w"];
+                param_vector[9] = params_["k_1"];
+                param_vector[10] = params_["k_2"];
+                // set costs
+                param_vector[9] = config_["Q"];
+                param_vector[10] = config_["R"];
 
-                // std::cout << "loading params 1: ";
-                // for(auto i : param_vector)
-                //     std::cout << param_vector[i] << ", ";
-                // std::cout << "\n";
-
-                // set other params                
-                param_vector.push_back(reference_);
-                param_vector.push_back(params_["Vc"]);
-                param_vector.push_back(params_["beta_c"]);
-                param_vector.push_back(params_["Vw"]);
-                param_vector.push_back(params_["beta_w"]);
-                param_vector.push_back(params_["k_1"]);
-                param_vector.push_back(params_["k_2"]);
-                // get costs from configuration object
-                param_vector.push_back(config_["Q"]);
-                param_vector.push_back(config_["R"]);
-
-                std::cout << "loading params: ";
-                for(auto i : param_vector)
+                std::cout << "loading param_vector: ";
+                for(int i = 0; i < np; i++)
                     std::cout << param_vector[i] << ", ";
                 std::cout << "\n";
 
