@@ -561,7 +561,7 @@ namespace NMPC{
                 arg["p"] = param;
                 
                 for(auto i : param)
-                    std::cout << param << ", "
+                    std::cout << param << ", ";
 
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
