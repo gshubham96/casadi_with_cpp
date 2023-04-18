@@ -498,7 +498,6 @@ namespace NMPC{
                     default: break;
                 }
 
-                state_update = true;
                 // Update vehicle state
                 for (auto i : state) 
                     state_[i.first] = i.second;
@@ -613,9 +612,10 @@ namespace NMPC{
             return;
         }
         // configuring the problem with default vars
-        if(defineMpcProblem())
+        if(defineMpcProblem()){
             std::cout << "Problem configured succesfully" << std::endl;
             initialized++;
+        }
         else{
             std::cout << "configuration failed!\n";
             return;
