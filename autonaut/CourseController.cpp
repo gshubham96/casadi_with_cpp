@@ -634,10 +634,10 @@ namespace NMPC{
                     args["i0"] = p0;
                     args["i1"] = 0;
                     args["i2"] = reWriteParams();
-                    std::vector<casadi::DM> rk1 = x_dot(args);
+                    std::vector<casadi::DM> f_eval = x_dot(args);
                     // std::vector<casadi::DM> rk1 = f_eval["o0"];
 
-                    std::cout << "res = " << rk1 << std::endl;
+                    std::cout << "res = " << f_eval["o0"] << std::endl;
 
                     // // Stage 2
                     // for(int i=0; i<nx; i++)
