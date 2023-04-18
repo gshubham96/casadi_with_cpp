@@ -671,7 +671,7 @@ namespace NMPC{
                 std::vector<double> rk4(f_eval["o0"]);
 
                 // next state
-                std::vector<double> x_rk4(4,0)
+                std::vector<double> x_rk4(4,0);
                 for(int i=0; i<nx; i++){
                     rk2[i] *= 2;
                     rk3[i] *= 2;
