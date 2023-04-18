@@ -482,9 +482,10 @@ namespace NMPC{
                 // relaunch the configuration function
                 if(defineMpcProblem())
                     std::cout << "Problem configured succesfully" << std::endl;
-                else
-                    std::cout << "configuration failed!\n"
-
+                else{
+                    std::cout << "configuration failed!\n";
+                    return false;
+                }
                 return true;
             }
 
