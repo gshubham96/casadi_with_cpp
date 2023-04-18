@@ -59,13 +59,10 @@ namespace NMPC{
                 for (auto i : config_) 
                     std::cout << "param name: " << i.first << ", param value: " << i.second << std::endl;
 
-
                 // assign configuration parameters
                 nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
                 Tp = config_["Tp"]; Ts = config_["Ts"];
                 double model_dim = config_["model_dim"], model_type = config_["model_type"], cost_type = config_["cost_type"];
-
-                std::cout << model_dim << std::endl;
 
                 N = floor(Tp / Ts);
 
@@ -88,7 +85,6 @@ namespace NMPC{
                     sym_u = delta,
                     sym_p = casadi::SX::sym("p_x0", np);
 
-                std::cout << "checkpoint 1.5: " << np << std::endl;
                 // environmental parameters that are constant over a given horizon
                 casadi::SX
                     chi_d = sym_p(nx),
@@ -169,7 +165,7 @@ namespace NMPC{
                 // full state dynamics
                 casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
                 // expressed as a function for loop evaluation
-                casadi::Function x_dot("x_dot", {sym_x, sym_u}, {nu_dot});
+                casadi::Function x_dot("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
                 std::cout << "checkpoint 3: " << std::endl;
                 // ################################################
