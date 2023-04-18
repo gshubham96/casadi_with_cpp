@@ -666,7 +666,7 @@ namespace NMPC{
 
     // Destructor
     ~CourseController() { 
-        std::cout << "My class is destroyed here. :(" << std::endl; };
+        // std::cout << "My class is destroyed here. :(" << std::endl; };
     };
 }
 
