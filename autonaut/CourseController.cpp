@@ -951,7 +951,7 @@ namespace NMPC{
             return;
         }
         // configuring the problem with default vars
-        if(defineMpcProblem()){
+        if(defineMpcProblemV2()){
             std::cout << "Problem configured succesfully" << std::endl;
             initialized++;
         }
