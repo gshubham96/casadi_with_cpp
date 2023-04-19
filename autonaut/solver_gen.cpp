@@ -325,13 +325,13 @@ class MpcProblem {
 
         // res = solver(arg);
 
-        // std::ofstream file;
-        // std::string filename = "test.m";
-        // file.open(filename.c_str());
-        // file << "% Results file from " __FILE__ << std::endl;
-        // file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
-        // file << std::endl;
-        // file << "optims = " << optimized_vars << ";" << std::endl;
+        std::ofstream file;
+        std::string filename = "solver_.m" + __TIME__;
+        file.open(filename.c_str());
+        file << "% Results file from " __FILE__ << std::endl;
+        file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+        file << std::endl;
+        file << "optims = " << optimized_vars << ";" << std::endl;
 
  
         return false;
