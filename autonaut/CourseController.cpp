@@ -314,12 +314,12 @@ namespace NMPC{
                     optims(nx*N + j) = X(j,N);
 
                 // Print Optimization Variable
-                for(int i = 0; i < N; i++){
-                    std::cout << "N: " << i << ", st: ";
-                    for(int j = 0; j < nx; j++)
-                        std::cout << optims(nx * i + j) << ", ";                    
-                    std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
-                }
+                // for(int i = 0; i < N; i++){
+                //     std::cout << "N: " << i << ", st: ";
+                //     for(int j = 0; j < nx; j++)
+                //         std::cout << optims(nx * i + j) << ", ";                    
+                //     std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
+                // }
 
                 // nlp problem
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
@@ -600,14 +600,13 @@ namespace NMPC{
                 double beta = atan(v/u);
                 double chi = psi + beta;
 
-                std::cout << "\n\ndesired course angle: " << p[nx] << std::endl;
+                std::cout << "\n\ndesired angle      : " << p[nx] << std::endl;
                 std::cout << "final heading angle: " << psi << std::endl;
                 std::cout << "final course  angle: " << chi  << std::endl;
 
                 std::ofstream file;
                 std::string filename = fs::current_path().parent_path().string();
                 filename = filename + "/results/solver_gen.m";
-                std::cout << "file path: " << filename << std::endl;
                 file.open(filename.c_str());
                 file << "% Results file from " __FILE__ << std::endl;
                 file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
