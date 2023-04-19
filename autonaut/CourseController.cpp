@@ -382,7 +382,7 @@ namespace NMPC{
                 // optim vars for each shooting period 
                 casadi::SX sym_x = vertcat(psi, u, v, r);
                 casadi::SX sym_u = delta;
-                casadi::DM sym_p = casadi::DM::sym("p", np);
+                casadi::SX sym_p = casadi::SX::sym("p", np);
 
                 // environmental parameters that are constant over a given horizon
                 // casadi::SX
@@ -479,7 +479,7 @@ namespace NMPC{
                 // optimization variables
                 casadi::SX X = casadi::SX::sym("X", nx, N+1);
                 casadi::SX U = casadi::SX::sym("U", N);
-                // casadi::SX p_x0 = casadi::SX::sym("p_x0", nx);
+                casadi::SX p_x0 = casadi::SX::sym("p_x0", nx);
 
                 casadi::SX obj = 0;
                 casadi::SX g = casadi::SX::sym("g", nx*(N+1));
