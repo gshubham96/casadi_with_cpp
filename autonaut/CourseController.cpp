@@ -366,7 +366,7 @@ namespace NMPC{
 
                 // mpc params
                 Tp = 45; Ts = 0.5; N = floor(Tp / Ts);
-                Q = 4.5; R = 3;
+                double Q = 4.5, R = 3;
 
                 // named symbolica vars
                 casadi::SX psi = casadi::SX::sym("psi", 1),
