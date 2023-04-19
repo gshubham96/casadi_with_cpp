@@ -197,7 +197,6 @@ class MpcProblem {
             casadi::SX cost_x  = delta_x * Q * delta_x;
             casadi::SX cost_u  = sym_du * R * sym_du;
             obj = obj + cost_u + cost_x;
-            std::cout << "i(end) = " << i << "\n";
 
             // multiple shooting using Runge-Kutta4
             casadi::SXDict args, f_eval;
@@ -240,6 +239,8 @@ class MpcProblem {
             for(int j = 0; j < nx; j++)
                 optims(nx*i + j) = X(j,i);
             optims(nx*(N+1) + i) = U(i);
+
+            std::cout << "i(end) = " << i << "\n";
         }
 
         for(int j = 0; j < nx; j++)
