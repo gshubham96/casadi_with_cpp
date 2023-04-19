@@ -327,7 +327,7 @@ class MpcProblem {
         // res = solver(arg);
 
         std::ofstream file;
-        std::string filename = fs::current_path().parent_path().string() + "\results\solver_gen.m";
+        std::string filename = fs::current_path().parent_path().string();
         std::cout << "file path: " << filename << std::endl;
         file.open(filename.c_str());
         file << "% Results file from " __FILE__ << std::endl;
