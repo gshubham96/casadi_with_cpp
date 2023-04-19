@@ -328,6 +328,7 @@ class MpcProblem {
 
         std::ofstream file;
         std::string filename = fs::current_path().parent_path().string() + "\results\solver_gen.m";
+        std::cout << "file path: " << filename << std::endl;
         file.open(filename.c_str());
         file << "% Results file from " __FILE__ << std::endl;
         file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
