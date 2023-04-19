@@ -331,8 +331,10 @@ class MpcProblem {
 
         std::cout << "\n\ndesired course angle: " << chi_d << std::endl;
 
+        std::cout.precision(3);
         
-        double psi = std::round(optimized_vars[nx*N] * 1000.0) / 1000.0;
+        // double psi = std::round(optimized_vars[nx*N] * 1000.0) / 1000.0;
+        double psi = optimized_vars[nx*N];
         double u = optimized_vars[nx*N+1];
         double v = optimized_vars[nx*N+2];
         double beta = std::round(atan(v/u)) / 1000.0;
