@@ -320,13 +320,14 @@ class MpcProblem {
         for(int j = 0; j < 4; j++)
             std::cout << optimized_vars[4*90 + j] << ", ";                    
 
-        std::cout << "\n\ndesired course angle: " << 0 << std::endl;
+        std::cout << "\n\ndesired course angle: " << chi_d << std::endl;
+        std::cout << "final heading angle: " << optimized_vars[nx*N] << std::endl;
         std::cout << "final course angle: " << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
 
         // res = solver(arg);
 
         std::ofstream file;
-        std::string filename = "solver_.m" + std::string(__TIME__);
+        std::string filename = "solver_.m";
         file.open(filename.c_str());
         file << "% Results file from " __FILE__ << std::endl;
         file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
