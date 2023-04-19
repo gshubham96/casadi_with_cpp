@@ -562,10 +562,14 @@ namespace NMPC{
                 std::cout << "final heading angle: " << psi << std::endl;
                 std::cout << "final course  angle: " << chi  << std::endl;
 
+                if(p[nx] == 0){
+                    remove( filename );
+                }
+
                 std::ofstream file;
                 std::string filename = fs::current_path().parent_path().string();
                 filename = filename + "/results/course_gen.m";
-                file.open(filename.c_str());
+                file.open(filename.c_str(), , std::ios_base::app);
                 file << "% Results file from " __FILE__ << std::endl;
                 file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
                 file << std::endl;
@@ -746,28 +750,15 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    double chi_ref = 0.2;
-    nmpc.updateMpcReference(chi_ref);
-
-    // solve the optimization problem
-    if(nmpc.optimizeMpcProblem()){
-        std::cout << "optimization succesful" << std::endl;
-        double u_opt;
-        if (nmpc.getOptimalInput(u_opt))
-            std::cout << "optimal output is: " << u_opt << std::endl;
+    for(int chi = 0; chi < PI; chi++){
+        nmpc.updateMpcReference(chi);
+        nmpc.updateMpcState(state_d);
+        // solve the optimization problem
+        if(nmpc.optimizeMpcProblem())
+            std::cout << "optimization succesful" << std::endl;
+        else
+            std::cout << "optimization failed :(" << std::endl;
     }
-    else
-        std::cout << "optimization failed :(" << std::endl;
-
-    chi_ref = 0.715;
-    nmpc.updateMpcReference(chi_ref);
-    nmpc.updateMpcState(state_d);
-
-    if(nmpc.optimizeMpcProblem())
-        std::cout << "optimization succesful" << std::endl;
-    else
-        std::cout << "optimization failed :(" << std::endl;
-
 
     return 0;
 }
