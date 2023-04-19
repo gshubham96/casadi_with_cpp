@@ -562,13 +562,14 @@ namespace NMPC{
                 std::cout << "final heading angle: " << psi << std::endl;
                 std::cout << "final course  angle: " << chi  << std::endl;
 
+                std::ofstream file;
+                std::string filename = fs::current_path().parent_path().string();
+                filename = filename + "/results/course_gen.m";
+
                 if(p[nx] == 0){
                     remove( filename );
                 }
 
-                std::ofstream file;
-                std::string filename = fs::current_path().parent_path().string();
-                filename = filename + "/results/course_gen.m";
                 file.open(filename.c_str(), , std::ios_base::app);
                 file << "% Results file from " __FILE__ << std::endl;
                 file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
