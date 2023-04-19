@@ -576,7 +576,7 @@ namespace NMPC{
                     ubx.push_back(DEG2RAD(40));
                 }
                 std::cout << "checkpoint 5" << std::endl;
-
+                return true;
             }
 
 
