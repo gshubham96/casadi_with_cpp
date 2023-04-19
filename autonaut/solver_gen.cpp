@@ -206,7 +206,7 @@ class MpcProblem {
             vec_chi_d(0) = cos(chi_d);
             vec_chi_d(1) = sin(chi_d);
 
-            delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
+            casadi::SX delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
 
 
             casadi::SX cost_x  = delta_x * Q * delta_x;
