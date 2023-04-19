@@ -734,7 +734,7 @@ int main(){
     params_d["k_1"] = 0.9551; params_d["k_2"] = -0.031775;
     params_d["Q"] = 4.5; params_d["R"] = 1.5;
 
-    nmpc.updateMpcParams(params_d);
+    // nmpc.updateMpcParams(params_d);
 
     // update MPC state
     std::map<std::string, double> state_d;
