@@ -570,7 +570,7 @@ namespace NMPC{
                     remove( filename );
                 }
 
-                file.open(filename.c_str(), , std::ios_base::app);
+                file.open(filename.c_str(), std::ios_base::app);
                 file << "% Results file from " __FILE__ << std::endl;
                 file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
                 file << std::endl;
