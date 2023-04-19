@@ -241,29 +241,33 @@ namespace NMPC{
                     casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
 
                     // 0 minimizes the different in course angle'
-                    cost_type = 2;
-                    casadi::SX delta_x;
-                    if(cost_type == 0){
-                        casadi::SX beta = asin(v_p / U);
-                        casadi::SX delta_x = ssa(chi_d - psi_p - beta);
-                    }
-                    else if(cost_type == 1){
-                        casadi::SX
-                            x_dot = u_p * cos(psi_p) - v_p * sin(psi_p),
-                            y_dot = u_p * sin(psi_p) + v_p * cos(psi_p),
-                            vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
-                        vec_chi_p(0) = 1/U * x_dot;
-                        vec_chi_p(1) = 1/U * y_dot;
+                    // cost_type = 2;
+                    // casadi::SX delta_x;
+                    // if(cost_type == 0){
+                    //     casadi::SX beta = asin(v_p / U);
+                    //     casadi::SX delta_x = ssa(chi_d - psi_p - beta);
+                    // }
+                    // else if(cost_type == 1){
+                    //     casadi::SX
+                    //         x_dot = u_p * cos(psi_p) - v_p * sin(psi_p),
+                    //         y_dot = u_p * sin(psi_p) + v_p * cos(psi_p),
+                    //         vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
+                    //     vec_chi_p(0) = 1/U * x_dot;
+                    //     vec_chi_p(1) = 1/U * y_dot;
 
-                        casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
-                        vec_chi_d(0) = cos(chi_d);
-                        vec_chi_d(1) = sin(chi_d);
+                    //     casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
+                    //     vec_chi_d(0) = cos(chi_d);
+                    //     vec_chi_d(1) = sin(chi_d);
 
-                        delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
-                    }
-                    else if(cost_type == 2){
-                        delta_x = chi_d - psi_p;
-                    }
+                    //     delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
+                    // }
+                    // else if(cost_type == 2){
+                    //     delta_x = chi_d - psi_p;
+                    // }
+
+                    casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
+                    casadi::SX beta = asin(sym_x(2) / U);
+                    casadi::SX delta_x = ssa(chi_d - psi_p - beta);
 
                     casadi::SX cost_x  = delta_x * Q * delta_x;
                     casadi::SX cost_u  = sym_du * R * sym_du;
@@ -583,15 +587,15 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
 
                 // ################# DEBUG
-                for(int i = 0; i < N; i=i+10){
-                    std::cout << "N: " << i << ", st: ";
-                    for(int j = 0; j < nx; j++)
-                        std::cout << optimized_vars[nx * i + j] << ", ";                    
-                    std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
-                }
-                std::cout << "N: " << N << ", st: ";
-                for(int j = 0; j < nx; j++)
-                    std::cout << optimized_vars[nx * N + j] << ", ";                    
+                // for(int i = 0; i < N; i=i+10){
+                //     std::cout << "N: " << i << ", st: ";
+                //     for(int j = 0; j < nx; j++)
+                //         std::cout << optimized_vars[nx * i + j] << ", ";                    
+                //     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
+                // }
+                // std::cout << "N: " << N << ", st: ";
+                // for(int j = 0; j < nx; j++)
+                //     std::cout << optimized_vars[nx * N + j] << ", ";                    
 
                 std::cout.precision(3);
                 double psi = optimized_vars[nx*N];
