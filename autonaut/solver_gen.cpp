@@ -241,6 +241,7 @@ class MpcProblem {
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
                 optims(nx*i + j) = X(j,i);
+            std::cout << "i(midl) = " << i << "\n";
             optims(nx*(N+1) + i) = U(i);
 
             std::cout << "i(end) = " << i << "\n";
