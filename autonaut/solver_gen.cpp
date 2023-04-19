@@ -183,8 +183,8 @@ class MpcProblem {
                 sym_du = U(i);
 
             //! TODO: Add beta to objective function
-            // casadi::SX delta_x = ssa(chi_d - sym_x(0) - atan(sym_x(2) / sym_x(1) + EPS));
-            casadi::SX beta = atan(sym_x(2) / (sym_x(1) + EPS));
+            casadi::SX U = sqrt(sym_x(2)^2 + (sym_x(1)+EPS)^2);
+            casadi::SX beta = asin(sym_x(2) / U);
             casadi::SX delta_x = (chi_d - sym_x(0) - beta);
             casadi::SX cost_x  = delta_x * Q * delta_x;
             casadi::SX cost_u  = sym_du * R * sym_du;
