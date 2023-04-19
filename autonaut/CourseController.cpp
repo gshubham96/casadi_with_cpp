@@ -746,7 +746,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    double chi_ref = 0;
+    double chi_ref = 0.2;
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
@@ -759,7 +759,7 @@ int main(){
     else
         std::cout << "optimization failed :(" << std::endl;
 
-    chi_ref = 0.5;
+    chi_ref = 0.715;
     nmpc.updateMpcReference(chi_ref);
     nmpc.updateMpcState(state_d);
 
