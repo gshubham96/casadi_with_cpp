@@ -242,9 +242,9 @@ namespace NMPC{
 
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
                     }
-                    else if(cost_type == 2){
+                    else if(cost_type == 2)
                         delta_x = ssa(chi_d - psi_p);
-                    }
+                    
 
                     casadi::SX cost_x  = delta_x * Q * delta_x;
                     casadi::SX cost_u  = sym_du * R * sym_du;
@@ -307,6 +307,8 @@ namespace NMPC{
                 opts["ipopt.acceptable_tol"] = 1e-8;
                 opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
                 opts["ipopt.warm_start_init_point"] = "yes";
+                // opts_dict["ipopt.sb"] = "yes";
+                opts["print_time"] = 0;
 
                 solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
 
