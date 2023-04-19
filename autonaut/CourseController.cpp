@@ -564,7 +564,7 @@ namespace NMPC{
 
                 std::ofstream file;
                 std::string filename = fs::current_path().parent_path().string();
-                filename = filename + "/results/solver_gen.m";
+                filename = filename + "/results/course_gen.m";
                 file.open(filename.c_str());
                 file << "% Results file from " __FILE__ << std::endl;
                 file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
