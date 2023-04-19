@@ -83,11 +83,9 @@ namespace NMPC{
                 // optim vars for each shooting period 
                 casadi::SX sym_x = vertcat(psi, u, v, r);
                 casadi::SX sym_u = delta;
-                casadi::SX p_x0 = casadi::SX::sym("x0", nx);
                 casadi::SX sym_p = casadi::SX::sym("p", np);
 
                 // environmental parameters that are constant over a given horizon
-                p_x0(0) = sym_p(0), p_x0(1) = sym_p(1), p_x0(2) = sym_p(2), p_x0(3) = sym_p(3);
                 casadi::SX
                     chi_d   = sym_p(nx),
                     Vc      = sym_p(nx+1),
@@ -101,20 +99,25 @@ namespace NMPC{
 
                 // system params
                 // assign system parameters
-                double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
-                double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
-                double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
+                const double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
+                const double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
+                const double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
+                const double CR12 = system_["CR12"], CR21 = system_["CR21"]; 
 
                 // detived states
-                casadi::SX u_e = u + EPS;
-                casadi::SX u_c = Vc * cos(beta_c - psi);
-                casadi::SX v_c = Vc * sin(beta_c - psi);
-                casadi::SX u_r = u_e - u_c;
-                casadi::SX v_r = v - v_c;
-                casadi::SX nu_r = vertcat(u_r, v_r, r);
-                casadi::SX U_r2 = pow(u_r, 2) + pow(v_r, 2);
-                casadi::SX beta = atan(v / u_e);
+                casadi::SX 
+                    u_e = u + EPS,
+                    u_c = Vc * cos(beta_c - psi),
+                    v_c = Vc * sin(beta_c - psi),
+                    u_r = u_e - u_c,
+                    v_r = v - v_c,
+                    nu_r = vertcat(u_r, v_r, r),
+                    U_r2 = pow(u_r, 2) + pow(v_r, 2),
+                    beta = atan(v / u_e);
 
+                // ################################################
+                // ###----------------DYNAMICS------------------###
+                // ################################################
 
                 // CURRENTS
                 casadi::SX 
@@ -128,6 +131,7 @@ namespace NMPC{
                     damping_r  = D33;
 
                 // #TODO CORIOLIS 
+                casadi::SX coriolis_u, coriolis_v, coriolis_r;
 
                 // WAVE FOILS
                 casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
@@ -150,22 +154,6 @@ namespace NMPC{
 
                 // #TODO WIND
                 casadi::SX tau_wind_u, tau_wind_v, tau_wind_r;
-
-
-                // dynamics of surge
-                // casadi::SX nu_c_dot_u = v_c * r;
-                // casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
-                // casadi::SX tau_rudr_u = R11 * U_r2 * delta * delta ;
-                // casadi::SX damping_u  = D11;
-
-                // casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
-
-                // casadi::SX nu_c_dot_v = -u_c * r;
-                // casadi::SX tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
-                // casadi::SX damping_v  = D22;
-
-                // casadi::SX tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
-                // casadi::SX damping_r  = D33;
 
                 // dynamics of yaw
                 casadi::SX yaw_dot = r;
@@ -206,7 +194,7 @@ namespace NMPC{
 
                 // set initial state
                 for(int j = 0; j < nx; j++)
-                    sym_dx(j) = X(j,0) - p_x0(j);
+                    sym_dx(j) = X(j,0) - sym_p(j);
                 sym_dx(0) = ssa(sym_dx(0));
 
                 // fill in the constraint vector
@@ -760,7 +748,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    double chi_ref = 0.115;
+    double chi_ref = 0.455;
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
