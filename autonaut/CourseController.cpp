@@ -283,9 +283,17 @@ namespace NMPC{
 
                     // Stage 2
                     args["i0"] = sym_x + 0.5*Ts*rk1;
-                    std::cout << "args[i0] :" << args["i0"] << "\n\n" << std::endl;
                     f_eval = x_dot(args);
                     casadi::SX rk2 = f_eval["o0"];
+
+                    // #DEBUG
+                    if (i == 0){
+                        std::cout << "sym_x :" << sym_x << "\n\n" << std::endl;
+                        std::cout << "rk1 :" << rk1 << "\n\n" << std::endl;
+                        std::cout << "args[i0] :" << args["i0"] << "\n\n" << std::endl;
+
+                    }
+
 
                     // Stage 3
                     args["i0"] = sym_x + 0.5*Ts*rk2;
