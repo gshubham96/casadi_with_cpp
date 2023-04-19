@@ -256,8 +256,8 @@ namespace NMPC{
                         vec_chi_p(1) = 1/U * y_dot;
 
                         casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
-                        vec_chi_d(0) = cos(chi_t);
-                        vec_chi_d(1) = sin(chi_t);
+                        vec_chi_d(0) = cos(chi_d);
+                        vec_chi_d(1) = sin(chi_d);
 
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
                     }
@@ -583,6 +583,16 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
 
                 // ################# DEBUG
+                for(int i = 0; i < N; i=i+10){
+                    std::cout << "N: " << i << ", st: ";
+                    for(int j = 0; j < nx; j++)
+                        std::cout << optimized_vars[nx * i + j] << ", ";                    
+                    std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
+                }
+                std::cout << "N: " << N << ", st: ";
+                for(int j = 0; j < nx; j++)
+                    std::cout << optimized_vars[nx * N + j] << ", ";                    
+
                 std::cout.precision(3);
                 double psi = optimized_vars[nx*N];
                 double u = optimized_vars[nx*N+1];
@@ -590,7 +600,7 @@ namespace NMPC{
                 double beta = atan(v/u);
                 double chi = psi + beta;
 
-                std::cout << "\n\ndesired course angle: " << p[nx+1] << std::endl;
+                std::cout << "\n\ndesired course angle: " << p[nx] << std::endl;
                 std::cout << "final heading angle: " << psi << std::endl;
                 std::cout << "final course  angle: " << chi  << std::endl;
 
@@ -603,16 +613,6 @@ namespace NMPC{
                 file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
                 file << std::endl;
                 file << "optims = " << optimized_vars << ";" << std::endl;
-
-                for(int i = 0; i < N; i=i+10){
-                    std::cout << "N: " << i << ", st: ";
-                    for(int j = 0; j < nx; j++)
-                        std::cout << optimized_vars[nx * i + j] << ", ";                    
-                    std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
-                }
-                std::cout << "N: " << N << ", st: ";
-                for(int j = 0; j < nx; j++)
-                    std::cout << optimized_vars[nx * N + j] << ", ";                    
 
                 // ################# DEBUG
 
