@@ -182,8 +182,15 @@ class MpcProblem {
             else
                 sym_du = U(i);
 
+            // assign states for readibility
+            casadi::SX
+                psi_p = sym_x(0),
+                u_p = sym_x(1) + EPS,
+                v_p = sym_x(2),
+                r_p = sym_x(3);
+
             //! TODO: Add beta to objective function
-            casadi::SX U = sqrt( pow(sym_x(2),2) + pow(sym_x(1)+EPS,2) );
+            casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
             casadi::SX beta = asin(sym_x(2) / U);
             casadi::SX delta_x = (chi_d - sym_x(0) - beta);
             casadi::SX cost_x  = delta_x * Q * delta_x;
