@@ -753,6 +753,8 @@ int main(){
 
     // update MPC reference
     for(int chi = 0; chi < PI; chi = chi + 0.15){
+
+        std::cout << "\chi_d = " << chi << std::endl;        
         nmpc.updateMpcReference(chi);
         nmpc.updateMpcState(state_d);
         // solve the optimization problem
