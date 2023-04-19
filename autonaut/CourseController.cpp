@@ -1015,7 +1015,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    double chi_ref = 0.35;
+    double chi_ref = 0.315;
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
