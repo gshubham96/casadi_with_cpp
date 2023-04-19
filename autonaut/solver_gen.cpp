@@ -240,9 +240,9 @@ class MpcProblem {
             std::cout << "i(midl) = " << i << "\n";
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
-                optims(nx*i + j) = X(j,i);
+                optims(nx*i + j) = sym_x(j);
             std::cout << "i(midl) = " << optims << "\n";
-            optims(nx*(N+1) + i) = U(i);
+            optims(nx*(N+1) + i) = sym_u;
 
             std::cout << "i(end) = " << i << "\n";
         }
