@@ -203,8 +203,8 @@ class MpcProblem {
             vec_chi_p(1) = 1/U * y_dot;
 
             casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
-            vec_chi_d(0) = cos(chi_t);
-            vec_chi_d(1) = sin(chi_t);
+            vec_chi_d(0) = cos(chi_d);
+            vec_chi_d(1) = sin(chi_d);
 
             delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
 
