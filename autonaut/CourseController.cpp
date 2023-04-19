@@ -153,13 +153,15 @@ namespace NMPC{
                 casadi::SX X = casadi::SX::sym("X", nx, N+1);
                 casadi::SX U = casadi::SX::sym("U", N);
 
-                casadi::SX obj = 0;
-                casadi::SX g = casadi::SX::sym("g", nx*(N+1));
-                casadi::SX optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
+                casadi::SX 
+                    obj = 0,
+                    g = casadi::SX::sym("g", nx*(N+1)),
+                    optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
+
+                // casadi loop helper vars
+                casadi::SX sym_du, sym_dx = casadi::SX::sym("sym_dx", nx);
 
                 // set initial state
-                casadi::SX sym_du;
-                casadi::SX sym_dx = casadi::SX::sym("sym_dx", nx);
                 for(int j = 0; j < nx; j++)
                     sym_dx(j) = X(j,0) - p_x0(j);
                 sym_dx(0) = ssa(sym_dx(0));
