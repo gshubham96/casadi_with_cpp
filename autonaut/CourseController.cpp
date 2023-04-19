@@ -386,10 +386,7 @@ namespace NMPC{
                 casadi::SX sym_p = casadi::SX::sym("p", np);
 
                 // environmental parameters that are constant over a given horizon
-                p_x0(0) = sym_p(0);
-                p_x0(1) = sym_p(1);
-                p_x0(2) = sym_p(2);
-                p_x0(3) = sym_p(3);
+                p_x0(0) = sym_p(0), p_x0(1) = sym_p(1), p_x0(2) = sym_p(2), p_x0(3) = sym_p(3);
                 casadi::SX
                     chi_d   = sym_p(nx),
                     Vc      = sym_p(nx+1),
@@ -401,28 +398,28 @@ namespace NMPC{
                     Q       = sym_p(nx+7),
                     R       = sym_p(nx+8);
 
-                // constant parameters for test - Vc, beta_c, Vw, beta_w,
-                // double chi_d = 1.35;
-                // double Vc = 0.35, beta_c = 1.57, Vw = 5, beta_w = 1.57, k_1 = 0.9551, k_2 = -0.031775;
-                // double Q = 4.5, R = 3;
-
                 // system params
-                double D11, R11, INV_M11;
-                D11 = 286.7200;
-                R11 = -53.2158;
-                INV_M11 = 0.0035;
+                // assign system parameters
+                double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
+                double D22 = system_["D22"], R22 = system_["R22"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
+                double D33 = system_["D33"], R33 = system_["R33"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
 
-                double D22, R22, INV_M22, INV_M23;
-                D22 = 194.56;
-                R22 = -100.72;
-                INV_M22 = 0.0026042; 
-                INV_M23 = -0.00017773;
+                // double D11, R11, INV_M11;
+                // D11 = 286.7200;
+                // R11 = -53.2158;
+                // INV_M11 = 0.0035;
 
-                double D33, R33, INV_M32, INV_M33;
-                D33 = 1098.6;
-                R33 = 207.74;
-                INV_M32 = -0.00017773; 
-                INV_M33 = 0.000922343;
+                // double D22, R22, INV_M22, INV_M23;
+                // D22 = 194.56;
+                // R22 = -100.72;
+                // INV_M22 = 0.0026042; 
+                // INV_M23 = -0.00017773;
+
+                // double D33, R33, INV_M32, INV_M33;
+                // D33 = 1098.6;
+                // R33 = 207.74;
+                // INV_M32 = -0.00017773; 
+                // INV_M33 = 0.000922343;
 
                 // detived states
                 casadi::SX u_e = u + EPS;
