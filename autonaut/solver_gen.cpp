@@ -190,6 +190,7 @@ class MpcProblem {
                 r_p = sym_x(3);
 
             //! TODO: Add beta to objective function
+            std::cout << "i = " << i << "\n";
             casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
             casadi::SX beta = asin(sym_x(2) / U);
             casadi::SX delta_x = (chi_d - sym_x(0) - beta);
