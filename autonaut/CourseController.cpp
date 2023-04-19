@@ -65,7 +65,7 @@ namespace NMPC{
             }
 
             // Function to define and compile the NLP Optimization Problem
-            bool defineMpcProblemV2(void){
+            bool defineMpcProblem(void){
 
                 // mpc params
                 nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
@@ -490,7 +490,7 @@ namespace NMPC{
                     config_[i.first] = i.second;
 
                 // relaunch the configuration function
-                if(defineMpcProblemV2())
+                if(defineMpcProblem())
                     std::cout << "Problem re-configured succesfully" << std::endl;
                 else{
                     std::cout << "configuration failed!\n";
@@ -683,7 +683,7 @@ namespace NMPC{
             return;
         }
         // configuring the problem with default vars
-        if(defineMpcProblemV2()){
+        if(defineMpcProblem()){
             std::cout << "Problem configured succesfully" << std::endl;
             initialized++;
         }
@@ -706,7 +706,7 @@ namespace NMPC{
             std::cout << "skipping configuration for now!" << std::endl;
         else{
             // relaunch the configuration function
-            if(defineMpcProblemV2()){
+            if(defineMpcProblem()){
                 std::cout << "Problem configured succesfully" << std::endl;
                 initialized++;
             }
