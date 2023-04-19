@@ -386,11 +386,11 @@ namespace NMPC{
                 casadi::SX sym_p = casadi::SX::sym("p", np);
 
                 // environmental parameters that are constant over a given horizon
+                p_x0(0) = sym_p(0);
+                p_x0(1) = sym_p(1);
+                p_x0(2) = sym_p(2);
+                p_x0(3) = sym_p(3);
                 casadi::SX
-                    p_x0(0) = sym_p(0),
-                    p_x0(1) = sym_p(1),
-                    p_x0(2) = sym_p(2),
-                    p_x0(3) = sym_p(3),
                     chi_d   = sym_p(nx),
                     Vc      = sym_p(nx+1),
                     beta_c  = sym_p(nx+2),
