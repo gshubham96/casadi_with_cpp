@@ -190,10 +190,9 @@ class MpcProblem {
                 r_p = sym_x(3);
 
             //! TODO: Add beta to objective function
-            std::cout << "i = " << i << "\n";
             casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
             casadi::SX beta = asin(sym_x(2) / U);
-            casadi::SX delta_x = (chi_d - sym_x(0) - beta);
+            casadi::SX delta_x = ssa(chi_d - sym_x(0) - beta);
             casadi::SX cost_x  = delta_x * Q * delta_x;
             casadi::SX cost_u  = sym_du * R * sym_du;
             obj = obj + cost_u + cost_x;
@@ -227,24 +226,19 @@ class MpcProblem {
            // next state
             casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
-            std::cout << "i(midl) = " << i << "\n";
             // introduce dynamics to constraints
             for(int j = 0; j < nx; j++)
                 sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
             sym_dx(0) = ssa(sym_dx(0));
 
-            std::cout << "i(midl) = " << i << "\n";
             for(int j = 0; j < nx; j++)
                 g(nx*(i+1) + j) = sym_dx(j);
 
-            std::cout << "i(midl) = " << i << "\n";
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
                 optims(nx*i + j) = sym_x(j);
-            std::cout << "i(midl) = " << optims << "\n";
             optims(nx*(N+1) + i) = sym_u;
 
-            std::cout << "i(end) = " << i << "\n";
         }
 
         for(int j = 0; j < nx; j++)
