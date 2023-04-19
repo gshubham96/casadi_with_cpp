@@ -526,7 +526,6 @@ namespace NMPC{
                 // set Mpc parameters
                 std::vector p = reWriteParams();
                 arg["p"] = p;
-                std::cout << "params: " << p << std::endl;
                 
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
@@ -541,15 +540,15 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
 
                 // ################# DEBUG
-                for(int i = N-4; i < N; i++){
-                    std::cout << "N: " << i << ", st: ";
-                    for(int j = 0; j < nx; j++)
-                        std::cout << optimized_vars[nx * i + j] << ", ";                    
-                    std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
-                }
-                std::cout << "N: " << N << ", st: ";
-                for(int j = 0; j < nx; j++)
-                    std::cout << optimized_vars[nx * N + j] << ", ";                    
+                // for(int i = N-4; i < N; i++){
+                //     std::cout << "N: " << i << ", st: ";
+                //     for(int j = 0; j < nx; j++)
+                //         std::cout << optimized_vars[nx * i + j] << ", ";                    
+                //     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
+                // }
+                // std::cout << "N: " << N << ", st: ";
+                // for(int j = 0; j < nx; j++)
+                //     std::cout << optimized_vars[nx * N + j] << ", ";                    
 
                 std::cout.precision(3);
                 double psi = optimized_vars[nx*N];
