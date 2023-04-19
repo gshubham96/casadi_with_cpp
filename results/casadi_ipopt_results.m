@@ -16,8 +16,8 @@ cmd.psi = rad2deg(x_pred(:,1));
 cmd.u = x_pred(:,2);
 cmd.v = x_pred(:,3);
 cmd.r = rad2deg(x_pred(:,4));
-cmd.beta = rad2deg(atan(cmd.v./cmd.u));
-cmd.chi = cmd.psi + cmd.v;
+cmd.beta = rad2deg(atan(cmd.v ./ cmd.u));
+cmd.chi = cmd.psi + cmd.beta;
 
 figure(1); clf; 
 hold on; grid on;

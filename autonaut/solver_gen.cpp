@@ -341,8 +341,6 @@ class MpcProblem {
         std::cout << "final heading angle: " << psi << std::endl;
         std::cout << "final course  angle: " << chi  << std::endl;
 
-        // res = solver(arg);
-
         std::ofstream file;
         std::string filename = fs::current_path().parent_path().string();
         filename = filename + "/results/solver_gen.m";

@@ -238,18 +238,19 @@ namespace NMPC{
                         u_p = sym_x(1) + EPS,
                         v_p = sym_x(2),
                         r_p = sym_x(3);
+                    casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
 
                     // 0 minimizes the different in course angle'
+                    cost_type = 2;
                     casadi::SX delta_x;
                     if(cost_type == 0){
-                        casadi::SX beta = atan(v_p / u_p);
-                        delta_x = ssa(chi_d - psi_p - beta);
+                        casadi::SX beta = asin(sym_x(2) / U);
+                        casadi::SX delta_x = ssa(chi_d - psi_p - beta);
                     }
                     else if(cost_type == 1){
                         casadi::SX
-                            x_dot = u_p * cos(psi_p) - v * sin(psi_p),
-                            y_dot = u_p * sin(psi_p) + v * cos(psi_p),
-                            U = sqrt(pow(x_dot,2) + pow(y_dot, 2)),
+                            x_dot = u_p * cos(psi_p) - v_p * sin(psi_p),
+                            y_dot = u_p * sin(psi_p) + v_p * cos(psi_p),
                             vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
                         vec_chi_p(0) = 1/U * x_dot;
                         vec_chi_p(1) = 1/U * y_dot;
@@ -581,13 +582,29 @@ namespace NMPC{
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
 
+                // ################# DEBUG
+                std::cout << "\n\ndesired course angle: " << p[nx+1] << std::endl;
+                std::cout.precision(3);
+                double psi = optimized_vars[nx*N];
+                double u = optimized_vars[nx*N+1];
+                double v = optimized_vars[nx*N+2];
+                double beta = atan(v/u);
+                double chi = psi + beta;
+
+                std::cout << "final heading angle: " << psi << std::endl;
+                std::cout << "final course  angle: " << chi  << std::endl;
+
                 std::ofstream file;
-                std::string filename = "test.m";
+                std::string filename = fs::current_path().parent_path().string();
+                filename = filename + "/results/solver_gen.m";
+                std::cout << "file path: " << filename << std::endl;
                 file.open(filename.c_str());
                 file << "% Results file from " __FILE__ << std::endl;
                 file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
                 file << std::endl;
                 file << "optims = " << optimized_vars << ";" << std::endl;
+
+                // ################# DEBUG
 
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
@@ -756,9 +773,6 @@ int main(){
     // instantiate a controller with default values
     NMPC::CourseController nmpc;
 
-    // nmpc.test_dynamics();
-    // return 0;
-
     // set default parameters
     std::map<std::string, double> params_d;
     params_d["Vc"] = 0.35; params_d["beta_c"] = 1.57;
@@ -778,7 +792,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    double chi_ref = 0.5236;
+    double chi_ref = 0;
     nmpc.updateMpcReference(chi_ref);
 
     // solve the optimization problem
