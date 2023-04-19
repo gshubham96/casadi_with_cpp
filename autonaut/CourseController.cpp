@@ -659,7 +659,7 @@ namespace NMPC{
             std::cout << "skipping configuration for now!" << std::endl;
         else{
             // relaunch the configuration function
-            if(defineMpcProblem()){
+            if(defineMpcProblemV2()){
                 std::cout << "Problem configured succesfully" << std::endl;
                 initialized++;
             }
