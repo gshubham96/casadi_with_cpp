@@ -195,11 +195,11 @@ class MpcProblem {
             // casadi::SX delta_x = chi_d - sym_x(0) - beta;
 
             casadi::SX
-                x_dot = u_p * cos(psi_p) - v * sin(psi_p),
+                px_dot = u_p * cos(psi_p) - v * sin(psi_p),
                 y_dot = u_p * sin(psi_p) + v * cos(psi_p),
-                U = sqrt(pow(x_dot,2) + pow(y_dot, 2)),
+                U = sqrt(pow(px_dot,2) + pow(y_dot, 2)),
                 vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
-            vec_chi_p(0) = 1/U * x_dot;
+            vec_chi_p(0) = 1/U * px_dot;
             vec_chi_p(1) = 1/U * y_dot;
 
             casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
