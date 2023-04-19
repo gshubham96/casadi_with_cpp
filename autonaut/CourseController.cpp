@@ -476,11 +476,6 @@ namespace NMPC{
                 arg["lbg"] = args_["lbg"];
                 arg["ubg"] = args_["ubg"];
 
-                arg["lbx"] = lbx;
-                arg["ubx"] = ubx;
-                arg["lbg"] = lbg;
-                arg["ubg"] = ubg;
-
                 // set Mpc parameters
                 std::vector p = reWriteParams();
                 arg["p"] = p;
