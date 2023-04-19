@@ -88,8 +88,8 @@ namespace NMPC{
 
                 // assign system parameters
                 double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
-                double D22 = system_["D22"], R22 = system_["R22"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
-                double D33 = system_["D33"], R33 = system_["R33"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
+                double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
+                double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
 
                 // named symbolica vars
                 casadi::SX 
@@ -401,8 +401,8 @@ namespace NMPC{
                 // system params
                 // assign system parameters
                 double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
-                double D22 = system_["D22"], R22 = system_["R22"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
-                double D33 = system_["D33"], R33 = system_["R33"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
+                double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
+                double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
 
                 std::cout << D11 << ", " << R11 << ", " << INV_M11 << std::endl;
                 std::cout << D22 << ", " << R22 << ", " << INV_M22 << ", " << INV_M23 << std::endl;
@@ -951,7 +951,7 @@ namespace NMPC{
             return;
         }
         // configuring the problem with default vars
-        if(defineMpcProblemV2()){
+        if(defineMpcProblem()){
             std::cout << "Problem configured succesfully" << std::endl;
             initialized++;
         }
