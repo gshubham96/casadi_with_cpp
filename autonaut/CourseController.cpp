@@ -189,11 +189,30 @@ namespace NMPC{
                         u_p = sym_x(1) + EPS,
                         v_p = sym_x(2),
                         r_p = sym_x(3);
-
-                    //! TODO: Add beta to objective function
                     casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
-                    casadi::SX beta = asin(sym_x(2) / U);
-                    casadi::SX delta_x = ssa(chi_d - psi_p - beta);
+
+                    casadi::SX delta_x;
+                    if(cost_type == 0){
+                        casadi::SX beta = asin(v_p / U);
+                        casadi::SX delta_x = ssa(chi_d - psi_p - beta);
+                    }
+                    else if(cost_type == 1){
+                        casadi::SX
+                            x_dot = u_p * cos(psi_p) - v_p * sin(psi_p),
+                            y_dot = u_p * sin(psi_p) + v_p * cos(psi_p),
+                            vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
+                        vec_chi_p(0) = 1/U * x_dot;
+                        vec_chi_p(1) = 1/U * y_dot;
+
+                        casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
+                        vec_chi_d(0) = cos(chi_d);
+                        vec_chi_d(1) = sin(chi_d);
+
+                        delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
+                    }
+                    else if(cost_type == 2){
+                        delta_x = chi_d - psi_p;
+                    }
 
                     casadi::SX cost_x  = delta_x * Q * delta_x;
                     casadi::SX cost_u  = sym_du * R * sym_du;
@@ -245,10 +264,6 @@ namespace NMPC{
                 }
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
-
-                // for(int j = 0; j < nx*(N+1) + nu*N; j++)
-                // for(int j = 0; j < nx*(2); j++)
-                    // std::cout << "g." << j << " = " << g(j)  << std::endl;
 
                 // nlp problem
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
