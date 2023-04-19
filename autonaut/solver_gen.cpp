@@ -233,9 +233,11 @@ class MpcProblem {
                 sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
             sym_dx(0) = ssa(sym_dx(0));
 
+            std::cout << "i(midl) = " << i << "\n";
             for(int j = 0; j < nx; j++)
                 g(nx*(i+1) + j) = sym_dx(j);
 
+            std::cout << "i(midl) = " << i << "\n";
             // push into main vector being optimized
             for(int j = 0; j < nx; j++)
                 optims(nx*i + j) = X(j,i);
