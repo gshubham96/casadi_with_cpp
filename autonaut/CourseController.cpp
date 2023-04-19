@@ -729,7 +729,7 @@ int main(){
 
     // set default parameters
     std::map<std::string, double> params_d;
-    params_d["Vc"] = 0; params_d["beta_c"] = 1.57;
+    params_d["Vc"] = 0.35; params_d["beta_c"] = 1.57;
     params_d["Vw"] = 0; params_d["beta_w"] = 1.57;
     params_d["k_1"] = 0.9551; params_d["k_2"] = -0.031775;
     params_d["Q"] = 4.5; params_d["R"] = 1.5;
