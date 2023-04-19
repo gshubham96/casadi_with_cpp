@@ -443,8 +443,8 @@ namespace NMPC{
                     config_[i.first] = i.second;
 
                 // relaunch the configuration function
-                if(defineMpcProblem())
-                    std::cout << "Problem configured succesfully" << std::endl;
+                if(defineMpcProblemV2())
+                    std::cout << "Problem re-configured succesfully" << std::endl;
                 else{
                     std::cout << "configuration failed!\n";
                     return false;
