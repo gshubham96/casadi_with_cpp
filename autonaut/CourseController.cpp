@@ -364,6 +364,8 @@ namespace NMPC{
 
             bool defineMpcProblemV2(void){
 
+                std::cout << "checkpoint 1" << std::endl;
+
                 // mpc params
                 Tp = 45; Ts = 0.5; N = floor(Tp / Ts);
                 double Q = 4.5, R = 3;
@@ -445,6 +447,7 @@ namespace NMPC{
                 casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
                 x_dot = casadi::Function("x_dot", {sym_x, sym_u}, {nu_dot});
 
+                std::cout << "checkpoint 2" << std::endl;
                 // optimization variables
                 casadi::SX X = casadi::SX::sym("X", nx, N+1);
                 casadi::SX U = casadi::SX::sym("U", N);
@@ -466,6 +469,7 @@ namespace NMPC{
                     g(j) = sym_dx(j);
 
                 // optimization loop
+                std::cout << "checkpoint 3" << std::endl;
                 for(int i = 0; i < N; i++){
 
                     // assign current state
@@ -538,6 +542,7 @@ namespace NMPC{
                     optims(nx*(N+1) + i) = sym_u;
 
                 }
+                std::cout << "checkpoint 4" << std::endl;
 
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
@@ -570,6 +575,7 @@ namespace NMPC{
                     lbx.push_back(-DEG2RAD(40));
                     ubx.push_back(DEG2RAD(40));
                 }
+                std::cout << "checkpoint 5" << std::endl;
 
             }
 
