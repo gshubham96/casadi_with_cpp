@@ -766,16 +766,21 @@ namespace NMPC{
                 arg["ubx"] = args_["ubx"];
                 arg["lbg"] = args_["lbg"];
                 arg["ubg"] = args_["ubg"];
-                
+
+                arg["lbx"] = lbx;
+                arg["ubx"] = ubx;
+                arg["lbg"] = lbg;
+                arg["ubg"] = ubg;
+
                 // set Mpc parameters
                 std::vector p = reWriteParams();
-                arg["p"] = p;
+                // arg["p"] = p;
                 std::cout << "params: " << p << std::endl;
                 
                 // set initial trajectory for warm start
                 arg["x0"] = args_["x0"];
-                arg["lam_x0"] = args_["lam_x0"];
-                arg["lam_g0"] = args_["lam_g0"];
+                // arg["lam_x0"] = args_["lam_x0"];
+                // arg["lam_g0"] = args_["lam_g0"];
 
                 std::cout << "mario 1" << std::endl;
                 res = solver(arg);
