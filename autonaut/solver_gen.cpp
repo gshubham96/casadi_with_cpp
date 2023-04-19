@@ -227,6 +227,7 @@ class MpcProblem {
            // next state
             casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
+            std::cout << "i(midl) = " << i << "\n";
             // introduce dynamics to constraints
             for(int j = 0; j < nx; j++)
                 sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
