@@ -115,32 +115,70 @@ namespace NMPC{
                 casadi::SX U_r2 = pow(u_r, 2) + pow(v_r, 2);
                 casadi::SX beta = atan(v / u_e);
 
+
+                // CURRENTS
+                casadi::SX 
+                    nu_c_dot_u = v_c * r,
+                    nu_c_dot_v = -u_c * r;
+
+                // DAMPING
+                casadi::SX 
+                    damping_u  = D11,
+                    damping_v  = D22,
+                    damping_r  = D33;
+
+                // #TODO CORIOLIS 
+
+                // WAVE FOILS
+                casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
+
+                // RUDDER
+                casadi::SX tau_rudr_u, tau_rudr_v, tau_rudr_r;
+                // If the model is nonlinear, consider nonlinear dynamics of the rudder
+                if(model_type == 0){
+                    casadi::SX alpha_r = delta - atan(v_r/u_r);
+                    tau_rudr_u = R11 * U_r2 * sin(alpha_r) * sin(delta) ;
+                    tau_rudr_v = R22 * U_r2 * sin(alpha_r) * cos(delta) ;
+                    tau_rudr_r = R33 * U_r2 * sin(alpha_r) * cos(delta) ;
+                }
+                // else consider the approximated linear equations
+                else if(model_type == 1){
+                    tau_rudr_u = R11 * U_r2 * delta * delta ;
+                    tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
+                    tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
+                }
+
+                // #TODO WIND
+                casadi::SX tau_wind_u, tau_wind_v, tau_wind_r;
+
+
+                // dynamics of surge
+                // casadi::SX nu_c_dot_u = v_c * r;
+                // casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
+                // casadi::SX tau_rudr_u = R11 * U_r2 * delta * delta ;
+                // casadi::SX damping_u  = D11;
+
+                // casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
+
+                // casadi::SX nu_c_dot_v = -u_c * r;
+                // casadi::SX tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
+                // casadi::SX damping_v  = D22;
+
+                // casadi::SX tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
+                // casadi::SX damping_r  = D33;
+
                 // dynamics of yaw
                 casadi::SX yaw_dot = r;
 
-                // CURRENTS
-
                 // dynamics of surge
-                casadi::SX nu_c_dot_u = v_c * r;
-                casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
-                casadi::SX tau_rudr_u = R11 * U_r2 * delta * delta ;
-                casadi::SX damping_u  = D11;
-
                 casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
 
                 // dynamics of sway
-                casadi::SX nu_c_dot_v = -u_c * r;
-                casadi::SX tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
-                casadi::SX damping_v  = D22;
-
-                // dynamics of yaw rate
-                casadi::SX tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
-                casadi::SX damping_r  = D33;
-
                 casadi::SX v_dot = nu_c_dot_v 
                                         + INV_M22*(tau_rudr_v - damping_v*v_r)
                                         + INV_M23*(tau_rudr_r - damping_r*r);
 
+                // dynamics of yaw rate
                 casadi::SX r_dot = 0 
                                     + INV_M32*(tau_rudr_v - damping_v*v_r)
                                     + INV_M33*(tau_rudr_r - damping_r*r);
@@ -148,15 +186,20 @@ namespace NMPC{
                 casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
                 x_dot = casadi::Function("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
-                std::cout << "checkpoint 2" << std::endl;
-                // optimization variables
-                casadi::SX X = casadi::SX::sym("X", nx, N+1);
-                casadi::SX U = casadi::SX::sym("U", N);
+                // ################################################
+                // ###----------------LOOP SETUP----------------###
+                // ################################################
 
+                // optimization variables
+                casadi::SX 
+                    X = casadi::SX::sym("X", nx, N+1),
+                    U = casadi::SX::sym("U", N),
+                    optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
+
+                // objective function, equlity constraints
                 casadi::SX 
                     obj = 0,
-                    g = casadi::SX::sym("g", nx*(N+1)),
-                    optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
+                    g = casadi::SX::sym("g", nx*(N+1));
 
                 // casadi loop helper vars
                 casadi::SX sym_du, sym_dx = casadi::SX::sym("sym_dx", nx);
@@ -171,7 +214,6 @@ namespace NMPC{
                     g(j) = sym_dx(j);
 
                 // optimization loop
-                std::cout << "checkpoint 3" << std::endl;
                 for(int i = 0; i < N; i++){
 
                     // assign current state
