@@ -382,39 +382,29 @@ namespace NMPC{
                 // optim vars for each shooting period 
                 casadi::SX sym_x = vertcat(psi, u, v, r);
                 casadi::SX sym_u = delta;
+                casadi::SX p_x0 = casadi::SX::sym("x0", nx);
                 casadi::SX sym_p = casadi::SX::sym("p", np);
 
                 // environmental parameters that are constant over a given horizon
-                // casadi::SX
-                //     chi_d = sym_p(nx),
-                //     Vc = sym_p(nx+1),
-                //     beta_c = sym_p(nx+2),
-                //     Vw = sym_p(nx+3),
-                //     beta_w = sym_p(nx+4),
-                //     k_1 = sym_p(nx+5),
-                //     k_2 = sym_p(nx+6),
-                //     Q = sym_p(nx+7),
-                //     R = sym_p(nx+8);
+                casadi::SX
+                    p_x0(0) = sym_p(0),
+                    p_x0(1) = sym_p(1),
+                    p_x0(2) = sym_p(2),
+                    p_x0(3) = sym_p(3),
+                    chi_d   = sym_p(nx),
+                    Vc      = sym_p(nx+1),
+                    beta_c  = sym_p(nx+2),
+                    Vw      = sym_p(nx+3),
+                    beta_w  = sym_p(nx+4),
+                    k_1     = sym_p(nx+5),
+                    k_2     = sym_p(nx+6),
+                    Q       = sym_p(nx+7),
+                    R       = sym_p(nx+8);
 
                 // constant parameters for test - Vc, beta_c, Vw, beta_w,
-                double chi_d = 1.35;
-                double Vc = 0.35, beta_c = 1.57, Vw = 5, beta_w = 1.57, k_1 = 0.9551, k_2 = -0.031775;
-                double Q = 4.5, R = 3;
-
-                // DEBUG
-                sym_p(0) = 0;
-                sym_p(1) = 0;
-                sym_p(2) = 0;
-                sym_p(3) = 0;
-                sym_p(4) = chi_d;
-                sym_p(5) = Vc;
-                sym_p(6) = beta_c;
-                sym_p(7) = Vw;
-                sym_p(8) = beta_w;
-                sym_p(9) = k_1;
-                sym_p(10) = k_2;
-                sym_p(11) = Q;
-                sym_p(12) = R;
+                // double chi_d = 1.35;
+                // double Vc = 0.35, beta_c = 1.57, Vw = 5, beta_w = 1.57, k_1 = 0.9551, k_2 = -0.031775;
+                // double Q = 4.5, R = 3;
 
                 // system params
                 double D11, R11, INV_M11;
@@ -479,7 +469,6 @@ namespace NMPC{
                 // optimization variables
                 casadi::SX X = casadi::SX::sym("X", nx, N+1);
                 casadi::SX U = casadi::SX::sym("U", N);
-                casadi::SX p_x0 = casadi::SX::sym("p_x0", nx);
 
                 casadi::SX obj = 0;
                 casadi::SX g = casadi::SX::sym("g", nx*(N+1));
@@ -581,7 +570,7 @@ namespace NMPC{
                     // std::cout << "g." << j << " = " << g(j)  << std::endl;
 
                 // nlp problem
-                casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", p_x0}};
+                casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
 
                 // nlp options
                 casadi::Dict opts;
@@ -803,7 +792,7 @@ namespace NMPC{
 
                 // set Mpc parameters
                 std::vector p = reWriteParams();
-                // arg["p"] = p;
+                arg["p"] = p;
                 std::cout << "params: " << p << std::endl;
                 
                 // set initial trajectory for warm start
