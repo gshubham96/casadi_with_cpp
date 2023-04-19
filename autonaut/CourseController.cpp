@@ -750,7 +750,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    for(int chi = 0; chi < PI; chi = chi + 15){
+    for(int chi = 0; chi < PI; chi = chi + 0.15){
         nmpc.updateMpcReference(chi);
         nmpc.updateMpcState(state_d);
         // solve the optimization problem
