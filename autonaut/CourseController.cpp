@@ -761,8 +761,8 @@ int main(){
 
     chi_ref = 0.5;
     nmpc.updateMpcReference(chi_ref);
-
     nmpc.updateMpcState(state_d);
+    
     if(nmpc.optimizeMpcProblem())
         std::cout << "optimization succesful" << std::endl;
     else
