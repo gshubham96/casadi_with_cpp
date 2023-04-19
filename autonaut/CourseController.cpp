@@ -566,9 +566,9 @@ namespace NMPC{
                 std::string filename = fs::current_path().parent_path().string();
                 filename = filename + "/results/course_gen.m";
 
-                if(p[nx] == 0){
-                    remove( filename );
-                }
+                // if(p[nx] == 0){
+                //     remove( filename );
+                // }
 
                 file.open(filename.c_str(), std::ios_base::app);
                 file << "% Results file from " __FILE__ << std::endl;
@@ -751,7 +751,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    for(int chi = 0; chi < PI; chi++){
+    for(int chi = 0; chi < PI; chi = chi + 15){
         nmpc.updateMpcReference(chi);
         nmpc.updateMpcState(state_d);
         // solve the optimization problem
