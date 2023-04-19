@@ -335,8 +335,8 @@ class MpcProblem {
         double psi = std::round(optimized_vars[nx*N] * 1000.0) / 1000.0;
         double u = optimized_vars[nx*N+1];
         double v = optimized_vars[nx*N+2];
-        double beta = atan(v/u);
-        double chi = std::round(psi + beta) / 1000.0;
+        double beta = std::round(atan(v/u)) / 1000.0;
+        double chi = psi + beta;
 
         std::cout << "final heading angle: " << psi << std::endl;
         std::cout << "final course  angle: " << chi  << std::endl;
