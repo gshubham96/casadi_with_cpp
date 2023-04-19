@@ -243,7 +243,7 @@ namespace NMPC{
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
                     }
                     else if(cost_type == 2){
-                        delta_x = chi_d - psi_p;
+                        delta_x = ssa(chi_d - psi_p);
                     }
 
                     casadi::SX cost_x  = delta_x * Q * delta_x;
@@ -541,15 +541,15 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
 
                 // ################# DEBUG
-                // for(int i = 0; i < N; i=i+10){
-                //     std::cout << "N: " << i << ", st: ";
-                //     for(int j = 0; j < nx; j++)
-                //         std::cout << optimized_vars[nx * i + j] << ", ";                    
-                //     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
-                // }
-                // std::cout << "N: " << N << ", st: ";
-                // for(int j = 0; j < nx; j++)
-                //     std::cout << optimized_vars[nx * N + j] << ", ";                    
+                for(int i = 0; i < N; i=i+10){
+                    std::cout << "N: " << i << ", st: ";
+                    for(int j = 0; j < nx; j++)
+                        std::cout << optimized_vars[nx * i + j] << ", ";                    
+                    std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
+                }
+                std::cout << "N: " << N << ", st: ";
+                for(int j = 0; j < nx; j++)
+                    std::cout << optimized_vars[nx * N + j] << ", ";                    
 
                 std::cout.precision(3);
                 double psi = optimized_vars[nx*N];
