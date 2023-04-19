@@ -367,7 +367,15 @@ namespace NMPC{
                 std::cout << "checkpoint 1" << std::endl;
 
                 // mpc params
-                Tp = 45; Ts = 0.5; N = floor(Tp / Ts);
+                nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
+                Tp = config_["Tp"]; Ts = config_["Ts"];
+                double model_dim = config_["model_dim"], model_type = config_["model_type"], cost_type = config_["cost_type"];
+
+                N = floor(Tp / Ts);
+
+                // model dims
+                // nx = 4; nu = 1; np = 13;
+                // Tp = 45; Ts = 0.5; N = floor(Tp / Ts);
                 double Q = 4.5, R = 3;
 
                 // named symbolica vars
@@ -381,8 +389,6 @@ namespace NMPC{
                 casadi::SX sym_x = vertcat(psi, u, v, r);
                 casadi::SX sym_u = delta;
 
-                // model dims
-                nx = 4; nu = 1; np = 13;
 
                 // constant parameters for test - Vc, beta_c, Vw, beta_w,
                 double chi_d = 1.35;
