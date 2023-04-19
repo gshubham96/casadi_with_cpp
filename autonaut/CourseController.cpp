@@ -541,7 +541,7 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
 
                 // ################# DEBUG
-                for(int i = N-4; i < N; i=i+10){
+                for(int i = N-4; i < N; i++){
                     std::cout << "N: " << i << ", st: ";
                     for(int j = 0; j < nx; j++)
                         std::cout << optimized_vars[nx * i + j] << ", ";                    
