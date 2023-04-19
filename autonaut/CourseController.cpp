@@ -408,22 +408,22 @@ namespace NMPC{
                 std::cout << D22 << ", " << R22 << ", " << INV_M22 << ", " << INV_M23 << std::endl;
                 std::cout << D33 << ", " << R33 << ", " << INV_M32 << ", " << INV_M33 << std::endl;
 
-                double D11, R11, INV_M11;
-                D11 = 286.7200;
-                R11 = -53.2158;
-                INV_M11 = 0.0035;
+                // double D11, R11, INV_M11;
+                // D11 = 286.7200;
+                // R11 = -53.2158;
+                // INV_M11 = 0.0035;
 
-                double D22, R22, INV_M22, INV_M23;
-                D22 = 194.56;
-                R22 = -100.72;
-                INV_M22 = 0.0026042; 
-                INV_M23 = -0.00017773;
+                // double D22, R22, INV_M22, INV_M23;
+                // D22 = 194.56;
+                // R22 = -100.72;
+                // INV_M22 = 0.0026042; 
+                // INV_M23 = -0.00017773;
 
-                double D33, R33, INV_M32, INV_M33;
-                D33 = 1098.6;
-                R33 = 207.74;
-                INV_M32 = -0.00017773; 
-                INV_M33 = 0.000922343;
+                // double D33, R33, INV_M32, INV_M33;
+                // D33 = 1098.6;
+                // R33 = 207.74;
+                // INV_M32 = -0.00017773; 
+                // INV_M33 = 0.000922343;
 
                 // detived states
                 casadi::SX u_e = u + EPS;
