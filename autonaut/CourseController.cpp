@@ -313,13 +313,13 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
 
-                // // Print Optimization Variable
-                // for(int i = 0; i < N; i++){
-                //     std::cout << "N: " << i << ", st: ";
-                //     for(int j = 0; j < nx; j++)
-                //         std::cout << optims(nx * i + j) << ", ";                    
-                //     std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
-                // }
+                // Print Optimization Variable
+                for(int i = 0; i < N; i++){
+                    std::cout << "N: " << i << ", st: ";
+                    for(int j = 0; j < nx; j++)
+                        std::cout << optims(nx * i + j) << ", ";                    
+                    std::cout << "cn: " << optims(nx*(N+1)+i) << std::endl;                    
+                }
 
                 // nlp problem
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
