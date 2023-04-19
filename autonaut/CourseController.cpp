@@ -302,8 +302,8 @@ namespace NMPC{
 
                 // nlp options
                 casadi::Dict opts;
-                opts["ipopt.max_iter"] = 1000;
-                opts["ipopt.print_level"] = 1;
+                opts["ipopt.max_iter"] = 300;
+                opts["ipopt.print_level"] = 0;
                 opts["ipopt.acceptable_tol"] = 1e-8;
                 opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
                 opts["ipopt.warm_start_init_point"] = "yes";
