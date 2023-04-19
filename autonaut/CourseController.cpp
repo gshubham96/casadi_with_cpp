@@ -385,7 +385,7 @@ namespace NMPC{
                 nx = 4; nu = 1; np = 13;
 
                 // constant parameters for test - Vc, beta_c, Vw, beta_w,
-                double chi_d = 0.35;
+                double chi_d = 1.35;
                 double Vc = 0.35, beta_c = 1.57, Vw = 5, beta_w = 1.57, k_1 = 0.9551, k_2 = -0.031775;
 
                 // system params
