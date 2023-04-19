@@ -244,7 +244,7 @@ namespace NMPC{
                     cost_type = 2;
                     casadi::SX delta_x;
                     if(cost_type == 0){
-                        casadi::SX beta = asin(sym_x(2) / U);
+                        casadi::SX beta = asin(v_p / U);
                         casadi::SX delta_x = ssa(chi_d - psi_p - beta);
                     }
                     else if(cost_type == 1){
@@ -709,7 +709,7 @@ namespace NMPC{
 
                     x_rk4[i] = p0[i] + (Ts/6) * (rk1[i] + rk2[i] + rk3[i] + rk4[i]);
                 }
-                // std::cout << "state: " << x_rk4 << std::endl;
+                std::cout << "state: " << x_rk4 << std::endl;
 
             }
 
@@ -769,6 +769,9 @@ int main(){
 
     // instantiate a controller with default values
     NMPC::CourseController nmpc;
+
+    nmpc.test_dynamics();
+    return 0;
 
     // set default parameters
     std::map<std::string, double> params_d;
