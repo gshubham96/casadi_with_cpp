@@ -47,11 +47,6 @@ namespace NMPC{
             // optimized input trajectory
             std::vector<double> input_traj_;
             
-            // ############### DEBUG #########################
-            std::vector<double> lbx, lbg, ubx, ubg;
-
-            // ########################################
-
             // ##################################
             // ##-------MEMBER FUNCTIONS-------##
             // ##################################
@@ -70,301 +65,7 @@ namespace NMPC{
             }
 
             // Function to define and compile the NLP Optimization Problem
-            bool defineMpcProblem(void){
-
-                // std::cout << "checkpoint 1: " << std::endl;
-
-                std::cout << "Configuring with parameters: " << std::endl;
-                for (auto i : config_) 
-                    std::cout << "(" << i.first << ", " << i.second << "), ";
-                std::cout << std::endl;
-
-                // assign configuration parameters
-                nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
-                Tp = config_["Tp"]; Ts = config_["Ts"];
-                double model_dim = config_["model_dim"], model_type = config_["model_type"], cost_type = config_["cost_type"];
-
-                N = floor(Tp / Ts);
-
-                // assign system parameters
-                double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
-                double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
-                double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
-
-                // named symbolica vars
-                casadi::SX 
-                    psi = casadi::SX::sym("psi", 1),
-                    u = casadi::SX::sym("u", 1), 
-                    v = casadi::SX::sym("v", 1), 
-                    r = casadi::SX::sym("r", 1),
-                    delta = casadi::SX::sym("delta", 1);
-
-                // optim vars for a single shooting period 
-                casadi::SX 
-                    sym_x = vertcat(psi, u, v, r),
-                    sym_u = delta,
-                    sym_p = casadi::SX::sym("p_x0", np);
-
-                // environmental parameters that are constant over a given horizon
-                casadi::SX
-                    chi_d = sym_p(nx),
-                    Vc = sym_p(nx+1),
-                    beta_c = sym_p(nx+2),
-                    Vw = sym_p(nx+3),
-                    beta_w = sym_p(nx+4),
-                    k_1 = sym_p(nx+5),
-                    k_2 = sym_p(nx+6),
-                    Q = sym_p(nx+7),
-                    R = sym_p(nx+8);
-
-                // detived states
-                casadi::SX
-                    u_e = u + EPS,
-                    u_c = Vc * cos(beta_c - psi),
-                    v_c = Vc * sin(beta_c - psi),
-                    u_r = u_e - u_c,
-                    v_r = v - v_c,
-                    U_r2 = pow(u_r, 2) + pow(v_r, 2),
-                    beta = atan(v / u_e);
-
-                // ################################################
-                // ###----------------DYNAMICS------------------###
-                // ################################################
-
-                // CURRENTS
-                casadi::SX 
-                    nu_c_dot_u = v_c * r,
-                    nu_c_dot_v = -u_c * r;
-
-                // DAMPING
-                casadi::SX 
-                    damping_u  = D11,
-                    damping_v  = D22,
-                    damping_r  = D33;
-
-                // YAW
-                casadi::SX yaw_dot = r;
-
-                // WAVE FOILS
-                casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
-
-                // RUDDER
-                casadi::SX tau_rudr_u, tau_rudr_v, tau_rudr_r;
-
-                // #TODO WIND
-                casadi::SX tau_wind_u, tau_wind_v, tau_wind_r;
-
-                // If the model is nonlinear, consider nonlinear dynamics of the rudder
-                if(model_type == 0){
-                    casadi::SX alpha_r = delta - atan(v_r/u_r);
-                    tau_rudr_u = R11 * U_r2 * sin(alpha_r) * sin(delta) ;
-                    tau_rudr_v = R22 * U_r2 * sin(alpha_r) * cos(delta) ;
-                    tau_rudr_r = R33 * U_r2 * sin(alpha_r) * cos(delta) ;
-                }
-                // else consider the approximated linear equations
-                else if(model_type == 1){
-                    tau_rudr_u = R11 * U_r2 * delta * delta ;
-                    tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
-                    tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
-                }
-
-                // #TODO CORIOLIS 
-
-                // dynamics of surge
-                casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
-
-                // dynamics of sway
-                casadi::SX v_dot = nu_c_dot_v 
-                                        + INV_M22*(tau_rudr_v - damping_v*v_r)
-                                        + INV_M23*(tau_rudr_r - damping_r*r);
-
-                // dynamics of yaw rate
-                casadi::SX r_dot = 0 
-                                    + INV_M32*(tau_rudr_v - damping_v*v_r)
-                                    + INV_M33*(tau_rudr_r - damping_r*r);
-
-                // full state dynamics
-                casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
-
-                // expressed as a function for loop evaluation
-                x_dot = casadi::Function("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
-
-                // ################################################
-                // ###----------------LOOP SETUP----------------###
-                // ################################################
-
-                // optimization variables
-                casadi::SX
-                    X = casadi::SX::sym("X", nx, N+1),
-                    U = casadi::SX::sym("U", N),
-                    optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
-
-                // objective function, equlity constraints
-                casadi::SX 
-                    obj = 0,
-                    g = casadi::SX::sym("g", nx*(N+1));
-
-                // casadi constraints vector
-                casadi::SX chi_t_dot, chi_t = chi_d;
-
-                // casadi loop helper vars
-                casadi::SX sym_du, sym_dx = casadi::SX::sym("sym_dx", nx);
-
-                // Constraint MPC to start the trajectory from current position
-                for(int j = 0; j < nx; j++)
-                    sym_dx(j) = X(j,0) - sym_p(j);
-                sym_dx(0) = ssa(sym_dx(0));
-
-                // fill in the constraint vector
-                for(int j = 0; j < nx; j++)
-                    g(j) = sym_dx(j);
-
-                // optimization loop
-                for(int i = 0; i < N; i++){
-
-                    // assign current state
-                    for(int j = 0; j < nx; j++)
-                        sym_x(j) = X(j,i);
-
-                    // assign current input or difference in input
-                    sym_u = U(i);
-                    if(i > 0)
-                        sym_du = U(i) - U(i-1);
-                    else
-                        sym_du = U(i);
-
-                    // trajectory
-                    chi_t_dot = ssa(chi_d - chi_t);
-                    chi_t = ssa(chi_t + Ts * chi_t_dot);
-                    
-                    // assign states for readibility
-                    casadi::SX
-                        psi_p = sym_x(0),
-                        u_p = sym_x(1) + EPS,
-                        v_p = sym_x(2),
-                        r_p = sym_x(3);
-                    casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
-
-                    // 0 minimizes the different in course angle'
-                    // cost_type = 2;
-                    // casadi::SX delta_x;
-                    // if(cost_type == 0){
-                    //     casadi::SX beta = asin(v_p / U);
-                    //     casadi::SX delta_x = ssa(chi_d - psi_p - beta);
-                    // }
-                    // else if(cost_type == 1){
-                    //     casadi::SX
-                    //         x_dot = u_p * cos(psi_p) - v_p * sin(psi_p),
-                    //         y_dot = u_p * sin(psi_p) + v_p * cos(psi_p),
-                    //         vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
-                    //     vec_chi_p(0) = 1/U * x_dot;
-                    //     vec_chi_p(1) = 1/U * y_dot;
-
-                    //     casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
-                    //     vec_chi_d(0) = cos(chi_d);
-                    //     vec_chi_d(1) = sin(chi_d);
-
-                    //     delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
-                    // }
-                    // else if(cost_type == 2){
-                    //     delta_x = chi_d - psi_p;
-                    // }
-
-                    casadi::SX beta = asin(sym_x(2) / U);
-                    casadi::SX delta_x = ssa(chi_d - psi_p - beta);
-
-                    casadi::SX cost_x  = delta_x * Q * delta_x;
-                    casadi::SX cost_u  = sym_du * R * sym_du;
-                    obj = obj + cost_u + cost_x;
-
-                    // multiple shooting using Runge-Kutta4
-                    casadi::SXDict args, f_eval;
-                    // Stage 1
-                    args["i0"] = sym_x;
-                    args["i1"] = sym_u;
-                    args["i2"] = sym_p;
-                    f_eval = x_dot(args);
-                    casadi::SX rk1 = f_eval["o0"];
-
-                    // Stage 2
-                    args["i0"] = sym_x + 0.5*Ts*rk1;
-                    f_eval = x_dot(args);
-                    casadi::SX rk2 = f_eval["o0"];
-
-                    // Stage 3
-                    args["i0"] = sym_x + 0.5*Ts*rk2;
-                    f_eval = x_dot(args);
-                    casadi::SX rk3 = f_eval["o0"];
-
-                    // Stage 4
-                    args["i0"] = sym_x + Ts*rk3;
-                    f_eval = x_dot(args);
-                    casadi::SX rk4 = f_eval["o0"];
-
-                    // next state
-                    casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
-
-                    // introduce dynamics to constraints
-                    for(int j = 0; j < nx; j++)
-                        sym_dx(j) = X(j,i+1) - sym_x_rk4(j);
-                    sym_dx(0) = ssa(sym_dx(0));
-
-                    for(int j = 0; j < nx; j++)
-                        g(nx*(i+1) + j) = sym_dx(j);
-
-                    // push into the main vector being optimized
-                    for(int j = 0; j < nx; j++)
-                        optims(nx*i + j) = sym_x(j);
-                    optims(nx*(N+1) + i) = sym_u;
-                }
-
-                for(int j = 0; j < nx; j++)
-                    optims(nx*N + j) = X(j,N);
-
-                // nlp problem
-                casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
-
-                // nlp options
-                casadi::Dict opts;
-                opts["ipopt.max_iter"] = 300;
-                opts["ipopt.print_level"] = 0;
-                opts["ipopt.acceptable_tol"] = 1e-8;
-                opts["ipopt.acceptable_obj_change_tol"] = 1e-6;
-                opts["ipopt.warm_start_init_point"] = "yes";
-
-                solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
-                solver.generate_dependencies("nlp.c");
-
-                // define state bounds
-                std::vector<double> ubx, lbx, ubg, lbg;
-                for(int i = 0; i < nx*(N+1); i++){
-                    lbx.push_back(-casadi::inf);
-                    ubx.push_back(casadi::inf);
-                    lbg.push_back(0);
-                    ubg.push_back(0); 
-                }
-
-                for(int i = nx*(N+1); i < nx*(N+1)+nu*N; i++){
-                    lbx.push_back(-DEG2RAD(40));
-                    ubx.push_back(DEG2RAD(40));
-                }
-
-                // setup lower and upper bounds for constraints as well as warm start
-                args_["lbx"] = lbx;
-                args_["ubx"] = ubx;
-                args_["lbg"] = lbg;
-                args_["ubg"] = ubg;
-
-                args_["x0"] = generate_random_vector(nx*(N+1)+nu*N);
-                args_["lam_x0"] = generate_random_vector(nx*(N+1)+nu*N);
-                args_["lam_g0"] = generate_random_vector(nx*(N+1));
-
-                return true;
-            }
-
             bool defineMpcProblemV2(void){
-
-                std::cout << "checkpoint 1" << std::endl;
 
                 // mpc params
                 nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
@@ -404,27 +105,6 @@ namespace NMPC{
                 double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
                 double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
 
-                std::cout << D11 << ", " << R11 << ", " << INV_M11 << std::endl;
-                std::cout << D22 << ", " << R22 << ", " << INV_M22 << ", " << INV_M23 << std::endl;
-                std::cout << D33 << ", " << R33 << ", " << INV_M32 << ", " << INV_M33 << std::endl;
-
-                // double D11, R11, INV_M11;
-                // D11 = 286.7200;
-                // R11 = -53.2158;
-                // INV_M11 = 0.0035;
-
-                // double D22, R22, INV_M22, INV_M23;
-                // D22 = 194.56;
-                // R22 = -100.72;
-                // INV_M22 = 0.0026042; 
-                // INV_M23 = -0.00017773;
-
-                // double D33, R33, INV_M32, INV_M33;
-                // D33 = 1098.6;
-                // R33 = 207.74;
-                // INV_M32 = -0.00017773; 
-                // INV_M33 = 0.000922343;
-
                 // detived states
                 casadi::SX u_e = u + EPS;
                 casadi::SX u_c = Vc * cos(beta_c - psi);
@@ -437,6 +117,8 @@ namespace NMPC{
 
                 // dynamics of yaw
                 casadi::SX yaw_dot = r;
+
+                // CURRENTS
 
                 // dynamics of surge
                 casadi::SX nu_c_dot_u = v_c * r;
@@ -544,7 +226,7 @@ namespace NMPC{
                     f_eval = x_dot(args);
                     casadi::SX rk4 = f_eval["o0"];
 
-                // next state
+                    // next state
                     casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
                     // introduce dynamics to constraints
@@ -561,8 +243,6 @@ namespace NMPC{
                     optims(nx*(N+1) + i) = sym_u;
 
                 }
-                std::cout << "checkpoint 4" << std::endl;
-
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
 
@@ -584,6 +264,7 @@ namespace NMPC{
                 solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
 
                 // define state bounds
+                std::vector<double> ubx, lbx, ubg, lbg;
                 for(int i = 0; i < nx*(N+1); i++){
                     lbx.push_back(-casadi::inf);
                     ubx.push_back(casadi::inf);
@@ -594,10 +275,19 @@ namespace NMPC{
                     lbx.push_back(-DEG2RAD(40));
                     ubx.push_back(DEG2RAD(40));
                 }
-                std::cout << "checkpoint 5" << std::endl;
+
+                // setup lower and upper bounds for constraints as well as warm start
+                args_["lbx"] = lbx;
+                args_["ubx"] = ubx;
+                args_["lbg"] = lbg;
+                args_["ubg"] = ubg;
+
+                args_["x0"] = generate_random_vector(nx*(N+1)+nu*N);
+                args_["lam_x0"] = generate_random_vector(nx*(N+1)+nu*N);
+                args_["lam_g0"] = generate_random_vector(nx*(N+1));
+
                 return true;
             }
-
 
             // Function to load defaults for config, params and system dynamics
             bool loadDefaults(){
