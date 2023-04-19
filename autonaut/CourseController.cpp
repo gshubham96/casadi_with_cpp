@@ -583,7 +583,6 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
 
                 // ################# DEBUG
-                std::cout << "\n\ndesired course angle: " << p[nx+1] << std::endl;
                 std::cout.precision(3);
                 double psi = optimized_vars[nx*N];
                 double u = optimized_vars[nx*N+1];
@@ -591,6 +590,7 @@ namespace NMPC{
                 double beta = atan(v/u);
                 double chi = psi + beta;
 
+                std::cout << "\n\ndesired course angle: " << p[nx+1] << std::endl;
                 std::cout << "final heading angle: " << psi << std::endl;
                 std::cout << "final course  angle: " << chi  << std::endl;
 
@@ -604,12 +604,6 @@ namespace NMPC{
                 file << std::endl;
                 file << "optims = " << optimized_vars << ";" << std::endl;
 
-                // ################# DEBUG
-
-                input_traj_.clear();
-                for(int i = 0; i < nu*N; i++)
-                    input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
-                
                 for(int i = 0; i < N; i=i+10){
                     std::cout << "N: " << i << ", st: ";
                     for(int j = 0; j < nx; j++)
@@ -620,9 +614,12 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     std::cout << optimized_vars[nx * N + j] << ", ";                    
 
-                std::cout << "\n\ndesired course angle: " << p[5] << std::endl;
-                std::cout << "final course angle: " << optimized_vars[nx*N] + atan(optimized_vars[nx*N+1]/optimized_vars[nx*N+2]) << std::endl;
+                // ################# DEBUG
 
+                input_traj_.clear();
+                for(int i = 0; i < nu*N; i++)
+                    input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
+                
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
                 std::vector<double> lam_x(res.at("lam_x"));
