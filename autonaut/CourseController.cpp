@@ -47,6 +47,7 @@ namespace NMPC{
             // optimized input trajectory
             std::vector<double> input_traj_;
             // file handling
+            int filecount;
             std::ofstream file;
             std::string filename;
             
@@ -641,7 +642,7 @@ namespace NMPC{
 
             }
 
-            void saveTrajectoryToFile(std::vector<double> optimized_vars){
+            void saveTrajectoryToFile(const std::vector<double> &optimized_vars){
                 if(filecount++ == -1){
                     // open a file
                     filename = fs::current_path().parent_path().string();
@@ -659,7 +660,7 @@ namespace NMPC{
                 }
             }
 
-            void print_details(){
+            void print_details(const std::vector<double> &optimized_vars){
 
                 std::cout.precision(3);
                 double psi = optimized_vars[nx*N];
