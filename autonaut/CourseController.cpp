@@ -133,8 +133,14 @@ namespace NMPC{
                     damping_v  = D22,
                     damping_r  = D33;
 
-                // #TODO CORIOLIS 
-                casadi::SX coriolis_u, coriolis_v, coriolis_r;
+                // CORIOLIS 
+                // Add only if model is nonlinear
+                casadi::SX coriolis_u = 0, coriolis_v = 0;
+                if(model_type == 0){
+                    casadi::SX
+                        coriolis_u = CR12 * r * v_r,
+                        coriolis_v = CR21 * r * u_r;
+                }
 
                 // WAVE FOILS
                 casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
@@ -751,11 +757,10 @@ int main(){
 
     // set default parameters
     std::map<std::string, double> params_d;
-    params_d["Vc"] = 0.35; params_d["beta_c"] = 1.57;
-    params_d["Vw"] = 5; params_d["beta_w"] = 1.57;
-    params_d["k_1"] = 0.9551; params_d["k_2"] = -0.031775;
-    params_d["Q"] = 4.5; params_d["R"] = 1.5;
-
+    params_d["Vc"] = 0.35;      params_d["beta_c"] = 1.57;
+    params_d["Vw"] = 5;         params_d["beta_w"] = 1.57;
+    params_d["k_1"] = 0.9551;   params_d["k_2"] = -0.031775;
+    params_d["Q"] = 4.5;        params_d["R"] = 1.5;
     nmpc.updateMpcParams(params_d);
 
     // update MPC state
@@ -764,7 +769,6 @@ int main(){
     state_d["u"] = 0.9821;
     state_d["v"] = 0.19964;
     state_d["r"] = 0.031876;
-
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
