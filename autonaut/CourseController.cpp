@@ -544,6 +544,7 @@ namespace NMPC{
                 return true;
             }
 
+            // 
             bool optimizeMpcProblem(){
 
                 // flag to check if nlp was set up and parameters were updated
@@ -589,6 +590,7 @@ namespace NMPC{
                 return true;
             }
 
+            // 
             double getOptimalInput(){
 
                 // get current time
@@ -608,6 +610,7 @@ namespace NMPC{
                 return u_star;
             }
 
+            // 
             void test_dynamics(){
 
                 // initial position
@@ -671,6 +674,7 @@ namespace NMPC{
 
             }
 
+            // 
             void saveTrajectoryToFile(){
                 if(filecount == -1){
                     // open a file
@@ -691,6 +695,7 @@ namespace NMPC{
                 }
             }
 
+            // 
             void print_details(){
 
                 std::cout.precision(3);
@@ -808,6 +813,7 @@ int main(){
         std::cout << "Optimal input is: " << nmpc.getOptimalInput() << std::endl;
         
     nmpc.saveTrajectoryToFile();
+    nmpc.print_details();
 
     return 0;
 }
