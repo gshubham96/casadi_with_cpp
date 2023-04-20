@@ -85,7 +85,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/include
     SYSTEM ${IPOPT_INCLUDE_DIRS}
     SYSTEM ${CASADI_INCLUDE_DIR}
-    ${CODE_GEN_INCLUDE_DIR})
+    ${CODE_GEN_INCLUDE_DIR}
+    autonaut    
+)
 
 # library directories
 link_directories(${LIBRARY_DIRS})
