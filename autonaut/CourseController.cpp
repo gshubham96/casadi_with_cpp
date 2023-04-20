@@ -677,7 +677,7 @@ namespace NMPC{
 
             }
 
-            void saveTrajectoryToFile(const std::vector<double> &optimized_vars){
+            void saveTrajectoryToFile(const std::vector<double> &optimized_vars = std::vector<double>()){
                 if(filecount == -1){
                     // open a file
                     filename = fs::current_path().parent_path().string();
@@ -747,7 +747,7 @@ namespace NMPC{
             std::cout << "configuration failed!\n";
             return;
         }
-        saveTrajectoryToFile(0);
+        saveTrajectoryToFile();
     }
 
     // allow user to skip configuration
@@ -773,7 +773,7 @@ namespace NMPC{
             else
                 std::cout << "configuration failed!\n";
         }
-        saveTrajectoryToFile(0);
+        saveTrajectoryToFile();
     }
 
     // Destructor
