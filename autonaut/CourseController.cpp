@@ -395,7 +395,7 @@ namespace NMPC{
                 }
 
                 file = "config.csv";
-                if(loadDefaultsFromFile(file, config_)){
+                if(!loadDefaultsFromFile(file, config_)){
                     std::cerr << "Data loading from file " << file << " FAILED!" << std::endl;             
                     return false;
                 }
