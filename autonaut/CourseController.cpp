@@ -682,7 +682,7 @@ namespace NMPC{
             }
 
             void saveTrajectoryToFile(const std::vector<double> &optimized_vars){
-                if(filecount == -1){
+                if(filecount++ == -1){
                     // open a file
                     filename = fs::current_path().parent_path().string();
                     filename = filename + "/results/course_gen.m";
