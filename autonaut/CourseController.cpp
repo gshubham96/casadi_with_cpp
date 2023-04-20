@@ -45,7 +45,7 @@ namespace NMPC{
             // NLP Solver
             casadi::Function solver;
             // optimized input trajectory
-            std::vector<double> input_traj_;
+            std::vector<double> optimized_vars_, input_traj_;
             // file handling
             int filecount;
             std::ofstream file;
@@ -573,25 +573,20 @@ namespace NMPC{
                 res = solver(arg);
                 t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-                // TODO CAN BE MADE MORE EFFICIENT 
                 // get optimal input trajectory
-                std::vector<double> optimized_vars;
-                optimized_vars = std::vector<double>(res.at("x"));                
-                // std::vector<double> optimized_vars(res.at("x"));
-
-                // print_details(optimized_vars);
-                saveTrajectoryToFile(optimized_vars);
+                optimized_vars_.clear();
+                optimized_vars_ = std::vector<double>(res.at("x"));                
 
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
-                    input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
+                    input_traj_.push_back(optimized_vars_[nx*(N+1) + i]);
                 
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
                 std::vector<double> lam_x(res.at("lam_x"));
                 std::vector<double> lam_g(res.at("lam_g"));
-                args_["x0"]  = optimized_vars;
-                args_["lam_x0"]  = lam_x;
+                args_["x0"]  = optimized_vars_;
+                args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
                 args_["lam_g0"]  = lam_g;
 
                 initialized--;
