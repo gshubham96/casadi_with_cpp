@@ -690,12 +690,14 @@ namespace NMPC{
                     file << "% Results file from " __FILE__ << std::endl;
                     file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
                     file.close();
+                    std::cout << "filecount: " << filecount << std::endl;
                 }
                 else if(filecount > -1){
                     // save trajectory to file
                     file.open(filename.c_str(), std::ios::app);
                     file<< "optims" << ++filecount << " = " << optimized_vars << ";" << std::endl;
                     file.close();
+                    std::cout << "filecount: " << filecount << std::endl;
                 }
             }
 
