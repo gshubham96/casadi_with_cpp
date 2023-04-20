@@ -4,6 +4,10 @@ for i = 1:7
     chi_d = eval(['chi_d' num2str(i)]);
     optims = eval(['optims' num2str(i)]);
     plot_prediction(optims, chi_d);
+
+    if strcmp(input('continue? ', 's'), 'n')
+        break;
+    end
 end
 
 function plot_prediction(optims, chi_d)
@@ -29,7 +33,7 @@ function plot_prediction(optims, chi_d)
     hold on; grid on;
     plot(cmd.psi);
     plot(cmd.chi);
-    yline(chi_d);
+    yline(rad2deg(chi_d), 'k--');
     legend('\psi', '\chi');
     
     xlabel('time interval'); ylabel('units');

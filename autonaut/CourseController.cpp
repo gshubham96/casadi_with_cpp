@@ -389,18 +389,14 @@ namespace NMPC{
 
                 // get system dynamics
                 std::string file = "system.csv";
-                if(loadDefaultsFromFile(file, system_))
-                    std::cout << "Data loading from file " << file << " succeeded!" << std::endl;             
-                else{
-                    std::cout << "Data loading from file " << file << " FAILED!" << std::endl;             
+                if(!loadDefaultsFromFile(file, system_)){
+                    std::cerr << "Data loading from file " << file << " FAILED!" << std::endl;             
                     return false;
                 }
 
                 file = "config.csv";
-                if(loadDefaultsFromFile(file, config_))
-                    std::cout << "Data loading from file " << file << " succeeded!" << std::endl;             
-                else{
-                    std::cout << "Data loading from file " << file << " FAILED!" << std::endl;             
+                if(loadDefaultsFromFile(file, config_)){
+                    std::cerr << "Data loading from file " << file << " FAILED!" << std::endl;             
                     return false;
                 }
                 
@@ -417,8 +413,8 @@ namespace NMPC{
                 std::string line;
 
                 if (myFile.fail()){
-                    std::cout << "ERROR: FILE OPEN FAILED. " << myFile.is_open() << std::endl;
-                    std::cout << "ERROR: LOOKING AT: " << file << std::endl;
+                    std::cerr << "ERROR: FILE OPEN FAILED. " << myFile.is_open() << std::endl;
+                    std::cerr << "ERROR: LOOKING AT: " << file << std::endl;
                     return false;               
                 }
 
@@ -688,7 +684,7 @@ namespace NMPC{
                     filename = filename + "/results/course_gen.m";
                     file.open(filename.c_str());
                     file << "% Results file from " __FILE__ << std::endl;
-                    file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+                    file << "% Generated " __DATE__ " at " __TIME__ << std::endl << std::endl;
                     file.close();
                     filecount++;
                 }
