@@ -695,6 +695,7 @@ namespace NMPC{
                 else if(filecount > -1){
                     // save trajectory to file
                     file.open(filename.c_str(), std::ios::app);
+                    file<< "chi_d" << filecount << " = " << reference_ << ";" << std::endl;
                     file<< "optims" << ++filecount << " = " << optimized_vars << ";" << std::endl;
                     file.close();
                 }
