@@ -543,9 +543,9 @@ namespace NMPC{
 
                 // flag to check if nlp was set up and parameters were updated
                 switch(initialized){
-                    case -1: std::cout << "configure problem first!\n"; return false;
-                    case  0: std::cout << "update parameters first!\n"; return false;
-                    case  1: std::cout << "update state first!\n"; return false;
+                    case -1: std::cerr << "configure problem first!\n"; return false;
+                    case  0: std::cerr << "update parameters first!\n"; return false;
+                    case  1: std::cerr << "update state first!\n"; return false;
                     default: break;
                 }
 
@@ -572,7 +572,7 @@ namespace NMPC{
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
 
-                print_details(optimized_vars);
+                // print_details(optimized_vars);
 
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
