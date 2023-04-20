@@ -112,8 +112,7 @@ namespace NMPC{
                     u_r = u_e - u_c,
                     v_r = v - v_c,
                     nu_r = vertcat(u_r, v_r, r),
-                    U_r2 = pow(u_r, 2) + pow(v_r, 2),
-                    beta = atan(v / u_e);
+                    U_r2 = pow(u_r, 2) + pow(v_r, 2);
 
                 // ################################################
                 // ###----------------DYNAMICS------------------###
