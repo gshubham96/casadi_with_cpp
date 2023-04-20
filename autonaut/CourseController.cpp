@@ -682,7 +682,7 @@ namespace NMPC{
             }
 
             void saveTrajectoryToFile(const std::vector<double> &optimized_vars){
-                if(filecount++ == -1){
+                if(filecount == -1){
                     // open a file
                     filename = fs::current_path().parent_path().string();
                     filename = filename + "/results/course_gen.m";
@@ -690,12 +690,13 @@ namespace NMPC{
                     file << "% Results file from " __FILE__ << std::endl;
                     file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
                     file.close();
+                    filecount++;
                     std::cout << "filecount: " << filecount << std::endl;
                 }
-                else if(++filecount > -1){
+                else if(filecount > -1){
                     // save trajectory to file
                     file.open(filename.c_str(), std::ios::app);
-                    file<< "optims" << filecount << " = " << optimized_vars << ";" << std::endl;
+                    file<< "optims" << ++filecount << " = " << optimized_vars << ";" << std::endl;
                     file.close();
                     std::cout << "filecount: " << filecount << std::endl;
                 }
