@@ -88,19 +88,19 @@ namespace NMPC{
             // updates course reference angle [rad]
             bool updateMpcReference(const double &reference);
 
-            // 
+            // Optimize the NLP with updated state and parameters
             bool optimizeMpcProblem();
 
-            // 
+            // Get the result from the optimized input
             double getOptimalInput();
 
-            // 
+            // debug function to test system dynamics
             void test_dynamics();
 
-            // 
+            // debug function to save trajectory to file
             void saveTrajectoryToFile();
 
-            // 
+            // debug function to print trajectory and other info on screen
             void print_details();
 
     // Constructor
