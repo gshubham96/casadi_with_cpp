@@ -138,8 +138,8 @@ namespace NMPC{
                 casadi::SX coriolis_u = 0, coriolis_v = 0;
                 if(model_type == 0){
                     casadi::SX
-                        coriolis_u = CR12 * r * v_r,
-                        coriolis_v = CR21 * r * u_r;
+                        coriolis_u = CR12 * r,
+                        coriolis_v = CR21 * r;
                 }
 
                 // WAVE FOILS
@@ -168,16 +168,16 @@ namespace NMPC{
                 casadi::SX yaw_dot = r;
 
                 // dynamics of surge
-                casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r);
+                casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r - coriolis_u*v_r);
 
                 // dynamics of sway
                 casadi::SX v_dot = nu_c_dot_v 
-                                        + INV_M22*(tau_rudr_v - damping_v*v_r)
-                                        + INV_M23*(tau_rudr_r - damping_r*r);
+                                    + INV_M22*(tau_rudr_v - damping_v*v_r - coriolis_v*u_r)
+                                    + INV_M23*(tau_rudr_r - damping_r*r);
 
                 // dynamics of yaw rate
                 casadi::SX r_dot = 0 
-                                    + INV_M32*(tau_rudr_v - damping_v*v_r)
+                                    + INV_M32*(tau_rudr_v - damping_v*v_r - coriolis_v*u_r)
                                     + INV_M33*(tau_rudr_r - damping_r*r);
 
                 casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
