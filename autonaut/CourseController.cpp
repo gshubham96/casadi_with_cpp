@@ -691,14 +691,12 @@ namespace NMPC{
                     file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
                     file.close();
                     filecount++;
-                    std::cout << "filecount: " << filecount << std::endl;
                 }
                 else if(filecount > -1){
                     // save trajectory to file
                     file.open(filename.c_str(), std::ios::app);
                     file<< "optims" << ++filecount << " = " << optimized_vars << ";" << std::endl;
                     file.close();
-                    std::cout << "filecount: " << filecount << std::endl;
                 }
             }
 
@@ -809,7 +807,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    for(double chi = 0; chi < PI; chi = chi + 1.02){
+    for(double chi = 0; chi < PI; chi = chi + 0.35){
         std::cout << "chi_d = " << chi << std::endl;        
         nmpc.updateMpcReference(chi);
         nmpc.updateMpcState(state_d);
