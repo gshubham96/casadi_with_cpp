@@ -545,6 +545,8 @@ namespace NMPC{
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
 
+                print_details(optimized_vars);
+
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
                     input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
@@ -675,16 +677,17 @@ namespace NMPC{
                 std::cout << "final course  angle: " << chi  << std::endl;
 
                 // prints out the trajectory
-                for(int i = N-4; i < N; i++){
-                    std::cout << "N: " << i << ", st: ";
-                    for(int j = 0; j < nx; j++)
-                        std::cout << optimized_vars[nx * i + j] << ", ";                    
-                    std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
-                }
-                std::cout << "N: " << N << ", st: ";
-                for(int j = 0; j < nx; j++)
-                    std::cout << optimized_vars[nx * N + j] << ", ";                    
+                // for(int i = N-4; i < N; i++){
+                //     std::cout << "N: " << i << ", st: ";
+                //     for(int j = 0; j < nx; j++)
+                //         std::cout << optimized_vars[nx * i + j] << ", ";                    
+                //     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
+                // }
+                // std::cout << "N: " << N << ", st: ";
+                // for(int j = 0; j < nx; j++)
+                //     std::cout << optimized_vars[nx * N + j] << ", ";                    
 
+                std::cout << "\n##################################\n\n ";
             }
 
     // Constructor
