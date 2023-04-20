@@ -223,10 +223,10 @@ namespace NMPC{
                     casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
 
                     casadi::SX delta_x;
-                    if(cost_type == 0){
-                        casadi::SX beta = asin(v_p / U);
-                        casadi::SX delta_x = ssa(chi_d - psi_p - beta);
-                    }
+                    // minimizes error in course angle
+                    if(cost_type == 0)
+                        delta_x = ssa(chi_d - psi_p - asin(v_p / U));
+                    // minimizes error in course vector                    
                     else if(cost_type == 1){
                         casadi::SX
                             x_dot = u_p * cos(psi_p) - v_p * sin(psi_p),
@@ -241,6 +241,7 @@ namespace NMPC{
 
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
                     }
+                    // minimizes error in heading angle
                     else if(cost_type == 2)
                         delta_x = ssa(chi_d - psi_p);
                     
