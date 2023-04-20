@@ -46,6 +46,9 @@ namespace NMPC{
             casadi::Function solver;
             // optimized input trajectory
             std::vector<double> input_traj_;
+            // file handling
+            std::ofstream file;
+            std::string filename;
             
             // ##################################
             // ##-------MEMBER FUNCTIONS-------##
@@ -541,44 +544,6 @@ namespace NMPC{
                 // get optimal input trajectory
                 std::vector<double> optimized_vars(res.at("x"));
 
-                // ################# DEBUG
-                // for(int i = N-4; i < N; i++){
-                //     std::cout << "N: " << i << ", st: ";
-                //     for(int j = 0; j < nx; j++)
-                //         std::cout << optimized_vars[nx * i + j] << ", ";                    
-                //     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
-                // }
-                // std::cout << "N: " << N << ", st: ";
-                // for(int j = 0; j < nx; j++)
-                //     std::cout << optimized_vars[nx * N + j] << ", ";                    
-
-                std::cout.precision(3);
-                double psi = optimized_vars[nx*N];
-                double u = optimized_vars[nx*N+1];
-                double v = optimized_vars[nx*N+2];
-                double beta = atan(v/u);
-                double chi = psi + beta;
-
-                std::cout << "\n\ndesired angle      : " << p[nx] << std::endl;
-                std::cout << "final heading angle: " << psi << std::endl;
-                std::cout << "final course  angle: " << chi  << std::endl;
-
-                std::ofstream file;
-                std::string filename = fs::current_path().parent_path().string();
-                filename = filename + "/results/course_gen.m";
-
-                // if(p[nx] == 0){
-                //     remove( filename );
-                // }
-
-                file.open(filename.c_str(), std::ios_base::app);
-                file << "% Results file from " __FILE__ << std::endl;
-                file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
-                file << std::endl;
-                file << "optims = " << optimized_vars << ";" << std::endl;
-
-                // ################# DEBUG
-
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
                     input_traj_.push_back(optimized_vars[nx*(N+1) + i]);
@@ -676,6 +641,51 @@ namespace NMPC{
 
             }
 
+            void saveTrajectoryToFile(std::vector<double> optimized_vars){
+                if(filecount++ == -1){
+                    // open a file
+                    filename = fs::current_path().parent_path().string();
+                    filename = filename + "/results/course_gen.m";
+                    file.open(filename.c_str());
+                    file << "% Results file from " __FILE__ << std::endl;
+                    file << "% Generated " __DATE__ " at " __TIME__ << std::endl;
+                    file.close();
+                }
+                else if(filecount > -1){
+                    // save trajectory to file
+                    file.open(filename.c_str(), std::ios_base::app);
+                    file ac<< "optims" << ++filecount << " = " << optimized_vars << ";" << std::endl;
+                    file.close();
+                }
+            }
+
+            void print_details(){
+
+                std::cout.precision(3);
+                double psi = optimized_vars[nx*N];
+                double u = optimized_vars[nx*N+1];
+                double v = optimized_vars[nx*N+2];
+                double beta = atan(v/u);
+                double chi = psi + beta;
+
+                // prints out desired and current states
+                std::cout << "desired angle      : " << p[nx] << std::endl;
+                std::cout << "final heading angle: " << psi << std::endl;
+                std::cout << "final course  angle: " << chi  << std::endl;
+
+                // prints out the trajectory
+                for(int i = N-4; i < N; i++){
+                    std::cout << "N: " << i << ", st: ";
+                    for(int j = 0; j < nx; j++)
+                        std::cout << optimized_vars[nx * i + j] << ", ";                    
+                    std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
+                }
+                std::cout << "N: " << N << ", st: ";
+                for(int j = 0; j < nx; j++)
+                    std::cout << optimized_vars[nx * N + j] << ", ";                    
+
+            }
+
     // Constructor
     CourseController(){
         initialized = -1;
@@ -699,7 +709,10 @@ namespace NMPC{
 
     // allow user to skip configuration
     CourseController(bool flag){
+        // set init flag
         initialized = -1;
+        // set file count flag
+        filecount = -1;
         // loading defaults from a file
         if(loadDefaults())
             std::cout << "default options loaded!\n";
@@ -717,7 +730,6 @@ namespace NMPC{
             else
                 std::cout << "configuration failed!\n";
         }
-
     }
 
     // Destructor
