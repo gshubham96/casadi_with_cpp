@@ -670,7 +670,7 @@ namespace NMPC{
 
             }
 
-            void saveTrajectoryToFile(const std::vector<double> &optimized_vars = std::vector<double>()){
+            void saveTrajectoryToFile(){
                 if(filecount == -1){
                     // open a file
                     filename = fs::current_path().parent_path().string();
@@ -685,17 +685,17 @@ namespace NMPC{
                     // save trajectory to file
                     file.open(filename.c_str(), std::ios::app);
                     file<< "chi_d" << filecount << " = " << reference_ << ";" << std::endl;
-                    file<< "optims" << filecount++ << " = " << optimized_vars << ";" << std::endl;
+                    file<< "optims" << filecount++ << " = " << optimized_vars_ << ";" << std::endl;
                     file.close();
                 }
             }
 
-            void print_details(const std::vector<double> &optimized_vars){
+            void print_details(){
 
                 std::cout.precision(3);
-                double psi = optimized_vars[nx*N];
-                double u = optimized_vars[nx*N+1];
-                double v = optimized_vars[nx*N+2];
+                double psi = optimized_vars_[nx*N];
+                double u = optimized_vars_[nx*N+1];
+                double v = optimized_vars_[nx*N+2];
                 double beta = atan(v/u);
                 double chi = psi + beta;
 
@@ -708,12 +708,12 @@ namespace NMPC{
                 // for(int i = N-4; i < N; i++){
                 //     std::cout << "N: " << i << ", st: ";
                 //     for(int j = 0; j < nx; j++)
-                //         std::cout << optimized_vars[nx * i + j] << ", ";                    
-                //     std::cout << "cn: " << optimized_vars[nx*(N+1)+i] << std::endl;                    
+                //         std::cout << optimized_vars_[nx * i + j] << ", ";                    
+                //     std::cout << "cn: " << optimized_vars_[nx*(N+1)+i] << std::endl;                    
                 // }
                 // std::cout << "N: " << N << ", st: ";
                 // for(int j = 0; j < nx; j++)
-                //     std::cout << optimized_vars[nx * N + j] << ", ";                    
+                //     std::cout << optimized_vars_[nx * N + j] << ", ";                    
 
                 std::cout << "\n##################################\n\n ";
             }
