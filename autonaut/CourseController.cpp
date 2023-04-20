@@ -206,6 +206,9 @@ namespace NMPC{
                 // ###----------------SETUP LOOP----------------###
                 // ################################################
 
+                // trajectory / motion planning
+                casadi::SX chi_t_dot, chi_t = chi_d;
+
                 // optimization variables
                 casadi::SX 
                     X = casadi::SX::sym("X", nx, N+1),
@@ -251,10 +254,15 @@ namespace NMPC{
                         r_p = sym_x(3);
                     casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
 
+                    // trajectory
+                    chi_t_dot = ssa(chi_d - chi_t);
+                    chi_t = ssa(chi_t + Ts * chi_t_dot);
+
                     casadi::SX delta_x;
                     // minimizes error in course angle
                     if(cost_type == 0)
-                        delta_x = ssa(chi_d - psi_p - asin(v_p / U));
+                        delta_x = ssa(chi_t - psi_p - asin(v_p / U));
+
                     // minimizes error in course vector                    
                     else if(cost_type == 1){
                         casadi::SX
@@ -265,16 +273,17 @@ namespace NMPC{
                         vec_chi_p(1) = 1/U * y_dot;
 
                         casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
-                        vec_chi_d(0) = cos(chi_d);
-                        vec_chi_d(1) = sin(chi_d);
+                        vec_chi_d(0) = cos(chi_t);
+                        vec_chi_d(1) = sin(chi_t);
 
                         delta_x = 1 - mtimes(vec_chi_d.T(), vec_chi_p);
                     }
+
                     // minimizes error in heading angle
                     else if(cost_type == 2)
-                        delta_x = ssa(chi_d - psi_p);
+                        delta_x = ssa(chi_t - psi_p);
                     
-
+                    // 
                     casadi::SX cost_x  = delta_x * Q * delta_x;
                     casadi::SX cost_u  = sym_du * R * sym_du;
                     obj = obj + cost_u + cost_x;
