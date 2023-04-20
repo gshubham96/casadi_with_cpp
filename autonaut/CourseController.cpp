@@ -589,7 +589,8 @@ namespace NMPC{
                 return true;
             }
 
-            bool getOptimalInput(double &u_star){
+            double getOptimalInput(){
+
                 // get current time
                 double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
                 double t_elapsed = (t_update - t_now);
@@ -602,7 +603,7 @@ namespace NMPC{
 
                 // otherwise, find the closest time index and send that input
                 int t_ind = floor(t_elapsed/Ts);
-                u_star = input_traj_[t_ind];
+                double u_star = input_traj_[t_ind];
 
                 return true;
             }
@@ -803,13 +804,10 @@ int main(){
     // solve the optimization problem
     if(!nmpc.optimizeMpcProblem())
         std::cerr << "optimization FAILED :(" << std::endl;
-    else{
-        double u_opt = 0;
-        nmpc.getOptimalInput(u_opt);
-        std::cout << "Optimal input is: " << u_opt << std::endl;
-    }
+    else
+        std::cout << "Optimal input is: " << nmpc.getOptimalInput() << std::endl;
         
-
+    nmpc.saveTrajectoryToFile();
 
     return 0;
 }
