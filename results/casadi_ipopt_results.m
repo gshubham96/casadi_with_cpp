@@ -1,6 +1,6 @@
 % Results file from /casadi_with_cpp/autonaut/solver_gen.cpp
 % Generated Apr 14 2023 at 12:10:42
-for i = 1:7
+for i = 0:1
     chi_d = eval(['chi_d' num2str(i)]);
     optims = eval(['optims' num2str(i)]);
     plot_prediction(optims, chi_d);

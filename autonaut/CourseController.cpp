@@ -575,7 +575,9 @@ namespace NMPC{
 
                 // TODO CAN BE MADE MORE EFFICIENT 
                 // get optimal input trajectory
-                std::vector<double> optimized_vars(res.at("x"));
+                std::vector<double> optimized_vars;
+                optimized_vars = std::vector<double>(res.at("x"));                
+                // std::vector<double> optimized_vars(res.at("x"));
 
                 // print_details(optimized_vars);
                 saveTrajectoryToFile(optimized_vars);
@@ -731,22 +733,19 @@ namespace NMPC{
         initialized = -1;
         // set file count flag
         filecount = -1;
+
         // loading defaults from a file
-        if(loadDefaults())
-            std::cout << "default options loaded!\n";
-        else{
-            std::cout << "could not load default options, exiting since user did not specify initilization variables\n";
+        if(!loadDefaults()){
+            std::cerr << "could not load default options, exiting since user did not specify initilization variables\n";
             return;
         }
+
         // configuring the problem with default vars
-        if(defineMpcProblem()){
-            std::cout << "Problem configured succesfully" << std::endl;
+        if(!defineMpcProblem())
+            std::cerr << "Problem configuration FAILED" << std::endl;
+        else
             initialized++;
-        }
-        else{
-            std::cout << "configuration failed!\n";
-            return;
-        }
+
         saveTrajectoryToFile();
     }
 
@@ -762,6 +761,7 @@ namespace NMPC{
         else{
             std::cout << "could not load default options, make sure to update ALL MPC configs parameters before configuration";
         }
+
         if(flag)
             std::cout << "skipping configuration for now!" << std::endl;
         else{
