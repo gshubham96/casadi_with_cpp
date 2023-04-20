@@ -582,6 +582,7 @@ namespace NMPC{
                 std::vector<double> optimized_vars(res.at("x"));
 
                 // print_details(optimized_vars);
+                saveTrajectoryToFile(optimized_vars);
 
                 input_traj_.clear();
                 for(int i = 0; i < nu*N; i++)
