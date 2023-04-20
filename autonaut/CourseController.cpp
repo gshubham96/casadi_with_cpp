@@ -812,7 +812,7 @@ int main(){
         std::cerr << "optimization FAILED :(" << std::endl;
     else{
         double u_opt = 0;
-        getOptimalInput(u_opt);
+        nmpc.getOptimalInput(u_opt);
         std::cout << "Optimal input is: " << u_opt << std::endl;
     }
         
