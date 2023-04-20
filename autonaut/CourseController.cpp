@@ -747,6 +747,7 @@ namespace NMPC{
             std::cout << "configuration failed!\n";
             return;
         }
+        saveTrajectoryToFile(optimized_vars);
     }
 
     // allow user to skip configuration
@@ -772,6 +773,7 @@ namespace NMPC{
             else
                 std::cout << "configuration failed!\n";
         }
+        saveTrajectoryToFile(optimized_vars);
     }
 
     // Destructor
