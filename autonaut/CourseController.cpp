@@ -805,7 +805,7 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    for(double chi = 0; chi < PI; chi = chi + 0.25){
+    for(double chi = 0; chi < PI; chi = chi + 1.02){
         std::cout << "chi_d = " << chi << std::endl;        
         nmpc.updateMpcReference(chi);
         nmpc.updateMpcState(state_d);
