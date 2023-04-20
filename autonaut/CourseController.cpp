@@ -804,16 +804,19 @@ int main(){
     nmpc.updateMpcState(state_d);
 
     // update MPC reference
-    for(double chi = 0; chi < PI; chi = chi + 0.35){
-        std::cout << "chi_d = " << chi << std::endl;        
-        nmpc.updateMpcReference(chi);
-        nmpc.updateMpcState(state_d);
-        // solve the optimization problem
-        if(nmpc.optimizeMpcProblem())
-            std::cout << "optimization succesful" << std::endl;
-        else
-            std::cout << "optimization failed :(" << std::endl;
+    double chi = 0.53;
+    nmpc.updateMpcReference(chi);
+
+    // solve the optimization problem
+    if(!nmpc.optimizeMpcProblem())
+        std::cerr << "optimization FAILED :(" << std::endl;
+    else{
+        double u_opt = 0;
+        getOptimalInput(u_opt);
+        std::cout << "Optimal input is: " << u_opt << std::endl;
     }
+        
+
 
     return 0;
 }
