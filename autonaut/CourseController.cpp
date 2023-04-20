@@ -579,8 +579,6 @@ namespace NMPC{
 
                 input_traj_.clear();
                 input_traj_.assign(optimized_vars_.begin()+nx*(N+1), optimized_vars_.end());
-
-                std::cout << input_traj_ << std::endl;
                 
                 // update variables for warm start
                 args_["x0"]  = optimized_vars_;
@@ -603,11 +601,12 @@ namespace NMPC{
                     return false;
                 }
 
+                std::cout << input_traj_ << std::endl;
                 // otherwise, find the closest time index and send that input
                 int t_ind = floor(t_elapsed/Ts);
                 double u_star = input_traj_[t_ind];
 
-                return true;
+                return u_star;
             }
 
             void test_dynamics(){
