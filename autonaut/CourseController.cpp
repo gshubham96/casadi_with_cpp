@@ -578,16 +578,12 @@ namespace NMPC{
                 optimized_vars_ = std::vector<double>(res.at("x"));                
 
                 input_traj_.clear();
-                for(int i = 0; i < nu*N; i++)
-                    input_traj_.push_back(optimized_vars_[nx*(N+1) + i]);
+                input_traj_.assign(optimized_vars_.begin()+nx*(N+1), optimized_vars_.end());
                 
-                // TODO CAN BE MADE MORE EFFICIENT 
                 // update variables for warm start
-                std::vector<double> lam_x(res.at("lam_x"));
-                std::vector<double> lam_g(res.at("lam_g"));
                 args_["x0"]  = optimized_vars_;
                 args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
-                args_["lam_g0"]  = lam_g;
+                args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
 
                 initialized--;
                 return true;
