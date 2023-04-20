@@ -71,11 +71,26 @@ namespace NMPC{
             // Function to define and compile the NLP Optimization Problem
             bool defineMpcProblem(void){
 
+                // ################################################
+                // ###----------------SETUP PARAMS--------------###
+                // ################################################
+
                 // mpc params
                 nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
                 Tp = config_["Tp"]; Ts = config_["Ts"];
                 N = floor(Tp / Ts);
                 double model_dim = config_["model_dim"], model_type = config_["model_type"], cost_type = config_["cost_type"];
+
+                // system params
+                const double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
+                const double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
+                const double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
+                const double CR12 = system_["CR12"], CR21 = system_["CR21"];
+                const double W11 = system_["W11"], W21 = system_["W21"], W31 = system_["W31"];
+
+                // ################################################
+                // ###----------------SETUP CONTROL DYNAMICS----###
+                // ################################################
 
                 // named symbolica vars
                 casadi::SX psi = casadi::SX::sym("psi", 1),
@@ -101,13 +116,6 @@ namespace NMPC{
                     Q       = sym_p(nx+7),
                     R       = sym_p(nx+8);
 
-                // system params
-                // assign system parameters
-                const double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
-                const double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
-                const double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
-                const double CR12 = system_["CR12"], CR21 = system_["CR21"]; 
-
                 // detived states
                 casadi::SX 
                     u_e = u + EPS,
@@ -119,11 +127,11 @@ namespace NMPC{
                     U_r2 = pow(u_r, 2) + pow(v_r, 2);
 
                 // ################################################
-                // ###----------------DYNAMICS------------------###
+                // ###----------------DYNAMIC EQUATIONS---------###
                 // ################################################
 
                 // CURRENTS
-                casadi::SX 
+                casadi::SX
                     nu_c_dot_u = v_c * r,
                     nu_c_dot_v = -u_c * r;
 
@@ -161,30 +169,41 @@ namespace NMPC{
                     tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
                 }
 
-                // #TODO WIND
-                casadi::SX tau_wind_u, tau_wind_v, tau_wind_r;
+                // WIND
+                // Add only if model is nonlinear
+                casadi::SX tau_wind_u = 0, tau_wind_v = 0, tau_wind_r = 0;
+                if(model_type == 0){
+                    casadi::SX u_rw = u_e - Vw * cos(beta_w - psi);
+                    casadi::SX v_rw = v - Vw * sin(beta_w - psi);
+                    casadi::SX V_rw2 = pow(u_rw, 2) + pow(v_rw, 2);
+                    casadi::SX gamma = -atan2(v_rw, u_rw);
+
+                    tau_wind_u = W11 * V_rw2 * cos(gamma);
+                    tau_wind_v = W21 * V_rw2 * sin(gamma);
+                    tau_wind_r = W31 * V_rw2 * sin(2*gamma);
+                }
 
                 // dynamics of yaw
                 casadi::SX yaw_dot = r;
 
                 // dynamics of surge
-                casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_foil_u + tau_rudr_u - damping_u*u_r - coriolis_u*v_r);
+                casadi::SX u_dot = nu_c_dot_u + INV_M11*(tau_wind_u + tau_foil_u + tau_rudr_u - damping_u*u_r - coriolis_u*v_r);
 
                 // dynamics of sway
                 casadi::SX v_dot = nu_c_dot_v 
-                                    + INV_M22*(tau_rudr_v - damping_v*v_r - coriolis_v*u_r)
-                                    + INV_M23*(tau_rudr_r - damping_r*r);
+                                    + INV_M22*(tau_wind_v + tau_rudr_v - damping_v*v_r - coriolis_v*u_r)
+                                    + INV_M23*(tau_wind_v + tau_rudr_r - damping_r*r);
 
                 // dynamics of yaw rate
                 casadi::SX r_dot = 0 
-                                    + INV_M32*(tau_rudr_v - damping_v*v_r - coriolis_v*u_r)
-                                    + INV_M33*(tau_rudr_r - damping_r*r);
+                                    + INV_M32*(tau_wind_r + tau_rudr_v - damping_v*v_r - coriolis_v*u_r)
+                                    + INV_M33*(tau_wind_r + tau_rudr_r - damping_r*r);
 
                 casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
                 x_dot = casadi::Function("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
                 // ################################################
-                // ###----------------LOOP SETUP----------------###
+                // ###----------------SETUP LOOP----------------###
                 // ################################################
 
                 // optimization variables
@@ -307,7 +326,9 @@ namespace NMPC{
                 for(int j = 0; j < nx; j++)
                     optims(nx*N + j) = X(j,N);
 
-                // nlp problem
+                // ################################################
+                // ###----------------SETUP NLP PROBLEM---------###
+                // ################################################
                 casadi::SXDict nlp = {{"x", optims}, {"f", obj}, {"g", g}, {"p", sym_p}};
 
                 // nlp options
