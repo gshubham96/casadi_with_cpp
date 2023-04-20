@@ -731,7 +731,10 @@ namespace NMPC{
 
     // Constructor
     CourseController(){
+        // set init flag
         initialized = -1;
+        // set file count flag
+        filecount = -1;
         // loading defaults from a file
         if(loadDefaults())
             std::cout << "default options loaded!\n";
