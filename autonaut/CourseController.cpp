@@ -579,6 +579,8 @@ namespace NMPC{
 
                 input_traj_.clear();
                 input_traj_.assign(optimized_vars_.begin()+nx*(N+1), optimized_vars_.end());
+
+                std::cout << input_traj_ << std::endl;
                 
                 // update variables for warm start
                 args_["x0"]  = optimized_vars_;
