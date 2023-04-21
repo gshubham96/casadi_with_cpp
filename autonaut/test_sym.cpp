@@ -38,6 +38,9 @@ int main(){
     sleep(4);
     std::cout << "Optimal input after 6 seconds is : " << nmpc.getOptimalInput() << std::endl;
 
+    sleep(30);
+    std::cout << "Optimal input after 36 seconds is : " << nmpc.getOptimalInput() << std::endl;
+
     nmpc.saveTrajectoryToFile();
     // nmpc.print_details();
 
