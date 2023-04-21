@@ -1,4 +1,5 @@
 #include <CourseController.h>
+#include <unistd.h>
 
 int main(){
 
@@ -29,8 +30,14 @@ int main(){
     if(!nmpc.optimizeMpcProblem())
         std::cerr << "optimization FAILED :(" << std::endl;
     else
-        std::cout << "Optimal input is: " << nmpc.getOptimalInput() << std::endl;
-        
+        std::cout << "Optimal input is 0: " << nmpc.getOptimalInput() << std::endl;
+
+    sleep(0.6);
+    std::cout << "Optimal input is 1: " << nmpc.getOptimalInput() << std::endl;
+
+    sleep(0.6);
+    std::cout << "Optimal input is 2: " << nmpc.getOptimalInput() << std::endl;
+
     nmpc.saveTrajectoryToFile();
     nmpc.print_details();
 

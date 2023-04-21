@@ -461,24 +461,25 @@ namespace NMPC{
 
     // updates config parameters if user wants to change the NLP
     bool CourseController::updateMpcConfig(const std::map<std::string, double> &config){
+        
+        // flag to check if problem needs (re)configuration
+        bool flag_config = false;
 
-        // recompile NLP if configuration parameters are changed
-        for(auto i : config){
-            if(i.first.compare("Q") == 0 || i.first.compare("R") == 0)
-                continue;
-            initialized = -1;
+        for (it = config.begin(); it != config.end(); it++){            
+            // Update Mpc Configuration parameters
+            config_[it->first] = it->second;
+            // recompile NLP if configuration parameters are changed
+            if(it->first.compare("Q") == 0 || it->first.compare("R") == 0)
+                continue;     
+            flag_config = true;
         }
 
-        // Update Mpc Configuration parameters
-        for (auto i : config) 
-            config_[i.first] = i.second;
-
         // relaunch the configuration function
-        if(defineMpcProblem())
-            std::cout << "Problem re-configured succesfully" << std::endl;
-        else{
-            std::cout << "configuration failed!\n";
-            return false;
+        if(flag_config == true){
+            if(!defineMpcProblem()){
+                std::cerr << "Configuration FAILED!\n";
+                return false;
+            }
         }
         return true;
     }
