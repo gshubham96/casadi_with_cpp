@@ -551,6 +551,7 @@ namespace NMPC{
 
         // otherwise, find the closest time index and send that input
         int t_ind = floor(t_elapsed/Ts);
+        std::cout << "index is: " << t_ind << std::endl;
         double u_star = input_traj_[t_ind];
 
         return u_star;
@@ -666,6 +667,8 @@ namespace NMPC{
         // std::cout << "N: " << N << ", st: ";
         // for(int j = 0; j < nx; j++)
         //     std::cout << optimized_vars_[nx * N + j] << ", ";                    
+
+        std::cout << "traj is " << input_traj_ << std::endl;
 
         std::cout << "\n##################################\n\n ";
     }
