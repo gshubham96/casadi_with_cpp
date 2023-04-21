@@ -546,7 +546,7 @@ namespace NMPC{
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
             std::cerr << "time since last NLP run exceeds threshold\n";
-            return std::nan;
+            return 1000;
         }
 
         // otherwise, find the closest time index and send that input
