@@ -39,7 +39,7 @@ int main(){
     std::cout << "Optimal input is 2: " << nmpc.getOptimalInput() << std::endl;
 
     nmpc.saveTrajectoryToFile();
-    nmpc.print_details();
+    // nmpc.print_details();
 
     return 0;
 }

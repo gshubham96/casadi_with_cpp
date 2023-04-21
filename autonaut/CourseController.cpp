@@ -542,7 +542,6 @@ namespace NMPC{
         // get current time
         double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         double t_elapsed = (t_now - t_update)/1000;                 // in seconds
-        std::cout << "\nt_elapsed is: " << t_elapsed << std::endl;
 
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
@@ -552,11 +551,7 @@ namespace NMPC{
 
         // otherwise, find the closest time index and send that input
         int t_ind = floor(t_elapsed/Ts);
-        std::cout << "index is: " << t_ind << std::endl;
-
         double u_star = input_traj_[t_ind];
-        std::cout << "u_star is: " << u_star << std::endl;
-
 
         return u_star;
     }
