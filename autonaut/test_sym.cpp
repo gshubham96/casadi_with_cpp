@@ -32,10 +32,10 @@ int main(){
     else
         std::cout << "Optimal input is 0: " << nmpc.getOptimalInput() << std::endl;
 
-    sleep(2.6);
+    sleep(2);
     std::cout << "Optimal input is 1: " << nmpc.getOptimalInput() << std::endl;
 
-    sleep(3.6);
+    sleep(4);
     std::cout << "Optimal input is 2: " << nmpc.getOptimalInput() << std::endl;
 
     nmpc.saveTrajectoryToFile();
