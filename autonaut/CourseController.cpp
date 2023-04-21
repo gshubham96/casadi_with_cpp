@@ -465,6 +465,7 @@ namespace NMPC{
         // flag to check if problem needs (re)configuration
         bool flag_config = false;
 
+        std::map<std::string, double>::iterator it;
         for (it = config.begin(); it != config.end(); it++){            
             // Update Mpc Configuration parameters
             config_[it->first] = it->second;
