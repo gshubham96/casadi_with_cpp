@@ -551,8 +551,10 @@ namespace NMPC{
 
         // otherwise, find the closest time index and send that input
         int t_ind = floor(t_elapsed/Ts);
-        std::cout << "index is: " << t_ind << std::endl;
         double u_star = input_traj_[t_ind];
+
+        std::cout << "t_elapsed is: " << t_elapsed << std::endl;
+        std::cout << "index is: " << t_ind << std::endl;
 
         return u_star;
     }
