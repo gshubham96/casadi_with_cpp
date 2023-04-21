@@ -672,7 +672,8 @@ namespace NMPC{
         // for(int j = 0; j < nx; j++)
         //     std::cout << optimized_vars_[nx * N + j] << ", ";                    
 
-        std::cout << "traj is " << input_traj_ << std::endl;
+        for(int j = 0; j < 10; j++)
+            std::cout << "traj is " << input_traj_[j] << std::endl;
 
         std::cout << "\n##################################\n\n ";
     }
