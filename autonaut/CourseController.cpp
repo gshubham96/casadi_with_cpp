@@ -541,7 +541,7 @@ namespace NMPC{
 
         // get current time
         double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        double t_elapsed = t_now - t_update;
+        double t_elapsed = (t_now - t_update)/1000;                 // in seconds
         std::cout << "\nt_elapsed is: " << t_elapsed << std::endl;
 
         // fail if NLP has not been run for a long time
@@ -673,7 +673,7 @@ namespace NMPC{
         //     std::cout << optimized_vars_[nx * N + j] << ", ";                    
 
         for(int j = 0; j < 10; j++)
-            std::cout << "traj is " << input_traj_[j] << std::endl;
+            std::cout << "traj at " << j << " is " << input_traj_[j] << std::endl;
 
         std::cout << "\n##################################\n\n ";
     }
